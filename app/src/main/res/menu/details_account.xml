@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.chevbook.Activity.DetailsAccountActivity" >
+
+    <item android:id="@+id/account_menuSave"
+        android:icon="@drawable/ic_action_save"
+        android:title="@string/action_save"
+        app:showAsAction="ifRoom" />
+
+</menu>

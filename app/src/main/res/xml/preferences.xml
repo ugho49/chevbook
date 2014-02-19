@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="pref_user_password"
+        android:title="@string/title_password_user"
+        android:password="true"
+        android:enabled="false"
+        android:visibility="gone">
+    </EditTextPreference>
+
+    <EditTextPreference
+        android:key="pref_user_url_image"
+        android:title="@string/title_image_user"
+        android:password="true"
+        android:enabled="false"
+        android:visibility="gone">
+    </EditTextPreference>
+
+    <EditTextPreference
+        android:key="pref_user_firstname"
+        android:title="@string/title_firstname_user"
+        android:password="true"
+        android:enabled="false"
+        android:visibility="gone">
+    </EditTextPreference>
+
+    <EditTextPreference
+        android:key="pref_user_lastname"
+        android:title="@string/title_lastname_user"
+        android:password="true"
+        android:enabled="false"
+        android:visibility="gone">
+    </EditTextPreference>
+
+    <PreferenceCategory android:title="@string/title_user">
+
+        <Preference
+            android:key="pref_user_name"
+            android:title="@string/title_name_user"
+            android:selectable="false"/>
+
+        <Preference
+            android:key="pref_user_email"
+            android:title="@string/title_email_user"
+            android:selectable="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_notification">
+
+        <CheckBoxPreference
+            android:key="pref_notification_on_or_off"
+            android:title="@string/title_notification_on_or_off">
+        </CheckBoxPreference>
+
+        <CheckBoxPreference
+            android:key="pref_notification_vibrate"
+            android:title="@string/title_notification_vibrate">
+        </CheckBoxPreference>
+
+        <RingtonePreference
+            android:key="pref_notification_ringtone"
+            android:ringtoneType="notification"
+            android:title="@string/title_notification_ringtone"
+            android:showDefault="true"
+            android:showSilent="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_more_information">
+
+        <Preference
+            android:key="pref_more_assistance"
+            android:title="@string/title_more_assistance"/>
+
+        <Preference
+            android:key="pref_more_privacy"
+            android:title="@string/title_more_privacy"/>
+
+        <Preference
+            android:key="pref_more_conditions"
+            android:title="@string/title_more_conditions"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

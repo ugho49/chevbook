@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\assets" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\src\release\assets" />
+    </dataSet>
+
+</merger>

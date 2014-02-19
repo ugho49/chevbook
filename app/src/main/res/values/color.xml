@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="card_border">#ffdedede</color>
+    <color name="dark_black_grey">#CC343434</color>
+    <color name="blue_account">#1f5e8b</color>
+    <color name="blue_account_light">#297eba</color>
+    <color name="grey_account">#b6b6b6</color>
+    <color name="grey_account_light">#cfcfcf</color>
+
+    <color name="grey_search_hover">#f1f1f1</color>
+
+    <color name="green_chevbook">#9ec212</color>
+    <color name="blue_chevbook">#1f5e8b</color>
+    <color name="grey_chevbook">#868686</color>
+</resources>

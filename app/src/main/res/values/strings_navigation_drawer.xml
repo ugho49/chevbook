@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string-array name="navigation_array">
+        <item>Mon Compte</item>
+        <item>Accueil</item>
+        <item>Appartements</item>
+        <item>Messages</item>
+        <item>Mes Favoris</item>
+        <item>Paramètres</item>
+        <item>A propos</item>
+        <item>Déconnexion</item>
+    </string-array>
+
+    <array name="navigation_icons">
+        <item>@drawable/ic_profile</item>
+        <item>@drawable/ic_news</item>
+        <item>@drawable/ic_door</item>
+        <item>@drawable/ic_chat</item>
+        <item>@drawable/ic_star</item>
+        <item>@drawable/ic_tools</item>
+        <item>@drawable/ic_interstate</item>
+        <item>@drawable/ic_power</item>
+    </array>
+</resources>

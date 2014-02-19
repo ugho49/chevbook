@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_key_words">Mot(s)-clé(s)</string>
+
+    <string name="price_min">Prix min</string>
+    <string name="price_max">Prix max</string>
+
+    <string name="room_min">Pièces min</string>
+    <string name="room_max">Pièces max</string>
+
+    <string name="cb_house">Maison</string>
+    <string name="cb_appartement">Appartements</string>
+    <string name="cb_terrain">Terrain</string>
+    <string name="cb_parking">Parking</string>
+
+    <!-- Array Spinner -->
+    <string-array name="appartements_quartier_array">
+        <item>La roseraie</item>
+        <item>Belle-Beille</item>
+        <item>Centre-ville</item>
+        <item>Capucins</item>
+        <item>Deux-crois Banchais</item>
+        <item>St serge</item>
+        <item>Monplaisir</item>
+        <item>Lac de maine</item>
+        <item>La Fayette - Eblé</item>
+        <item>Madeleine - St léonard</item>
+        <item>Justices</item>
+    </string-array>
+
+    <string-array name="appartements_type_array">
+        <item>T1</item>
+        <item>T2</item>
+        <item>T3</item>
+        <item>Studio</item>
+        <item>Loft</item>
+    </string-array>
+
+    <string name="anounce_post_by">Mise en ligne par</string>
+    <string name="anounce_description">Description</string>
+    <string name="anounce_price_month">Loyer mensuel</string>
+    <string name="anounce_district">Quartier</string>
+    <string name="anounce_categorie">Catégorie</string>
+    <string name="anounce_room">Pièce(s)</string>
+
+    <string name="anounce_not_found">Aucune annonce trouvée !</string>
+    <string name="anounce_message_not_found">Si vous effectuez une recherche par mots-clés, vérifiez qu\'il n\'y a pas de faute de frappe.</string>
+
+</resources>

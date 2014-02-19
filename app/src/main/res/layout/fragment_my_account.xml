@@ -1,0 +1,144 @@
+<uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/card_border"
+    android:id="@+id/ptr_layout_account"
+    tools:context="com.example.chevbook.Activity.MainActivity$PlaceholderFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="150dp"
+
+                android:gravity="center_vertical|center_horizontal"
+                android:background="@drawable/bg_card_dark">
+
+                <com.example.chevbook.CustomsView.CircularImageView
+                    android:id="@+id/profilePicture"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_profile"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_marginLeft="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="25dp"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold"
+                        android:text="Prénom"
+                        android:id="@+id/profilePrenom" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="25dp"
+                        android:textColor="@android:color/white"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Nom"
+                        android:id="@+id/profileNom" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="25dp"
+                        android:textColor="@android:color/white"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="jj/mm/aaaa"
+                        android:id="@+id/profileNom" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:background="@drawable/bg_card">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="25dp"
+                    android:textColor="@color/dark_black_grey"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="email@email.com"
+                    android:layout_marginRight="8dp"
+                    android:id="@+id/profileEmail" />
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textStyle="bold"
+                android:layout_margin="8dp"
+                android:fontFamily="sans-serif-light"
+                android:textSize="25dp"
+                android:textColor="@color/dark_black_grey"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Appartements"
+                android:id="@+id/profileAppartement"
+                android:background="@drawable/button_bg_card"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:textSize="25dp"
+                android:textColor="@color/dark_black_grey"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Messages"
+                android:id="@+id/profileMessages"
+                android:background="@drawable/button_bg_card"
+                android:layout_margin="8dp"/>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:textSize="25dp"
+                android:layout_margin="8dp"
+                android:textColor="@color/dark_black_grey"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Favoris"
+                android:id="@+id/profileFavoris"
+                android:background="@drawable/button_bg_card"/>
+
+        </LinearLayout>
+    </ScrollView>
+</uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

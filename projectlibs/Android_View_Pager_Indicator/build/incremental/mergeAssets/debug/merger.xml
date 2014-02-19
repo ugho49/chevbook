@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\src\debug\assets" />
+    </dataSet>
+
+</merger>

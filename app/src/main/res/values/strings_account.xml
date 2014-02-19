@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_edit_update_profil">Vous pouvez modifier et compléter vos informations personnelles</string>
+    <string name="choose_my_picture">Choisir ma photo</string>
+
+    <string name="radio_button_man">Mr</string>
+    <string name="radio_button_woman">Mme</string>
+
+    <string name="firstName_account">Prénom</string>
+    <string name="lastName_account">Nom</string>
+    <string name="email_account">Email</string>
+    <string name="born_in_account">Né(e) le</string>
+    <string name="date_of_birth_account">Date de naissance</string>
+    <string name="phone_account">Téléphone</string>
+
+    <string name="field_required_account">* champs obligatoires</string>
+</resources>

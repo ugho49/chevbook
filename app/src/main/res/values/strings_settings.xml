@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Titles Category -->
+    <string name="title_user">Utilisateur</string>
+    <string name="title_notification">Notifications</string>
+    <string name="title_more_information">Plus d\'information</string>
+
+    <!-- Titles -->
+    <string name="title_name_user">Prénom Nom</string>
+    <string name="title_firstname_user">Prénom</string>
+    <string name="title_lastname_user">Nom</string>
+    <string name="title_email_user">E-mail</string>
+    <string name="title_password_user">Mot de passe</string>
+    <string name="title_image_user">URL image</string>
+    <string name="title_notification_on_or_off">Recevoir des notifications</string>
+    <string name="title_notification_vibrate">Vibrer</string>
+    <string name="title_notification_ringtone">Son</string>
+    <string name="title_more_assistance">Assistance</string>
+    <string name="title_more_privacy">Politique de confidentialité</string>
+    <string name="title_more_conditions">Conditions d\'utilisation</string>
+
+
+    <!-- Summary -->
+
+
+    <!-- Other -->
+    <string name="settings_saved">Préférences enregistrées</string>
+
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:startColor="#404040"
+        android:endColor="#F1F1F1"
+        android:angle="270"
+        >
+    </gradient>
+</shape><!-- From: file:/D:/AndroidStudioProjects/ChevBook/projectlibs/Android_View_Pager_Indicator/res/drawable/drop_shadow.xml -->

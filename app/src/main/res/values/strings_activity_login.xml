@@ -1,0 +1,22 @@
+<resources>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mot de passe</string>
+
+    <string name="action_sign_in_register"><b>Connexion</b></string>
+    <string name="action_sign_in_short">Connexion</string>
+
+    <string name="action_forgot_password"><u>Mot de passe perdu</u></string>
+    <string name="create_account">Créer un compte</string>
+    <string name="create_account_warning_message">Vous allez etre redirigé vers le formulaire d\'inscription du site internet.</string>
+
+    <string name="url_web_create_account">http://www.google.com</string>
+
+    <string name="login_progress_signing_in">Connexion en cours&#8230;</string>
+
+    <string name="error_invalid_email">Adresse mail incorrect</string>
+    <string name="error_invalid_password">Mot de passe incorrect</string>
+    <string name="error_invalid_email_or_password">Adresse mail OU Mot de passe incorrect</string>
+    <string name="error_incorrect_password">Mot de passe incorrect</string>
+    <string name="error_field_required">Ce champ est requis</string>
+</resources>

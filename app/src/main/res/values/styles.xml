@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="ptrHeaderStyle">@style/Widget.Custom.PtrHeader</item>
+    </style>
+
+    <style name="Widget.Custom.PtrHeader" parent="android:Widget">
+        <!-- The background of the header view -->
+        <!--<item name="ptrHeaderBackground">...</item>-->
+
+        <!-- The height of the header view. Please note, only set if in you really need to -->
+        <!--<item name="ptrHeaderHeight">...</item>-->
+
+        <!-- TextAppearance of the header view's title text -->
+        <!--<item name="ptrHeaderTitleTextAppearance">...</item>-->
+
+        <!-- Color to tint the progress bar -->
+        <item name="ptrProgressBarColor">@color/green_chevbook</item>
+
+        <!-- Radius of the progress bar corners -->
+        <!--<item name="ptrProgressBarCornerRadius">4dp</item>-->
+
+        <!-- Style of the Progress Bar. Values are either: inside or outside -->
+        <!--<item name="ptrProgressBarStyle">...</item>-->
+
+        <!-- The strings to be displayed at the various states -->
+        <!--<item name="ptrPullText">...</item>
+        <item name="ptrRefreshingText">...</item>
+        <item name="ptrReleaseText">...</item>-->
+    </style>
+
+    <style name="LoginFormContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <!--<item name="android:padding">16dp</item>-->
+    </style>
+</resources>

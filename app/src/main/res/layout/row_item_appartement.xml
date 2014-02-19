@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/imageCoupon"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/darker_gray"
+            android:src="@drawable/logo_android_chevbook" />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:longClickable="false"
+            android:focusableInTouchMode="false"
+            android:layout_marginLeft="7dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Appartement T2 meublé"
+                android:id="@+id/nomCoupon"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:textColor="@color/blue_account"
+                android:layout_marginBottom="2dp"
+                android:maxLines="1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="La roseraie"
+                android:textColor="@color/blue_account_light"
+                android:layout_marginBottom="2dp"
+                android:id="@+id/textView2"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Loue 2 pièces meublé rue Tahiti à min du métro Daumesnil dans un bon immeuble ancien du 3ème étage..."
+                android:id="@+id/descriptionCoupon"
+                android:maxLines="2"
+                android:layout_marginBottom="2dp"
+                android:textSize="11dp"
+                android:textIsSelectable="false"
+                android:minLines="2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="200€"
+                android:id="@+id/dateCoupon"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                android:maxLines="1"
+                android:textSize="15dp"
+                android:layout_marginBottom="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="18/02/2014 - 14h22"
+                android:id="@+id/textView"
+                android:textSize="10dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
