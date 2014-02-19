@@ -2,6 +2,9 @@
 <resources>
     <string name="action_refresh">Rafraîchir</string>
     <string name="action_save">Enregistrer</string>
+    <string name="action_add_favorite">Ajouter aux favoris</string>
+    <string name="action_delete_favorite">Retirer des favoris</string>
+    <string name="action_send_message">Envoyer un message</string>
     <string name="action_search">Rechercher</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>

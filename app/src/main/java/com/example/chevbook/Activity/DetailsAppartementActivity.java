@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.chevbook.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -32,6 +33,10 @@ public class DetailsAppartementActivity extends ActionBarActivity {
     private static ActionBarActivity actionBarActivity;
     private static ImageLoader imageLoader;
     private ArrayList<String> mUrlImagesAppartement;
+
+    private MenuItem menuAddFavoris;
+    private MenuItem menuDeleteFavoris;
+    private MenuItem menuSendMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +64,45 @@ public class DetailsAppartementActivity extends ActionBarActivity {
 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.details_appartement, menu);
+
+        menuAddFavoris = menu.findItem(R.id.menu_detail_appartements_rate_not_important);
+        menuDeleteFavoris = menu.findItem(R.id.menu_detail_appartements_rate_important);
+        menuSendMessage = menu.findItem(R.id.menu_detail_appartements_new_message);
+
+
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-        this.finish();
+        switch (id) {
+            case R.id.menu_detail_appartements_new_message:
+                Toast.makeText(getApplicationContext(), "Envoi d'un message", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.menu_detail_appartements_rate_important:
+                //delete to favoris
+                setMenuFavorisFullstar(false);
+                break;
+
+            case R.id.menu_detail_appartements_rate_not_important:
+                //add to favoris
+                setMenuFavorisFullstar(true);
+                break;
+
+            default:this.finish();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setMenuFavorisFullstar(Boolean b)
+    {
+        //True for show full star
+        //false for show empty star
+        menuAddFavoris.setVisible(!b);
+        menuDeleteFavoris.setVisible(b);
     }
 
     private class ImagePagerAdapter extends PagerAdapter {

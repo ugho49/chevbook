@@ -9,7 +9,7 @@
     <string name="btn_yes">Oui</string>
     <string name="btn_no">Non</string>
     <string name="btn_confirm">Confirmer</string>
-    <string name="btn_search">Recherhcer</string>
+    <string name="btn_search">Rechercher</string>
     <string name="btn_validate">Valider</string>
     <string name="btn_save">Enregistrer</string>
     <string name="btn_change_password">Changer mon mot de passe</string>
