@@ -334,6 +334,7 @@ public class LoginActivity extends ActionBarActivity {
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(myIntent);
                 finish();
+
             } else {
                 mEmailView.setError(getString(R.string.error_invalid_email_or_password));
                 mPasswordView.requestFocus();

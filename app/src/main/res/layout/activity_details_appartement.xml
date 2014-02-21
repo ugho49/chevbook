@@ -70,13 +70,26 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Le 18/02/2014 à 14h12"
                 android:id="@+id/textView"
                 android:layout_marginTop="2dp"
                 android:textSize="13dp" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:textSize="25dp"
+                android:textColor="@color/dark_black_grey"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/look_on_map"
+                android:id="@+id/buttonDetailAppartementLookOnMap"
+                android:background="@drawable/button_bg_card"
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
                 android:orientation="vertical"

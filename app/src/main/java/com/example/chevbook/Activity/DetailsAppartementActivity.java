@@ -1,5 +1,7 @@
 package com.example.chevbook.Activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,9 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.example.chevbook.CustomDialog.CustomDialogMap;
 import com.example.chevbook.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -29,6 +32,8 @@ public class DetailsAppartementActivity extends ActionBarActivity {
     ViewPager mViewPagerDetailAppartement;
     @InjectView(R.id.indicator_view_pager_detail_appartement)
     CirclePageIndicator mIndicatorViewPagerDetailAppartement;
+    @InjectView(R.id.buttonDetailAppartementLookOnMap)
+    Button mButtonDetailAppartementLookOnMap;
 
     private static ActionBarActivity actionBarActivity;
     private static ImageLoader imageLoader;
@@ -37,6 +42,8 @@ public class DetailsAppartementActivity extends ActionBarActivity {
     private MenuItem menuAddFavoris;
     private MenuItem menuDeleteFavoris;
     private MenuItem menuSendMessage;
+
+    private CustomDialogMap dialogMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,16 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         mIndicatorViewPagerDetailAppartement.setFillColor(getResources().getColor(R.color.blue_account));
         mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);
         mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
+
+        dialogMap = new CustomDialogMap(DetailsAppartementActivity.this, "65 rue du chèvrefeuille, 49000 Angers");
+        dialogMap.createDialog();
+
+        mButtonDetailAppartementLookOnMap.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //showCustomDialogMap();
+                dialogMap.showDialog();
+            }
+        });
     }
 
     @Override
@@ -69,8 +86,6 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         menuDeleteFavoris = menu.findItem(R.id.menu_detail_appartements_rate_important);
         menuSendMessage = menu.findItem(R.id.menu_detail_appartements_new_message);
 
-
-
         return true;
     }
 
@@ -79,7 +94,8 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_detail_appartements_new_message:
-                Toast.makeText(getApplicationContext(), "Envoi d'un message", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Envoi d'un message", Toast.LENGTH_SHORT).show();
+                showCustomDialogMessage();
                 break;
 
             case R.id.menu_detail_appartements_rate_important:
@@ -92,13 +108,13 @@ public class DetailsAppartementActivity extends ActionBarActivity {
                 setMenuFavorisFullstar(true);
                 break;
 
-            default:this.finish();
+            default:
+                this.finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void setMenuFavorisFullstar(Boolean b)
-    {
+    public void setMenuFavorisFullstar(Boolean b) {
         //True for show full star
         //false for show empty star
         menuAddFavoris.setVisible(!b);
@@ -127,12 +143,11 @@ public class DetailsAppartementActivity extends ActionBarActivity {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view ==  object;
+            return view == object;
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-
             ImageView imageView = new ImageView(getApplicationContext());
             // int padding = context.getResources().getDimensionPixelSize(
             //       R.dimen.padding_medium);
@@ -143,11 +158,10 @@ public class DetailsAppartementActivity extends ActionBarActivity {
             imageLoader.displayImage(mImages.get(position), imageView);
 
             imageView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     Intent intentImage = new Intent(getApplication(), FullscreenPictureActivity.class);
-                    intentImage.putExtra("position",position);
-                    intentImage.putExtra("ListeURL",mImages);
+                    intentImage.putExtra("position", position);
+                    intentImage.putExtra("ListeURL", mImages);
                     startActivity(intentImage);
                 }
             });
@@ -160,5 +174,49 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((ImageView) object);
         }
+    }
+
+    /*public void showCustomDialogMap()
+    {
+        View custom_view_change_password = getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_map, null);
+
+        // Google Map
+        GoogleMap googleMap;
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(custom_view_change_password)
+                .setNegativeButton(getString(R.string.btn_return), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                })
+                .create();
+
+        dialog.show();
+    }*/
+
+    public void showCustomDialogMessage()
+    {
+        View custom_view_change_password = getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_message, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(custom_view_change_password)
+                .setTitle("Envoi d'un message")
+                .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton(getString(R.string.btn_send), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                })
+                .create();
+
+        dialog.show();
     }
 }
