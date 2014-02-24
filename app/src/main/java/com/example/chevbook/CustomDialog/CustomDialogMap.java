@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Toast;
 
@@ -46,6 +47,10 @@ public class CustomDialogMap {
         this.adresse = adresse;
     }
 
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
     public void createDialog() {
         View custom_view_change_password = mActivity.getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_map, null);
         googleMap = ((MapFragment) mActivity.getFragmentManager().findFragmentById(R.id.mapCustomDialog)).getMap();
@@ -78,7 +83,9 @@ public class CustomDialogMap {
         {
             if(connectionDetector.isConnectingToInternet())
             {
-                showMarkerClient();
+                //showMarkerClient();
+                LoadMarkerTask mLoadMarkerTask = new LoadMarkerTask();
+                mLoadMarkerTask.execute((Void) null);
             }
             else {
                 Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.no_internet_connexion), Toast.LENGTH_SHORT).show();
@@ -86,47 +93,61 @@ public class CustomDialogMap {
         }
     }
 
-    private void showMarkerClient()
-    {
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+    public class LoadMarkerTask extends AsyncTask<Void, Void, Boolean> {
 
-        LatLng position = getPositionByAdresse(adresse);
+        LatLng position;
+        Geocoder fwdGeocoder;
+        List<Address> locations;
 
-        googleMap.addMarker(new MarkerOptions().position(position).title(mActivity.getResources().getString(R.string.appartements)).snippet(adresse).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        builder.include(position);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), mActivity.getResources().getDisplayMetrics().widthPixels, mActivity.getResources().getDisplayMetrics().heightPixels, 200));
-    }
-
-    private LatLng getPositionByAdresse(String adresse)
-    {
-        LatLng pos = null;
-
-        Geocoder fwdGeocoder = new Geocoder(mActivity.getApplicationContext(), Locale.FRANCE);
-        List<Address> locations = null;
-
-        try {
-            locations = fwdGeocoder.getFromLocationName(adresse, 10);
-        }
-        catch (IOException e) {
-            // Pbs geocoder adresse client
+            position = null;
+            fwdGeocoder = new Geocoder(mActivity.getApplicationContext(), Locale.FRANCE);
+            locations = null;
         }
 
-        if ((locations == null) || (locations.isEmpty()))
-        {
-            // Adresse client inconnue
-            Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.map_error_found_adress), Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            // Réussite du geofencing
-            pos = new LatLng(locations.get(0).getLatitude(),locations.get(0).getLongitude());
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            try {
+                locations = fwdGeocoder.getFromLocationName(adresse, 10);
+                return true;
+            }
+            catch (IOException e) {
+                // Pbs geocoder adresse
+                return false;
+            }
         }
 
-        return pos;
-    }
+        @Override
+        protected void onPostExecute(final Boolean success) {
 
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
+            if (success) {
+                if ((locations == null) || (locations.isEmpty()))
+                {
+                    // Adresse client inconnue
+                    Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.map_error_found_adress), Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    // Réussite du geofencing
+                    position = new LatLng(locations.get(0).getLatitude(),locations.get(0).getLongitude());
+
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+                    googleMap.addMarker(new MarkerOptions().position(position).title(mActivity.getResources().getString(R.string.appartements)).snippet(adresse).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    builder.include(position);
+
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), mActivity.getResources().getDisplayMetrics().widthPixels, mActivity.getResources().getDisplayMetrics().heightPixels, 200));
+                }
+            }
+            else
+            {
+                Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.map_error_found_adress), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
