@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fragment_message_tab_array">
+        <item>Reçus</item>
+        <item>Envoyés</item>
+    </string-array>
+
+    <!--<string name="btn_cancel">Annuler</string>-->
+</resources>

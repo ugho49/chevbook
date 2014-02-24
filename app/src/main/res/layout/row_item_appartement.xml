@@ -13,10 +13,9 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/imageCoupon"
+            android:id="@+id/imageViewRowItemAppartementPicture"
             android:scaleType="centerCrop"
             android:layout_gravity="center_vertical"
-            android:background="@android:color/darker_gray"
             android:src="@drawable/logo_android_chevbook" />
 
 
@@ -34,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Appartement T2 meublé"
-                android:id="@+id/nomCoupon"
+                android:id="@+id/textViewRowItemAppartementName"
                 android:textStyle="bold"
                 android:textSize="17dp"
                 android:textColor="@color/blue_account"
@@ -48,7 +47,7 @@
                 android:text="La roseraie"
                 android:textColor="@color/blue_account_light"
                 android:layout_marginBottom="2dp"
-                android:id="@+id/textView2"
+                android:id="@+id/textViewRowItemAppartementQuartier"
                 android:textSize="16dp" />
 
             <TextView
@@ -56,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Loue 2 pièces meublé rue Tahiti à min du métro Daumesnil dans un bon immeuble ancien du 3ème étage..."
-                android:id="@+id/descriptionCoupon"
+                android:id="@+id/textViewRowItemAppartementDescription"
                 android:maxLines="2"
                 android:layout_marginBottom="2dp"
                 android:textSize="11dp"
@@ -68,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="200€"
-                android:id="@+id/dateCoupon"
+                android:id="@+id/textViewRowItemAppartementPrice"
                 android:textStyle="bold"
                 android:layout_gravity="left"
                 android:maxLines="1"
@@ -80,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="18/02/2014 - 14h22"
-                android:id="@+id/textView"
+                android:id="@+id/textViewRowItemAppartementDate"
                 android:textSize="10dp" />
 
         </LinearLayout>

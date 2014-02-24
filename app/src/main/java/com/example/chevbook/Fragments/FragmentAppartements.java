@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -23,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.chevbook.Activity.DetailsAppartementActivity;
+import com.example.chevbook.Adapter.ListViewAppartementAdapter;
+import com.example.chevbook.Class.Appartement;
 import com.example.chevbook.Class.Modele;
 import com.example.chevbook.R;
 
@@ -65,6 +68,7 @@ public class FragmentAppartements extends Fragment implements OnRefreshListener 
     private static String [] AppartementListType;
 
     private Modele vmodele;
+    private ListViewAppartementAdapter Adapter;
 
     private PullToRefreshLayout mPullToRefreshLayout;
     private static LayoutInflater mInflater;
@@ -106,6 +110,21 @@ public class FragmentAppartements extends Fragment implements OnRefreshListener 
         mImageViewSearch.setOnClickListener(clickListener);
         mImageViewSearchMoreDetail.setOnClickListener(clickListener);
 
+        Adapter = new ListViewAppartementAdapter(getActivity().getBaseContext());
+        mListViewSearch.setAdapter(Adapter);
+
+        mListViewSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+
+                Intent intentDetailAppartement = new Intent(getActivity(), DetailsAppartementActivity.class);
+                intentDetailAppartement.putExtra("position", position);
+                intentDetailAppartement.putExtra("appartement", new Appartement());
+                startActivity(intentDetailAppartement);
+            }
+
+        });
+
         return root;
     }
 
@@ -121,13 +140,7 @@ public class FragmentAppartements extends Fragment implements OnRefreshListener 
                     break;
 
                 case R.id.imageViewSearch:
-                    Toast.makeText(getActivity(), "Recherche lancée... (click appart event)", Toast.LENGTH_SHORT).show();
-
-                    /* A SUPPRIMER */
-                        Intent intentDetailAppartement = new Intent(getActivity(), DetailsAppartementActivity.class);
-                        //todo: putExtra like intentDetailAccount.putExtra("url_image","bsjeibjsprjbopsrj")
-                        startActivity(intentDetailAppartement);
-                    /* A SUPPRIMER */
+                    Toast.makeText(getActivity(), "Recherche lancée...", Toast.LENGTH_SHORT).show();
                     break;
 
             }

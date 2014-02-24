@@ -209,12 +209,12 @@ public class DetailsAppartementActivity extends ActionBarActivity {
                         dialog.cancel();
                     }
                 })
-                .setPositiveButton(getString(R.string.btn_send), new DialogInterface.OnClickListener() {
+                /*.setPositiveButton(getString(R.string.btn_send), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();
                         dialog.cancel();
                     }
-                })
+                })*/
                 .create();
 
         dialog.show();

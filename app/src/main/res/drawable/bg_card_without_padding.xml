@@ -6,7 +6,7 @@
 
             <corners android:radius="1dp"/>
 
-            <solid android:color="@color/dark_black" />
+            <solid android:color="#ccc" />
 
         </shape>
     </item>
@@ -16,12 +16,12 @@
 
             <corners android:radius="1dp" />
 
-            <solid android:color="@color/dark_black_grey" />
+            <solid android:color="@android:color/white" />
 
-            <padding android:bottom="8dp"
-                android:left="8dp"
-                android:right="8dp"
-                android:top="8dp" />
+            <padding android:bottom="0dp"
+                android:left="0dp"
+                android:right="0dp"
+                android:top="0dp" />
         </shape>
     </item>
 </layer-list>
