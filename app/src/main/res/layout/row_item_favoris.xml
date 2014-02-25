@@ -1,7 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
-</LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card"
+        android:layout_margin="5dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="105dp"
+            android:layout_height="105dp"
+            android:id="@+id/imageViewRowItemFavorisPicture"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/logo_android_chevbook" />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:longClickable="false"
+            android:focusableInTouchMode="false"
+            android:layout_marginLeft="7dp"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Appartement T2 meublé"
+                android:id="@+id/textViewRowItemFavorisName"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:textColor="@color/blue_account"
+                android:maxLines="1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="La roseraie"
+                android:textColor="@color/blue_account_light"
+                android:id="@+id/textViewRowItemFavorisQuartier"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Loue 2 pièces meublé rue Tahiti à min du métro Daumesnil dans un bon immeuble ancien du 3ème étage..."
+                android:id="@+id/textViewRowItemFavorisDescription"
+                android:maxLines="2"
+                android:textSize="11dp"
+                android:textIsSelectable="false"
+                android:minLines="2" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="200€"
+                        android:id="@+id/textViewRowItemFavorisPrice"
+                        android:textStyle="bold"
+                        android:layout_gravity="left"
+                        android:maxLines="1"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="18/02/2014 - 14h22"
+                        android:id="@+id/textViewRowItemFavorisDate"
+                        android:textSize="10dp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageViewRowItemFavorisDelete"
+                    android:src="@drawable/ic_action_discard_light"
+                    android:background="@drawable/button_search_appartement"
+                    android:layout_weight="0.1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

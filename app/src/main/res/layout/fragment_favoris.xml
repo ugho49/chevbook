@@ -2,12 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.chevbook.Fragments.FragmentFavoris">
+    tools:context="com.example.chevbook.Fragments.FragmentFavoris"
+    android:background="@color/card_border">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Mes favoris" />
+        android:id="@+id/listViewFavoris"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        tools:listitem="@layout/row_item_favoris"
+        android:paddingBottom="5dp"/>
 
 </FrameLayout>
