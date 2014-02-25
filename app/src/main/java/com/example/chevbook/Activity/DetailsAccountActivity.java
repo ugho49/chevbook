@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.example.chevbook.CustomsView.CircularImageView;
 import com.example.chevbook.R;
+import com.google.analytics.tracking.android.EasyTracker;
 
 import java.io.File;
 import java.io.IOException;
@@ -157,6 +158,20 @@ public class DetailsAccountActivity extends ActionBarActivity {
         /* REMOVE */
             //Toast.makeText(getApplicationContext(), selectedImagePath, Toast.LENGTH_LONG).show();
         /* REMOVE */
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EasyTracker.getInstance(this).activityStart(this);  // Start Google Analytics
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
 
     @Override

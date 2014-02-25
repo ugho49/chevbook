@@ -10,6 +10,7 @@ import android.view.WindowManager;
 
 import com.example.chevbook.Adapter.FullScreenImageAdapter;
 import com.example.chevbook.R;
+import com.google.analytics.tracking.android.EasyTracker;
 
 import java.util.ArrayList;
 
@@ -62,5 +63,19 @@ public class FullscreenPictureActivity extends ActionBarActivity {
             return true;
         }*/
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EasyTracker.getInstance(this).activityStart(this);  // Start Google Analytics
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
 }

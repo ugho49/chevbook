@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.example.chevbook.CustomDialog.CustomDialogMap;
 import com.example.chevbook.R;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -218,5 +219,19 @@ public class DetailsAppartementActivity extends ActionBarActivity {
                 .create();
 
         dialog.show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EasyTracker.getInstance(this).activityStart(this);  // Start Google Analytics
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
 }

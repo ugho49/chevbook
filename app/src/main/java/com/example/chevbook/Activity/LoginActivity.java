@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.chevbook.Class.Modele;
 import com.example.chevbook.Class.User;
 import com.example.chevbook.R;
+import com.google.analytics.tracking.android.EasyTracker;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -167,6 +168,20 @@ public class LoginActivity extends ActionBarActivity {
         }*/
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EasyTracker.getInstance(this).activityStart(this);  // Start Google Analytics
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
 
     /**
