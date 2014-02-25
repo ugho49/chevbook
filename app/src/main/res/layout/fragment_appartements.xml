@@ -124,7 +124,7 @@
                 android:paddingLeft="10dp"
                 android:textColor="#858585"
                 android:hint="@string/search_key_words"
-                android:background="#00000000"
+                android:background="@color/white_transparent"
                 android:singleLine="true"
                 android:layout_marginLeft="5dp" />
 

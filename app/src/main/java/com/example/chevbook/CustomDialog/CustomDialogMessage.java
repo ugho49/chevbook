@@ -89,6 +89,8 @@ public class CustomDialogMessage {
             mEditTextCustomDialogMessageMessage.setEnabled(false);
             mEditTextCustomDialogMessageTitle.setEnabled(false);
             mEditTextCustomDialogMessageTitle.setMaxLines(20);
+            mEditTextCustomDialogMessageTitle.setBackgroundColor(mActivity.getResources().getColor(R.color.white_transparent));
+            mEditTextCustomDialogMessageMessage.setBackgroundColor(mActivity.getResources().getColor(R.color.white_transparent));
         }
         else {
             mButtonCustomDialogMessageSent.setVisibility(View.VISIBLE);
