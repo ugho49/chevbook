@@ -7,10 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chevbook.CustomsView.CircularImageView;
 import com.example.chevbook.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Ugho on 25/02/14.
@@ -19,10 +23,12 @@ public class CustomDialogMessage {
 
     private static TextView mTextViewCustomDialogMessageUserName;
     private static TextView mTextViewCustomDialogMessageDate;
+    private static TextView mTextViewCustomDialogMessageFromTo;
     private static CircularImageView mImageViewCustomDialogMessageUserReceiver;
     private static EditText mEditTextCustomDialogMessageTitle;
     private static EditText mEditTextCustomDialogMessageMessage;
     private static Button mButtonCustomDialogMessageSent;
+    private static Button mButtonCustomDialogMessageReply;
 
     private Activity mActivity;
     private final ImageLoader imageLoader = ImageLoader.getInstance();
@@ -42,8 +48,10 @@ public class CustomDialogMessage {
         mEditTextCustomDialogMessageMessage = (EditText)custom_view_message.findViewById(R.id.editTextCustomDialogMessageMessage);
         mTextViewCustomDialogMessageUserName = (TextView)custom_view_message.findViewById(R.id.textViewCustomDialogMessageUserName);
         mTextViewCustomDialogMessageDate = (TextView)custom_view_message.findViewById(R.id.textViewCustomDialogMessageDate);
+        mTextViewCustomDialogMessageFromTo = (TextView) custom_view_message.findViewById(R.id.textViewCustomDialogMessageFromTo);
         mImageViewCustomDialogMessageUserReceiver = (CircularImageView)custom_view_message.findViewById(R.id.imageViewCustomDialogMessageUserReceiver);
         mButtonCustomDialogMessageSent = (Button)custom_view_message.findViewById(R.id.buttonCustomDialogMessageSent);
+        mButtonCustomDialogMessageReply = (Button)custom_view_message.findViewById(R.id.buttonCustomDialogMessageReply);
 
         dialog = new AlertDialog.Builder(mActivity)
                 .setView(custom_view_message)
@@ -58,6 +66,9 @@ public class CustomDialogMessage {
     }
 
     public void showDialog() {
+        mButtonCustomDialogMessageReply.setOnClickListener(clickListener);
+        mButtonCustomDialogMessageSent.setOnClickListener(clickListener);
+
         dialog.show();
     }
 
@@ -81,23 +92,64 @@ public class CustomDialogMessage {
 
     }
 
-    public void lookMessage(Boolean b)
+    public void lookMessage()
+    {
+        mButtonCustomDialogMessageSent.setVisibility(View.GONE);
+        mEditTextCustomDialogMessageMessage.setEnabled(false);
+        mEditTextCustomDialogMessageTitle.setEnabled(false);
+        mEditTextCustomDialogMessageTitle.setMaxLines(20);
+        mEditTextCustomDialogMessageTitle.setSingleLine(false);
+        mEditTextCustomDialogMessageTitle.setBackgroundColor(mActivity.getResources().getColor(R.color.white_transparent));
+        mEditTextCustomDialogMessageMessage.setBackgroundColor(mActivity.getResources().getColor(R.color.white_transparent));
+    }
+
+    public void showButtonReply(Boolean b)
     {
         if(b)
         {
-            mButtonCustomDialogMessageSent.setVisibility(View.GONE);
-            mEditTextCustomDialogMessageMessage.setEnabled(false);
-            mEditTextCustomDialogMessageTitle.setEnabled(false);
-            mEditTextCustomDialogMessageTitle.setMaxLines(20);
-            mEditTextCustomDialogMessageTitle.setBackgroundColor(mActivity.getResources().getColor(R.color.white_transparent));
-            mEditTextCustomDialogMessageMessage.setBackgroundColor(mActivity.getResources().getColor(R.color.white_transparent));
+            mButtonCustomDialogMessageReply.setVisibility(View.VISIBLE);
+            mTextViewCustomDialogMessageFromTo.setText("De :");
         }
         else {
-            mButtonCustomDialogMessageSent.setVisibility(View.VISIBLE);
-            mEditTextCustomDialogMessageMessage.setEnabled(true);
-            mEditTextCustomDialogMessageTitle.setEnabled(true);
+            mButtonCustomDialogMessageReply.setVisibility(View.GONE);
         }
     }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.buttonCustomDialogMessageSent:
+                    Toast.makeText(mActivity.getApplicationContext(), "Envoi en cours...", Toast.LENGTH_SHORT).show();
+
+                    //todo
+
+                    dialog.cancel();
+                    break;
+
+                case R.id.buttonCustomDialogMessageReply:
+                    //Toast.makeText(mActivity.getApplicationContext(), "Réponse...", Toast.LENGTH_SHORT).show();
+
+                    dialog.cancel();
+
+                    CustomDialogMessage dm = new CustomDialogMessage(mActivity);
+                    dm.createDialog();
+                    dm.resetDialog();
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+                    String currentDateAndTime = sdf.format(new Date());
+
+                    dm.setDateMessage(currentDateAndTime);
+                    dm.setUserName("testName");
+                    dm.setImageUserMessage("https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-prn2/t1/1546110_10202187125312508_9323923_n.jpg");
+                    dm.showDialog();
+                    break;
+
+            }
+        }
+    };
 
     public void setUserName(String userName)
     {

@@ -21,7 +21,9 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -103,7 +105,11 @@ public class DetailsAppartementActivity extends ActionBarActivity {
                 //showCustomDialogMessage();
 
                 dialogMessage.setUserName("Ugho49");
-                dialogMessage.setDateMessage("15/08/2014");
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+                String currentDateAndTime = sdf.format(new Date());
+
+                dialogMessage.setDateMessage(currentDateAndTime);
                 dialogMessage.setImageUserMessage("https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-prn2/t1/1546110_10202187125312508_9323923_n.jpg");
 
                 dialogMessage.showDialog();

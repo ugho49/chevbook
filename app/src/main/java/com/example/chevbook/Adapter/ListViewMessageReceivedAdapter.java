@@ -39,6 +39,7 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         public ImageView picture;
+        public ImageView ico_new;
         public TextView title;
         public TextView userName;
         public TextView date;
@@ -74,6 +75,7 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
             v = vi.inflate(R.layout.row_item_messages_received, null);
             holder = new ViewHolder();
             holder.picture = (ImageView) v.findViewById(R.id.imageViewRowItemMessageReceivedPictureUser);
+            holder.ico_new = (ImageView) v.findViewById(R.id.imageViewRowItemMessageReceivedNew);
             holder.title = (TextView) v.findViewById(R.id.textViewRowItemMessageReceivedTitleAnnounce);
             holder.userName = (TextView) v.findViewById(R.id.textViewRowItemMessageReceivedUserName);
             holder.message = (TextView) v.findViewById(R.id.textViewRowItemMessageReceivedMessage);
@@ -87,6 +89,11 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
 
         String url_image = "https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-prn2/t1/1546110_10202187125312508_9323923_n.jpg";
         imageLoader.displayImage(url_image, holder.picture);
+
+        if(position == 0)
+        {
+            holder.ico_new.setVisibility(View.VISIBLE);
+        }
 
         return v;
     }

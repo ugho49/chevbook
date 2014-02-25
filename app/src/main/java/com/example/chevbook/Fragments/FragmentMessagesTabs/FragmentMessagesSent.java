@@ -51,7 +51,7 @@ public class FragmentMessagesSent extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
                 dialogMessage.createDialog();
-                dialogMessage.lookMessage(true);
+                dialogMessage.lookMessage();
                 dialogMessage.resetDialog();
                 dialogMessage.instantiateDialog("https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-prn2/t1/1546110_10202187125312508_9323923_n.jpg", "Ugho49", "12/02/2014", "Renseignement pour votre appartement", "Bonjour, je suis très intéressé par votre annonce, pouvez-vous me recontacter au plus vite pour en connaître d'avantage ? Mon numéro : 06.88.10.65.38. Coordialement, Ugho STEPHAN");
                 dialogMessage.showDialog();

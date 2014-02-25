@@ -36,15 +36,30 @@
                 android:gravity="center_vertical"
                 android:layout_marginLeft="10dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Appartement T2 meublé"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="bold"
-                    android:id="@+id/textViewRowItemMessageReceivedTitleAnnounce"
-                    android:textColor="@color/blue_account"/>
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Appartement T2 meublé"
+                        android:fontFamily="sans-serif"
+                        android:textStyle="bold"
+                        android:id="@+id/textViewRowItemMessageReceivedTitleAnnounce"
+                        android:textColor="@color/blue_account"
+                        android:layout_weight="1" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageViewRowItemMessageReceivedNew"
+                        android:src="@drawable/ic_new"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:orientation="horizontal"
