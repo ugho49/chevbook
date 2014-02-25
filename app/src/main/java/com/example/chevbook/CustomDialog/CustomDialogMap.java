@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -89,6 +90,7 @@ public class CustomDialogMap {
             }
             else {
                 Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.no_internet_connexion), Toast.LENGTH_SHORT).show();
+                Log.d("chevbook_CD_MAP", "no internet connexion");
             }
         }
     }
@@ -130,6 +132,7 @@ public class CustomDialogMap {
                 {
                     // Adresse client inconnue
                     Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.map_error_found_adress), Toast.LENGTH_SHORT).show();
+                    Log.d("chevbook_CD_MAP", "not adress fount");
                 }
                 else
                 {
@@ -147,6 +150,7 @@ public class CustomDialogMap {
             else
             {
                 Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.map_error_found_adress), Toast.LENGTH_SHORT).show();
+                Log.d("chevbook_CD_MAP", "Error geocoder adress");
             }
         }
     }

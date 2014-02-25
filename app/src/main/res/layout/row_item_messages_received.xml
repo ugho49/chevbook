@@ -2,43 +2,28 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/card_border">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_card_without_padding"
-        android:layout_margin="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Appartement T2 meublé"
-            android:id="@+id/textViewRowItemMessageReceivedTitleAnnounce"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:background="#CC616161"
-            android:padding="2dp"
-            android:textColor="@android:color/white"
-            android:gravity="center_vertical|center_horizontal" />
+        android:background="@drawable/bg_card"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/linearLayout"
-            android:gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp">
+            android:gravity="center_vertical">
 
             <com.example.chevbook.CustomsView.CircularImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
                 android:id="@+id/imageViewRowItemMessageReceivedPictureUser"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_user_drag_drop" />
@@ -51,6 +36,16 @@
                 android:gravity="center_vertical"
                 android:layout_marginLeft="10dp">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Appartement T2 meublé"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:id="@+id/textViewRowItemMessageReceivedTitleAnnounce"
+                    android:textColor="@color/blue_account"/>
+
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
@@ -62,7 +57,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="Message envoyé par"
                         android:id="@+id/textView"
-                        android:textSize="16dp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -87,7 +82,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="le"
                         android:id="@+id/textView3"
-                        android:textSize="16dp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -96,7 +91,7 @@
                         android:text="23/05/2014"
                         android:id="@+id/textViewRowItemMessageReceivedDate"
                         android:layout_marginLeft="4dp"
-                        android:textSize="15dp" />
+                        android:textSize="14dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -109,8 +104,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Bonjour, je suis très intéressé par votre annonce, pouvez-vous me recontacter au plus vite pour en connaître d'avantage ? Mon numéro : 06.88.10.65.38. Coordialement, Ugho STEPHAN"
             android:id="@+id/textViewRowItemMessageReceivedMessage"
-            android:padding="5dp"
             android:textSize="12dp"
+            android:layout_marginTop="1dp"
             android:maxLines="2" />
 
     </LinearLayout>

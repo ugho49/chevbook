@@ -13,5 +13,6 @@
         android:layout_alignParentTop="false"
         android:dividerHeight="0dp"
         android:divider="@null"
-        tools:listitem="@layout/row_item_messages_sent" />
+        tools:listitem="@layout/row_item_messages_sent"
+        android:paddingBottom="5dp"/>
 </RelativeLayout>
