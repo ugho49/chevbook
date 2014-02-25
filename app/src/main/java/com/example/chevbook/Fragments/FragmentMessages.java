@@ -41,6 +41,7 @@ public class FragmentMessages extends Fragment {
         mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.green_chevbook));
         mViewPager.setAdapter(new ViewPageMessagesAdapter(getChildFragmentManager(), mTabsTitles));
 
+
         return root;
     }
 

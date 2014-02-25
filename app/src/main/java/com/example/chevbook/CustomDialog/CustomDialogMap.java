@@ -53,11 +53,11 @@ public class CustomDialogMap {
     }
 
     public void createDialog() {
-        View custom_view_change_password = mActivity.getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_map, null);
+        View custom_view_map = mActivity.getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_map, null);
         googleMap = ((MapFragment) mActivity.getFragmentManager().findFragmentById(R.id.mapCustomDialog)).getMap();
 
         dialog = new AlertDialog.Builder(mActivity)
-                .setView(custom_view_change_password)
+                .setView(custom_view_map)
                 .setNegativeButton(mActivity.getResources().getString(R.string.btn_return), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();

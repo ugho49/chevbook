@@ -1,7 +1,5 @@
 package com.example.chevbook.Activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.chevbook.CustomDialog.CustomDialogMap;
+import com.example.chevbook.CustomDialog.CustomDialogMessage;
 import com.example.chevbook.R;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -45,6 +44,7 @@ public class DetailsAppartementActivity extends ActionBarActivity {
     private MenuItem menuSendMessage;
 
     private CustomDialogMap dialogMap;
+    private CustomDialogMessage dialogMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,11 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
 
         dialogMap = new CustomDialogMap(DetailsAppartementActivity.this, "65 rue du chèvrefeuille, 49000 Angers");
+        dialogMessage = new CustomDialogMessage(DetailsAppartementActivity.this);
+
         dialogMap.createDialog();
+        dialogMessage.createDialog();
+
 
         mButtonDetailAppartementLookOnMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -96,7 +100,14 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         switch (id) {
             case R.id.menu_detail_appartements_new_message:
                 //Toast.makeText(getApplicationContext(), "Envoi d'un message", Toast.LENGTH_SHORT).show();
-                showCustomDialogMessage();
+                //showCustomDialogMessage();
+
+                dialogMessage.setUserName("Ugho49");
+                dialogMessage.setDateMessage("15/08/2014");
+                dialogMessage.setImageUserMessage("https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-prn2/t1/1546110_10202187125312508_9323923_n.jpg");
+
+                dialogMessage.showDialog();
+
                 break;
 
             case R.id.menu_detail_appartements_rate_important:
@@ -177,27 +188,7 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         }
     }
 
-    /*public void showCustomDialogMap()
-    {
-        View custom_view_change_password = getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_map, null);
-
-        // Google Map
-        GoogleMap googleMap;
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(custom_view_change_password)
-                .setNegativeButton(getString(R.string.btn_return), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
-                    }
-                })
-                .create();
-
-        dialog.show();
-    }*/
-
-    public void showCustomDialogMessage()
+    /*public void showCustomDialogMessage()
     {
         View custom_view_change_password = getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_message, null);
 
@@ -210,16 +201,10 @@ public class DetailsAppartementActivity extends ActionBarActivity {
                         dialog.cancel();
                     }
                 })
-                /*.setPositiveButton(getString(R.string.btn_send), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
-                    }
-                })*/
                 .create();
 
         dialog.show();
-    }
+    }*/
 
     @Override
     public void onStart() {
