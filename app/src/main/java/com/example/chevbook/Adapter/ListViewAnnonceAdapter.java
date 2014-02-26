@@ -17,20 +17,20 @@ import java.util.List;
 /**
  * Created by Ugho on 24/02/14.
  */
-public class ListViewAppartementAdapter extends BaseAdapter {
+public class ListViewAnnonceAdapter extends BaseAdapter {
 
     private final List<Appartement> list;
     private final Context _c;
 
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public ListViewAppartementAdapter(Context context) {
+    public ListViewAnnonceAdapter(Context context) {
 
         this._c = context;
         this.list = null;
     }
 
-    public ListViewAppartementAdapter(Context context, List<Appartement> ListAppartements) {
+    public ListViewAnnonceAdapter(Context context, List<Appartement> ListAppartements) {
 
         this._c = context;
         this.list = ListAppartements;
@@ -72,7 +72,7 @@ public class ListViewAppartementAdapter extends BaseAdapter {
         View v = convertView;
         if (v == null) {
             LayoutInflater vi = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.row_item_appartement, null);
+            v = vi.inflate(R.layout.row_item_annonce, null);
             holder = new ViewHolder();
             holder.image = (ImageView) v.findViewById(R.id.imageViewRowItemAppartementPicture);
             holder.title = (TextView) v.findViewById(R.id.textViewRowItemAppartementName);

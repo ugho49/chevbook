@@ -12,28 +12,32 @@ import android.view.ViewGroup;
 import com.example.chevbook.R;
 
 
-/**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- *
- */
-public class FragmentAbout extends Fragment {
+public class FragmentMyAnnonces extends Fragment {
 
 
-    public FragmentAbout() {
+    public FragmentMyAnnonces() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_my_annonces, container, false);
+
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        actionBar.setTitle(mNavigationTitles[7]);
-        return inflater.inflate(R.layout.fragment_about, container, false);
-    }
+        actionBar.setTitle(mNavigationTitles[4]);
+        //todo
 
+        return rootView;
+    }
 
 }

@@ -24,7 +24,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.chevbook.Activity.DetailsAppartementActivity;
-import com.example.chevbook.Adapter.ListViewAppartementAdapter;
+import com.example.chevbook.Adapter.ListViewAnnonceAdapter;
 import com.example.chevbook.Class.Appartement;
 import com.example.chevbook.Class.Modele;
 import com.example.chevbook.R;
@@ -35,7 +35,7 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class FragmentAppartements extends Fragment implements OnRefreshListener {
+public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
     @InjectView(R.id.editTextSearch)
     EditText mEditTextSearch;
@@ -68,13 +68,13 @@ public class FragmentAppartements extends Fragment implements OnRefreshListener 
     private static String [] AppartementListType;
 
     private Modele vmodele;
-    private ListViewAppartementAdapter Adapter;
+    private ListViewAnnonceAdapter Adapter;
 
     private PullToRefreshLayout mPullToRefreshLayout;
     private static LayoutInflater mInflater;
 
     public static Fragment newInstance(Context context) {
-        FragmentAppartements f = new FragmentAppartements();
+        FragmentAnnonces f = new FragmentAnnonces();
 
         return f;
     }
@@ -89,7 +89,7 @@ public class FragmentAppartements extends Fragment implements OnRefreshListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //init
-        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_appartements, null);
+        ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_annonce, null);
         ButterKnife.inject(this, root);
         mInflater = inflater;
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -110,7 +110,7 @@ public class FragmentAppartements extends Fragment implements OnRefreshListener 
         mImageViewSearch.setOnClickListener(clickListener);
         mImageViewSearchMoreDetail.setOnClickListener(clickListener);
 
-        Adapter = new ListViewAppartementAdapter(getActivity().getBaseContext());
+        Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext());
         mListViewSearch.setAdapter(Adapter);
 
         mListViewSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -148,7 +148,7 @@ public class FragmentAppartements extends Fragment implements OnRefreshListener 
     };
 
     private void custom_dialog_more_detail() {
-        View custom_view_change_password = mInflater.inflate(R.layout.custom_dialog_search_appartement_more_detail, null);
+        View custom_view_change_password = mInflater.inflate(R.layout.custom_dialog_search_annonce_more_detail, null);
 
         AppartementListQuartier = getResources().getStringArray(R.array.appartements_quartier_array);
         AppartementListType = getResources().getStringArray(R.array.appartements_type_array);

@@ -46,7 +46,7 @@ public class FragmentFavoris extends Fragment {
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        actionBar.setTitle(mNavigationTitles[4]);
+        actionBar.setTitle(mNavigationTitles[5]);
 
         Adapter = new ListViewFavorisAdapter(getActivity(), getActivity().getBaseContext());
         mListViewFavoris.setAdapter(Adapter);

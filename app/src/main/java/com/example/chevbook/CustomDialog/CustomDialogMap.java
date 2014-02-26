@@ -53,7 +53,7 @@ public class CustomDialogMap {
     }
 
     public void createDialog() {
-        View custom_view_map = mActivity.getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_map, null);
+        View custom_view_map = mActivity.getLayoutInflater().inflate(R.layout.custom_dialog_detail_annonce_map, null);
         googleMap = ((MapFragment) mActivity.getFragmentManager().findFragmentById(R.id.mapCustomDialog)).getMap();
 
         dialog = new AlertDialog.Builder(mActivity)

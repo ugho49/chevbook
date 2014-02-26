@@ -42,7 +42,7 @@ public class CustomDialogMessage {
     }
 
     public void createDialog() {
-        View custom_view_message = mActivity.getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_message, null);
+        View custom_view_message = mActivity.getLayoutInflater().inflate(R.layout.custom_dialog_message, null);
 
         mEditTextCustomDialogMessageTitle = (EditText)custom_view_message.findViewById(R.id.editTextCustomDialogMessageTitle);
         mEditTextCustomDialogMessageMessage = (EditText)custom_view_message.findViewById(R.id.editTextCustomDialogMessageMessage);

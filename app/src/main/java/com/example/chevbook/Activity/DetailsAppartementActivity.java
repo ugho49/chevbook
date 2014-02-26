@@ -52,7 +52,7 @@ public class DetailsAppartementActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_details_appartement);
+        setContentView(R.layout.activity_details_annonce);
         ButterKnife.inject(this);
         imageLoader = ImageLoader.getInstance();
 

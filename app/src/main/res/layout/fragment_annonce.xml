@@ -17,7 +17,7 @@
         android:dividerHeight="0dp"
         android:divider="@null"
         android:layout_below="@+id/linearLayoutSearchAppartementEditText"
-        tools:listitem="@layout/row_item_appartement"/>
+        tools:listitem="@layout/row_item_annonce"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

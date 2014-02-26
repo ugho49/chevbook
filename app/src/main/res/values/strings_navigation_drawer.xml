@@ -7,8 +7,9 @@
     <string-array name="navigation_array">
         <item>Mon Compte</item>
         <item>Accueil</item>
-        <item>Appartements</item>
-        <item>Messages</item>
+        <item>Annonces</item>
+        <item>Mes Messages</item>
+        <item>Mes Annonces</item>
         <item>Mes Favoris</item>
         <item>Paramètres</item>
         <item>A propos</item>
@@ -20,6 +21,7 @@
         <item>@drawable/ic_news</item>
         <item>@drawable/ic_door</item>
         <item>@drawable/ic_chat</item>
+        <item>@drawable/ic_folder</item>
         <item>@drawable/ic_star</item>
         <item>@drawable/ic_tools</item>
         <item>@drawable/ic_interstate</item>
