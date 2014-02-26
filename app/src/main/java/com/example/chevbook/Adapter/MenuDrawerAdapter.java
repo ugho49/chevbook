@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.chevbook.Class.Modele;
 import com.example.chevbook.Class.User;
 import com.example.chevbook.CustomsView.CircularImageView;
 import com.example.chevbook.R;
@@ -26,6 +25,7 @@ public class MenuDrawerAdapter extends BaseAdapter {
     //int[] mIcon;
     TypedArray mIcon;
     LayoutInflater inflater;
+    User currentUser;
 
     public MenuDrawerAdapter(Context context, String[] title,TypedArray icon) {
         this.context = context;
@@ -60,8 +60,10 @@ public class MenuDrawerAdapter extends BaseAdapter {
 
         if(position == 0)
         {
-            Modele vmodele = new Modele();
-            User currentUser = vmodele.getCurrentUser();
+            /*Modele vmodele = new Modele();
+            User currentUser = vmodele.getCurrentUser();*/
+
+            currentUser = new User(context);
             //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.context);
 
             CircularImageView IconCircular;
@@ -76,8 +78,8 @@ public class MenuDrawerAdapter extends BaseAdapter {
             //String url = "https://scontent-a.xx.fbcdn.net/hphotos-frc3/t31/1501641_10202187145833021_172354652_o.jpg";
             //String url = vPersonne.getUrl_image();
             //String url = prefs.getString("pref_user_url_image","");
-            String url = currentUser.getUrl_image();
-            String name = currentUser.getPrenom() + " " + currentUser.getNom();
+            String url = currentUser.getUrlProfilPicture();
+            String name = currentUser.getFirstName() + " " + currentUser.getLastName();
 
             //mettre le nom
             //txtTitle.setText(vPersonne.getPrenom() + " " + vPersonne.getNom());

@@ -3,7 +3,6 @@ package com.example.chevbook;
 import android.app.Application;
 
 import com.example.chevbook.Activity.LoginActivity;
-import com.example.chevbook.Class.Modele;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -23,12 +22,12 @@ public class Chevbook extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Modele vmodele = new Modele();
+        /*Modele vmodele = new Modele();
 
         if(vmodele.UserExist(this.getApplicationContext()))
         {
             vmodele.getCurrentUser().InstantiateByPrefs(this.getApplicationContext());
-        }
+        }*/
 
         //Parse.initialize(this, "YOUR_APP_ID", "YOUR_CLIENT_KEY");
         Parse.initialize(this, getResources().getString(R.string.PARSE_APP_ID), getResources().getString(R.string.PARSE_CLIENT_KEY));

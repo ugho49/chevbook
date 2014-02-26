@@ -2,88 +2,148 @@ package com.example.chevbook.Class;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 /**
- * Created by Ugho on 28/01/14.
+ * Created by Ugho on 26/02/14.
  */
 public class User {
 
-    //Variables
-    private static String email;
-    private static String passwordMD5;
-    private static String nom;
-    private static String prenom;
-    private static String url_image;
+    // Shared Preferences
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
-    private static SharedPreferences prefs;
-    private static SharedPreferences.Editor prefsEditor;
+    private Context _context;
 
-    //Constructeurs
-    public User() {
+    private static final int PRIVATE_MODE = 0;
+
+    // Sharedpref file name
+    private static final String PREF_NAME = "PrefsUserChevbook";
+
+    // All Shared Preferences
+    private static final String KEY_EMAIL = "emailUserChevbook";
+    private static final String KEY_PASSWORD_MD5 = "passwordMD5UserChevbook";
+    private static final String KEY_FIRSTNAME = "firstnameUserChevbook";
+    private static final String KEY_LASTNAME = "lastnameUserChevbook";
+    private static final String KEY_URL_PROFIL_PICTURE = "urlProfilPictureUserChevbook";
+
+    // All Other Shared Preferences
+    private static final String IS_LOGIN = "IsLoggedIn";
+
+
+    public User(Context context) {
+        this._context = context;
+        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        editor = pref.edit();
     }
 
-    public User(String vemail, String vpassword, String vnom, String vprenom, String vurl_img) {
-        email = vemail;
-        passwordMD5 = getMd5(vpassword);
-        nom = vnom;
-        prenom = vprenom;
-        url_image = vurl_img;
+    public void loginUser(String email, String password){
+
+        editor.putBoolean(IS_LOGIN, true);
+
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_PASSWORD_MD5, getMd5(password));
+
+        editor.commit();
     }
 
-    //Méthodes
-    public void InstantiateByPrefs(Context vcontext)
+    public void loginUser(String email, String password, String firstname, String lastname, String url_picture){
+
+        editor.putBoolean(IS_LOGIN, true);
+
+        editor.putString(KEY_EMAIL, email);
+        editor.putString(KEY_PASSWORD_MD5, getMd5(password));
+        editor.putString(KEY_FIRSTNAME, firstname);
+        editor.putString(KEY_LASTNAME, lastname);
+        editor.putString(KEY_URL_PROFIL_PICTURE, url_picture);
+
+        editor.commit();
+    }
+
+    public void logoutUser(){
+        editor.clear();
+        editor.commit();
+
+        /*editor.putBoolean(IS_LOGIN, false);
+        editor.commit();*/
+    }
+
+    public Boolean isLoggedIn(){
+        return pref.getBoolean(IS_LOGIN, false);
+    }
+
+    public HashMap<String, String> getUserDetails(){
+        HashMap<String, String> user = new HashMap<String, String>();
+        // user name
+
+        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
+        user.put(KEY_PASSWORD_MD5, pref.getString(KEY_PASSWORD_MD5, null));
+        user.put(KEY_FIRSTNAME, pref.getString(KEY_FIRSTNAME, null));
+        user.put(KEY_LASTNAME, pref.getString(KEY_LASTNAME, null));
+        user.put(KEY_URL_PROFIL_PICTURE, pref.getString(KEY_URL_PROFIL_PICTURE, null));
+
+        // return user
+        return user;
+    }
+
+    // Getters
+    public String getEmail()
     {
-        initPrefs(vcontext);
-
-        email = prefs.getString("pref_user_email", "");
-        passwordMD5 = prefs.getString("pref_user_password","");
-        prenom = prefs.getString("pref_user_firstname", "");
-        nom = prefs.getString("pref_user_lastname", "");
-        url_image = prefs.getString("pref_user_url_image", "");
+        return pref.getString(KEY_EMAIL, null);
     }
 
-    public void SaveInPrefs(Context vcontext)
+    public String getPasswordMD5()
     {
-        initPrefs(vcontext);
-        prefsEditor.putString("pref_user_name", this.getPrenom() + " " + this.getNom());
-        prefsEditor.putString("pref_user_firstname", this.getPrenom());
-        prefsEditor.putString("pref_user_lastname", this.getNom());
-        prefsEditor.putString("pref_user_password", this.getPasswordMD5());
-        prefsEditor.putString("pref_user_url_image", this.getUrl_image());
-        prefsEditor.putString("pref_user_email", this.getEmail());
-        prefsEditor.commit();
+        return pref.getString(KEY_PASSWORD_MD5, null);
     }
 
-    public void Delete(Context vcontext)
+    public String getFirstName()
     {
-        initPrefs(vcontext);
-        prefsEditor.putString("pref_user_name", "");
-        prefsEditor.putString("pref_user_firstname", "");
-        prefsEditor.putString("pref_user_lastname", "");
-        prefsEditor.putString("pref_user_password", "");
-        prefsEditor.putString("pref_user_url_image", "");
-        prefsEditor.putString("pref_user_email", "");
-        prefsEditor.commit();
-
-        email = "";
-        passwordMD5 = "";
-        prenom = "";
-        nom = "";
-        url_image = "";
+        return pref.getString(KEY_FIRSTNAME, null);
     }
 
-    public void initPrefs(Context vcontext)
+    public String getLastName()
     {
-        prefs = PreferenceManager.getDefaultSharedPreferences(vcontext);
-        prefsEditor = prefs.edit();
+        return pref.getString(KEY_LASTNAME, null);
     }
 
+    public String getUrlProfilPicture()
+    {
+        return pref.getString(KEY_URL_PROFIL_PICTURE, null);
+    }
+
+    // Setters
+    public void setEmail(String email)
+    {
+        editor.putString(KEY_EMAIL, email);
+    }
+
+    public void setPassword(String password)
+    {
+        editor.putString(KEY_PASSWORD_MD5, getMd5(password));
+    }
+
+    public void setFirstname(String firstname)
+    {
+        editor.putString(KEY_FIRSTNAME, firstname);
+    }
+
+    public void setLastname(String lastname)
+    {
+        editor.putString(KEY_LASTNAME, lastname);
+    }
+
+    public void setUrlProfilPicture(String url)
+    {
+        editor.putString(KEY_URL_PROFIL_PICTURE, url);
+    }
+
+    //Methode MD5
     public static String getMd5(String input)
     {
         //Permet de crypter une chaîne donnée en MD5
@@ -103,46 +163,5 @@ public class User {
             Log.e("MD5", e.getLocalizedMessage());
             return null;
         }
-    }
-
-    //Getters && Setters
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPasswordMD5() {
-        return passwordMD5;
-    }
-
-    public void setPasswordMD5(String passwordMD5) {
-        this.passwordMD5 = passwordMD5;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getUrl_image() {
-        return url_image;
-    }
-
-    public void setUrl_image(String url_image) {
-        this.url_image = url_image;
     }
 }

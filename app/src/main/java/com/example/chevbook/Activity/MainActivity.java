@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.example.chevbook.Class.Modele;
+import com.example.chevbook.Class.User;
 import com.example.chevbook.Fragments.NavigationDrawerFragment;
 import com.example.chevbook.R;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -38,13 +39,17 @@ public class MainActivity extends ActionBarActivity
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
     private Modele vmodele;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
+
         vmodele = new Modele();
+        mUser = new User(getApplicationContext());
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -75,8 +80,8 @@ public class MainActivity extends ActionBarActivity
                     Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(myIntent);
-                    //vmodele.supprimePersonne();
-                    vmodele.UserLogOut(getApplicationContext());
+                    //vmodele.UserLogOut(getApplicationContext());
+                    mUser.logoutUser();
                     finish();
                 }
             });

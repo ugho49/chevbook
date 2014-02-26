@@ -1,9 +1,6 @@
 package com.example.chevbook.Class;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
@@ -20,8 +17,8 @@ public class Modele {
     private ObjectContainer db;
     private File appDir;
 
-    private static Controlleur vcontroleur = new Controlleur();
-    private static User currentUser = new User();
+    private static Controlleur vcontroleur = null;
+    private static User currentUser = null;
 
     //Getter & Setter
     public Controlleur getControleur() {
@@ -68,7 +65,7 @@ public class Modele {
         }
     }
 
-    public void UserLogOut(Context c)
+    /*public void UserLogOut(Context c)
     {
         this.getCurrentUser().Delete(c);
     }
@@ -85,6 +82,6 @@ public class Modele {
         }
 
         return vretour;
-    }
+    }*/
 
 }

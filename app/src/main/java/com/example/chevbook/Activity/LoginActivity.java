@@ -64,6 +64,7 @@ public class LoginActivity extends ActionBarActivity {
 
     //Modele
     private Modele vmodele;
+    private User mUser;
 
 
     @Override
@@ -73,7 +74,7 @@ public class LoginActivity extends ActionBarActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
 
-        vmodele = new Modele();
+        /*vmodele = new Modele();
         if(vmodele.UserExist(this.getApplicationContext()))
         {
             vmodele.getCurrentUser().InstantiateByPrefs(this.getApplicationContext());
@@ -82,6 +83,18 @@ public class LoginActivity extends ActionBarActivity {
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(myIntent);
             finish();
+        }*/
+
+        vmodele = new Modele();
+        mUser = new User(getApplicationContext());
+        if (mUser.isLoggedIn())
+        {
+            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(myIntent);
+            finish();
+
+            vmodele.setCurrentUser(mUser);
         }
 
         // Set up the login form.
@@ -341,9 +354,12 @@ public class LoginActivity extends ActionBarActivity {
 
             if (success) {
 
-                User user = new User(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
+                /*User user = new User(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
                 user.SaveInPrefs(getApplicationContext());
-                vmodele.setCurrentUser(user);
+                vmodele.setCurrentUser(user);*/
+
+                mUser.loginUser(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
+                vmodele.setCurrentUser(mUser);
 
                 Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

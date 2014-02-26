@@ -65,7 +65,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         setHasOptionsMenu(true);
 
         vmodele = new Modele();
-        vuser = vmodele.getCurrentUser();
+        vuser = new User(getActivity().getApplicationContext());
     }
 
     @Override
@@ -172,10 +172,10 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
     };
 
     public void LoadData() {
-        mProfileNom.setText(vuser.getNom());
-        mProfilePrenom.setText(vuser.getPrenom());
+        mProfileNom.setText(vuser.getLastName());
+        mProfilePrenom.setText(vuser.getFirstName());
         mProfileEmail.setText(vuser.getEmail());
-        imageLoader.displayImage(vuser.getUrl_image(), mProfilePicture);
+        imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
 
         LoadUserTask mLoadUserTask = new LoadUserTask();
         mLoadUserTask.execute((Void) null);
