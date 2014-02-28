@@ -23,6 +23,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.0.1'
     compile 'com.google.android.gms:play-services:4.1.32'
     compile 'com.google.code.gson:gson:2.2.+'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.8.6'
     compile files('libs/libGoogleAnalyticsServices.jar')
     compile files('libs/db4o-8.0.249.16098-all-java5.jar')

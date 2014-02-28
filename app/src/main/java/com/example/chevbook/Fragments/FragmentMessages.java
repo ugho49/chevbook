@@ -3,7 +3,6 @@ package com.example.chevbook.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.example.chevbook.Adapter.ViewPageMessagesAdapter;
 import com.example.chevbook.R;
 
@@ -36,12 +36,20 @@ public class FragmentMessages extends Fragment {
         actionBar.setTitle(mNavigationTitles[3]);
 
         mTabsTitles = getResources().getStringArray(R.array.fragment_message_tab_array);
-        ViewPager mViewPager = (ViewPager) root.findViewById(R.id.viewPagerFragmentMessages);
-        PagerTabStrip mPagerTabStrip =(PagerTabStrip) root.findViewById(R.id.pagerTabStripFragmentMessages);
-        mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.green_chevbook));
 
+        /*ViewPager mViewPager = (ViewPager) root.findViewById(R.id.viewPagerFragmentMessages);
+
+        PagerTabStrip mPagerTabStrip =(PagerTabStrip) root.findViewById(R.id.pagerTabStripFragmentMessages);
+        mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.green_chevbook));*/
+
+        ViewPager mViewPager = (ViewPager) root.findViewById(R.id.viewPagerFragmentMessages);
         mViewPager.setAdapter(new ViewPageMessagesAdapter(getChildFragmentManager(), mTabsTitles));
 
+        // Bind the tabs to the ViewPager
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) root.findViewById(R.id.pagerTabStripFragmentMessages);
+        tabs.setIndicatorColor(getResources().getColor(R.color.green_chevbook));
+        tabs.setShouldExpand(true);
+        tabs.setViewPager(mViewPager);
 
         return root;
     }

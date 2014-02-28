@@ -51,7 +51,8 @@
         </activity>
         <activity
             android:name="com.example.chevbook.Activity.MainActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.chevbook.Activity.DetailsAccountActivity"
@@ -60,7 +61,8 @@
         </activity>
         <activity
             android:name="com.example.chevbook.Activity.DetailsAppartementActivity"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name="com.example.chevbook.Activity.FullscreenPictureActivity" >
         </activity>
