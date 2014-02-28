@@ -11,6 +11,7 @@
     <color name="grey_search_hover">#f1f1f1</color>
     <color name="white_transparent">#00000000</color>
 
+    <color name="green_chevbook_light">#bbe415</color>
     <color name="green_chevbook">#9ec212</color>
     <color name="blue_chevbook">#1f5e8b</color>
     <color name="grey_chevbook">#868686</color>

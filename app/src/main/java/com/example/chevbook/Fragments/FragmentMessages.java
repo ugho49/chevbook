@@ -1,6 +1,7 @@
 package com.example.chevbook.Fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -48,6 +49,9 @@ public class FragmentMessages extends Fragment {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) root.findViewById(R.id.pagerTabStripFragmentMessages);
         tabs.setIndicatorColor(getResources().getColor(R.color.green_chevbook));
+        tabs.setTextColor(Color.WHITE);
+        tabs.setDividerColor(Color.WHITE);
+        tabs.setDrawingCacheEnabled(true);
         tabs.setShouldExpand(true);
         tabs.setViewPager(mViewPager);
 

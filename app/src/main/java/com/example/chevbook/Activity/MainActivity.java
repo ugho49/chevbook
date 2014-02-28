@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity
             "com.example.chevbook.Fragments.FragmentMessages",
             "com.example.chevbook.Fragments.FragmentMyAnnonces",
             "com.example.chevbook.Fragments.FragmentFavoris",
-            "",
+            "com.example.chevbook.Fragments.FragmentSettingsContainer",
             "com.example.chevbook.Fragments.FragmentAbout",
             ""
     };
@@ -65,12 +65,7 @@ public class MainActivity extends ActionBarActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if(position == 6)
-        {
-            Intent myIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-            startActivityForResult(myIntent, 1);
-        }
-        else if(position == 8)
+        if(position == 8)
         {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
@@ -102,8 +97,6 @@ public class MainActivity extends ActionBarActivity
                     .commit();
 
 
-            /*i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(i);*/
         }
 
     }

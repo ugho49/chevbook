@@ -3,7 +3,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
+    <!--<EditTextPreference
         android:key="pref_user_password"
         android:title="@string/title_password_user"
         android:password="true"
@@ -33,7 +33,7 @@
         android:password="true"
         android:enabled="false"
         android:visibility="gone">
-    </EditTextPreference>
+    </EditTextPreference>-->
 
     <PreferenceCategory android:title="@string/title_user">
 
@@ -70,7 +70,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/title_more_information">
+    <!--<PreferenceCategory android:title="@string/title_more_information">
 
         <Preference
             android:key="pref_more_assistance"
@@ -84,6 +84,6 @@
             android:key="pref_more_conditions"
             android:title="@string/title_more_conditions"/>
 
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 
 </PreferenceScreen>

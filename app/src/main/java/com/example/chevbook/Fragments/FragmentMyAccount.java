@@ -151,11 +151,6 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                 case R.id.profileMessages:
                     Toast.makeText(getActivity(), "Mes Messages", Toast.LENGTH_SHORT).show();
 
-                    /*getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new FragmentMessages())
-                            .setTransition(FragmentTransaction.TRANSIT_ENTER_MASK)
-                            .addToBackStack(null)
-                            .commit();*/
                     break;
 
                 case R.id.profileFavoris:

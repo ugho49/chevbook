@@ -95,6 +95,7 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.id.text1,
                 mNavigationTitles));*/
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mDrawerListView;
     }
 

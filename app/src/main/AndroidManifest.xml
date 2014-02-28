@@ -67,7 +67,7 @@
         <activity android:name="com.example.chevbook.Activity.FullscreenPictureActivity" >
         </activity>
         <activity
-            android:name="com.example.chevbook.Activity.SettingsActivity"
+            android:name=".Fragments.FragmentSettings"
             android:screenOrientation="portrait" >
         </activity>
 

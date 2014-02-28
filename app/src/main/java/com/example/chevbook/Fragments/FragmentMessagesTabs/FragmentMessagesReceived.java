@@ -1,5 +1,6 @@
 package com.example.chevbook.Fragments.FragmentMessagesTabs;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.chevbook.Adapter.ListViewMessageReceivedAdapter;
 import com.example.chevbook.CustomDialog.CustomDialogMessage;
@@ -14,17 +16,20 @@ import com.example.chevbook.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
 /**
  * Created by Ugho on 24/02/14.
  */
-public class FragmentMessagesReceived extends Fragment {
+public class FragmentMessagesReceived extends Fragment implements OnRefreshListener {
 
     @InjectView(R.id.listViewMessageReceived)
     ListView mListViewMessageReceived;
 
     private CustomDialogMessage dialogMessage;
-
+    private PullToRefreshLayout mPullToRefreshLayout;
     private ListViewMessageReceivedAdapter Adapter;
 
     public FragmentMessagesReceived() {
@@ -46,6 +51,13 @@ public class FragmentMessagesReceived extends Fragment {
         Adapter = new ListViewMessageReceivedAdapter(getActivity().getBaseContext());
         mListViewMessageReceived.setAdapter(Adapter);
 
+        // Now find the PullToRefreshLayout to setup
+        mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout_messages_received);
+        ActionBarPullToRefresh.from(getActivity())
+                .allChildrenArePullable()
+                .listener(this)
+                .setup(mPullToRefreshLayout);
+
         dialogMessage = new CustomDialogMessage(getActivity());
 
         mListViewMessageReceived.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,5 +74,30 @@ public class FragmentMessagesReceived extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                super.onPostExecute(result);
+
+                // Notify PullToRefreshLayout that the refresh has finished
+                Toast.makeText(getActivity(), "Refresh Messages Received", Toast.LENGTH_SHORT).show();
+                mPullToRefreshLayout.setRefreshComplete();
+            }
+        }.execute();
     }
 }

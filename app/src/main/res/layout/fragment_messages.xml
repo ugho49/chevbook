@@ -7,13 +7,14 @@
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/pagerTabStripFragmentMessages"
         android:layout_width="match_parent"
-        android:layout_height="48dp" />
+        android:layout_height="46dp"
+        android:background="@drawable/bg_card_dark_without_padding"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerFragmentMessages"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="46dp"
         android:background="@color/card_border">
 
         <!--<android.support.v4.view.PagerTabStrip
