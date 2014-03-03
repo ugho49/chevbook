@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.chevbook.Fragments.FragmentAboutTabs.FragmentAboutContactUs">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:padding="6dp"
+        android:layout_above="@+id/buttonAboutContactUsSent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Votre message :"
+                android:id="@+id/textView"
+                android:textSize="20dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:hint="Votre message ici !"
+                android:ems="10"
+                android:background="@drawable/border_text_grey"
+                android:id="@+id/editText"
+                android:minHeight="100dp"
+                android:layout_marginTop="5dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_send"
+        android:textColor="@android:color/white"
+        android:background="@drawable/button_login_account"
+        android:id="@+id/buttonAboutContactUsSent"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

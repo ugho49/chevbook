@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.example.chevbook.Adapter.ViewPageMessagesAdapter;
+import com.example.chevbook.Adapter.ViewPagerMessagesAdapter;
 import com.example.chevbook.R;
 
 import java.lang.reflect.Field;
@@ -44,7 +44,7 @@ public class FragmentMessages extends Fragment {
         mPagerTabStrip.setTabIndicatorColor(getResources().getColor(R.color.green_chevbook));*/
 
         ViewPager mViewPager = (ViewPager) root.findViewById(R.id.viewPagerFragmentMessages);
-        mViewPager.setAdapter(new ViewPageMessagesAdapter(getChildFragmentManager(), mTabsTitles));
+        mViewPager.setAdapter(new ViewPagerMessagesAdapter(getChildFragmentManager(), mTabsTitles));
 
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) root.findViewById(R.id.pagerTabStripFragmentMessages);

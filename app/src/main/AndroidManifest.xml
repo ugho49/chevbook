@@ -64,11 +64,8 @@
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.example.chevbook.Activity.FullscreenPictureActivity" >
-        </activity>
         <activity
-            android:name=".Fragments.FragmentSettings"
-            android:screenOrientation="portrait" >
+            android:name="com.example.chevbook.Activity.FullscreenPictureActivity" >
         </activity>
 
         <service android:name="com.parse.PushService" />

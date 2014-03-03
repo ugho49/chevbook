@@ -62,6 +62,8 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(mNavigationTitles[2]);
         actionBarActivity = (ActionBarActivity) this;
 
+
+
         ImagePagerAdapter adapter = new ImagePagerAdapter();
         mViewPagerDetailAppartement.setAdapter(adapter);
         mIndicatorViewPagerDetailAppartement.setFillColor(getResources().getColor(R.color.blue_account));

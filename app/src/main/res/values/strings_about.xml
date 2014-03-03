@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fragment_about_tab_array">
+        <item>Contact</item>
+        <item>Licences</item>
+        <item>Aide</item>
+    </string-array>
+</resources>

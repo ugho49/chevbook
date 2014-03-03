@@ -4,10 +4,29 @@
     android:layout_height="match_parent"
     tools:context="com.example.chevbook.Fragments.FragmentAbout">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/pagerTabStripFragmentAbout"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/bg_card_dark_without_padding"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerFragmentAbout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="A propos" />
+        android:layout_marginTop="46dp"
+        android:background="@color/card_border">
 
+        <!--<android.support.v4.view.PagerTabStrip
+            android:id="@+id/pagerTabStripFragmentMessages"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="top"
+            android:textColor="@android:color/white"
+            android:gravity="center_vertical"
+            android:textSize="20dp"
+            android:background="@color/dark_black">
+        </android.support.v4.view.PagerTabStrip>-->
+
+    </android.support.v4.view.ViewPager>
 </FrameLayout>

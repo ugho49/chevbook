@@ -10,12 +10,12 @@ import com.example.chevbook.Fragments.FragmentMessagesTabs.FragmentMessagesSent;
 /**
  * Created by Ugho on 24/02/14.
  */
-public class ViewPageMessagesAdapter extends FragmentPagerAdapter {
+public class ViewPagerMessagesAdapter extends FragmentPagerAdapter {
 
     // Declare the titles of ViewPager pages
     private String[] mTabsTitles;
 
-    public ViewPageMessagesAdapter(FragmentManager fm, String[] mTitles) {
+    public ViewPagerMessagesAdapter(FragmentManager fm, String[] mTitles) {
         super(fm);
         this.mTabsTitles = mTitles;
     }
