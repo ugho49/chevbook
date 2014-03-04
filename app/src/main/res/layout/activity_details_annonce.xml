@@ -9,8 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scrollView"
-        android:padding="8dp">
+        android:id="@+id/scrollView">
 
         <LinearLayout
             android:orientation="vertical"
@@ -26,12 +25,18 @@
                 android:textStyle="bold"
                 android:textSize="23dp"
                 android:textColor="@color/blue_account"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical|center_horizontal" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/view_pager_detail_appartement"
                 android:layout_width="fill_parent"
-                android:layout_height="200dp" />
+                android:layout_height="230dp"
+                android:layout_marginLeft="-7dp"
+                android:layout_marginRight="-7dp"/>
 
             <com.viewpagerindicator.CirclePageIndicator
                 android:id="@+id/indicator_view_pager_detail_appartement"
@@ -42,41 +47,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="-25dp" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/anounce_post_by"
-                    android:id="@+id/textView3"
-                    android:layout_marginRight="3dp"
-                    android:textSize="13dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="ugho49"
-                    android:textColor="@color/blue_account_light"
-                    android:id="@+id/textView4"
-                    android:textStyle="italic"
-                    android:textSize="13dp" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Le 18/02/2014 à 14h12"
-                android:id="@+id/textView"
-                android:layout_marginTop="2dp"
-                android:textSize="13dp" />
 
             <Button
                 android:layout_width="fill_parent"
@@ -89,7 +59,9 @@
                 android:text="@string/look_on_map"
                 android:id="@+id/buttonDetailAppartementLookOnMap"
                 android:background="@drawable/button_bg_card"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -97,7 +69,9 @@
                 android:layout_height="fill_parent"
                 android:background="@drawable/bg_card"
                 android:layout_marginTop="10dp"
-                android:visibility="visible">
+                android:visibility="visible"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -118,7 +92,10 @@
             <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp">
 
                 <TableRow
                     android:layout_width="fill_parent"
@@ -227,6 +204,48 @@
                 </TableRow>
 
             </TableLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:id="@+id/linearLayout"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/anounce_post_by"
+                    android:id="@+id/textView3"
+                    android:layout_marginRight="3dp"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="ugho49"
+                    android:textColor="@color/blue_account_light"
+                    android:id="@+id/textView4"
+                    android:textStyle="italic"
+                    android:textSize="13dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Le 18/02/2014 à 14h12"
+                android:id="@+id/textView"
+                android:layout_marginTop="2dp"
+                android:textSize="13dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
     </ScrollView>

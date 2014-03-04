@@ -16,8 +16,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -139,12 +139,27 @@ public class CustomDialogMap {
                     // Réussite du geofencing
                     position = new LatLng(locations.get(0).getLatitude(),locations.get(0).getLongitude());
 
-                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    /*LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
                     googleMap.addMarker(new MarkerOptions().position(position).title(mActivity.getResources().getString(R.string.appartements)).snippet(adresse).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     builder.include(position);
 
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), mActivity.getResources().getDisplayMetrics().widthPixels, mActivity.getResources().getDisplayMetrics().heightPixels, 200));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), mActivity.getResources().getDisplayMetrics().widthPixels, mActivity.getResources().getDisplayMetrics().heightPixels, 200));*/
+
+                    googleMap.addMarker(new MarkerOptions()
+                                                .position(position)
+                                                .title("")
+                                                .snippet(adresse)
+                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    
+
+                    CameraPosition cameraPosition = new CameraPosition
+                                                            .Builder()
+                                                            .target(position)
+                                                            .zoom(13)
+                                                            .build();
+
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }
             }
             else

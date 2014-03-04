@@ -1,7 +1,6 @@
 package com.example.chevbook.Activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -66,8 +65,8 @@ public class DetailsAppartementActivity extends ActionBarActivity {
 
         ImagePagerAdapter adapter = new ImagePagerAdapter();
         mViewPagerDetailAppartement.setAdapter(adapter);
-        mIndicatorViewPagerDetailAppartement.setFillColor(getResources().getColor(R.color.blue_account));
-        mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);
+        /*mIndicatorViewPagerDetailAppartement.setFillColor(getResources().getColor(R.color.blue_account));
+        mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);*/
         mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
 
         dialogMap = new CustomDialogMap(DetailsAppartementActivity.this, "65 rue du chèvrefeuille, 49000 Angers");
@@ -169,10 +168,13 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             ImageView imageView = new ImageView(getApplicationContext());
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setPadding(7,0,7,0);
+
             // int padding = context.getResources().getDimensionPixelSize(
             //       R.dimen.padding_medium);
             //imageView.setPadding(padding, padding, padding, padding);
-            //imageView.setScaleType(ImageView.ScaleType.FIT_START);
+
             //imageView.setImageResource(mImages[position]);
 
             imageLoader.displayImage(mImages.get(position), imageView);
