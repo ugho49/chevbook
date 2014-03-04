@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,12 +32,8 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 public class FragmentMyAccount extends Fragment implements OnRefreshListener {
 
     @InjectView(R.id.profilePicture)CircularImageView mProfilePicture;
-    @InjectView(R.id.profilePrenom)TextView mProfilePrenom;
-    @InjectView(R.id.profileNom)TextView mProfileNom;
+    @InjectView(R.id.profilePrenomNom)TextView mProfilePrenomNom;
     @InjectView(R.id.profileEmail)TextView mProfileEmail;
-    @InjectView(R.id.profileAppartement)Button mProfileAppartement;
-    @InjectView(R.id.profileMessages)Button mProfileMessages;
-    @InjectView(R.id.profileFavoris)Button mProfileFavoris;
 
     private Modele vmodele;
     private User vuser;
@@ -94,9 +89,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         actionBar.setTitle(mNavigationTitles[0]);
 
         //click Button
-        mProfileAppartement.setOnClickListener(clickListener);
-        mProfileMessages.setOnClickListener(clickListener);
-        mProfileFavoris.setOnClickListener(clickListener);
+        //mProfileFavoris.setOnClickListener(clickListener);
 
         return root;
     }
@@ -135,16 +128,10 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         public void onClick(View v)
         {
 
-            switch(v.getId())
+            /*switch(v.getId())
             {
                 case R.id.profileAppartement:
                     Toast.makeText(getActivity(), "Mes Appartements", Toast.LENGTH_SHORT).show();
-
-                    /*getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new FragmentMyAnnonces())
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .addToBackStack(null)
-                            .commit();*/
 
                     break;
 
@@ -156,19 +143,13 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                 case R.id.profileFavoris:
                     Toast.makeText(getActivity(), "Mes Favoris", Toast.LENGTH_SHORT).show();
 
-                    /*getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container, new FragmentFavoris())
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                            .addToBackStack(null)
-                            .commit();*/
                     break;
-            }
+            }*/
         }
     };
 
     public void LoadData() {
-        mProfileNom.setText(vuser.getLastName());
-        mProfilePrenom.setText(vuser.getFirstName());
+        mProfilePrenomNom.setText(vuser.getFirstName() + " " + vuser.getLastName().toUpperCase());
         mProfileEmail.setText(vuser.getEmail());
         imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
 

@@ -18,12 +18,11 @@
             android:layout_height="fill_parent">
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="150dp"
-
-                android:gravity="center_vertical|center_horizontal"
-                android:background="@drawable/bg_card_dark">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_dark"
+                android:gravity="center_vertical|center_horizontal">
 
                 <com.example.chevbook.CustomsView.CircularImageView
                     android:id="@+id/profilePicture"
@@ -31,114 +30,323 @@
                     android:layout_height="130dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_profile"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:fontFamily="sans-serif-light"
-                        android:textSize="25dp"
-                        android:textColor="@android:color/white"
-                        android:textStyle="bold"
-                        android:text="Prénom"
-                        android:id="@+id/profilePrenom" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-light"
-                        android:textSize="25dp"
-                        android:textColor="@android:color/white"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Nom"
-                        android:id="@+id/profileNom" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-light"
-                        android:textSize="25dp"
-                        android:textColor="@android:color/white"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="jj/mm/aaaa"
-                        android:id="@+id/profileNom" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_vertical|center_horizontal"
-                android:background="@drawable/bg_card">
+                    android:src="@drawable/ic_profile" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-light"
-                    android:textSize="25dp"
-                    android:textColor="@color/dark_black_grey"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="email@email.com"
-                    android:layout_marginRight="8dp"
-                    android:id="@+id/profileEmail" />
+                    android:fontFamily="sans-serif-light"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:text="Prénom NOM"
+                    android:maxLines="1"
+                    android:id="@+id/profilePrenomNom" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/textView"
+                    android:textColor="@color/dark_black_grey"
+                    android:text="Compte"
+                    android:layout_marginBottom="1dp"
+                    android:textAllCaps="true" />
+
+                <View
+                    android:layout_height="2dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/dark_black_grey" />
+
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="E-mail"
+                            android:textColor="@color/dark_black"
+                            android:id="@+id/textView2"
+                            android:layout_column="0"
+                            android:layout_weight="1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dark_black_grey"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="email@email.com"
+                            android:id="@+id/profileEmail"
+                            android:layout_column="1"
+                            android:gravity="right" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:gravity="center_vertical"
+                        android:id="@+id/tableRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Téléphone"
+                            android:textColor="@color/dark_black"
+                            android:id="@+id/textView3"
+                            android:layout_column="0"
+                            android:layout_weight="1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dark_black_grey"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="xxxxxxxxxx"
+                            android:id="@+id/textView4"
+                            android:layout_column="1"
+                            android:gravity="right" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:gravity="center_vertical"
+                        android:id="@+id/tableRow2" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Ville"
+                            android:textColor="@color/dark_black"
+                            android:id="@+id/textView5"
+                            android:layout_column="0"
+                            android:layout_weight="1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dark_black_grey"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Angers"
+                            android:id="@+id/textView6"
+                            android:layout_column="1"
+                            android:gravity="right" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
+                        android:background="@drawable/button_search_appartement"
+                        android:gravity="center_vertical"
+                        android:id="@+id/tableRow3" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="Mes annonces"
+                            android:id="@+id/textView5"
+                            android:textColor="@color/dark_black"
+                            android:layout_column="0"
+                            android:layout_weight="1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/dark_black_grey"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="3"
+                            android:id="@+id/textView8"
+                            android:layout_column="1"
+                            android:gravity="right" />
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/textView"
+                    android:textColor="@color/dark_black_grey"
+                    android:text="Amis"
+                    android:layout_marginBottom="1dp"
+                    android:textAllCaps="true" />
+
+                <View
+                    android:layout_height="2dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/dark_black_grey" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Inviter par SMS"
+                    android:textColor="@color/dark_black"
+                    android:id="@+id/textView7"
+                    android:layout_column="0"
+                    android:background="@drawable/button_search_appartement"
+                    android:textStyle="bold"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Inviter par email"
+                    android:id="@+id/textView2"
+                    android:textColor="@color/dark_black"
+                    android:layout_column="0"
+                    android:background="@drawable/button_search_appartement"
+                    android:textStyle="bold"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/bg_card"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/textView"
+                    android:textColor="@color/dark_black_grey"
+                    android:text="Assistance"
+                    android:layout_marginBottom="1dp"
+                    android:textAllCaps="true" />
+
+                <View
+                    android:layout_height="2dp"
+                    android:layout_width="match_parent"
+                    android:background="@color/dark_black_grey" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Nous contacter"
+                    android:id="@+id/textView7"
+                    android:textColor="@color/dark_black"
+                    android:layout_column="0"
+                    android:background="@drawable/button_search_appartement"
+                    android:textStyle="bold"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/dark_black"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Désactiver le compte"
+                    android:id="@+id/textView2"
+                    android:layout_column="0"
+                    android:background="@drawable/button_search_appartement"
+                    android:textStyle="bold"
+                    android:minHeight="40dp"
+                    android:gravity="center_vertical" />
 
             </LinearLayout>
 
             <Button
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textStyle="bold"
-                android:layout_margin="8dp"
-                android:fontFamily="sans-serif-light"
-                android:textSize="25dp"
-                android:textColor="@color/dark_black_grey"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Appartements"
-                android:id="@+id/profileAppartement"
-                android:background="@drawable/button_bg_card"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Se déconnecter"
+                android:background="@drawable/button_logout"
+                android:textColor="@android:color/white"
+                android:id="@+id/button"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp" />
 
-            <Button
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-light"
-                android:textSize="25dp"
-                android:textColor="@color/dark_black_grey"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Messages"
-                android:id="@+id/profileMessages"
-                android:background="@drawable/button_bg_card"
-                android:layout_margin="8dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical|center_horizontal">
 
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-light"
-                android:textSize="25dp"
-                android:layout_margin="8dp"
-                android:textColor="@color/dark_black_grey"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Favoris"
-                android:id="@+id/profileFavoris"
-                android:background="@drawable/button_bg_card"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Chevbook"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/dark_black_grey"
+                    android:textAllCaps="true"
+                    android:id="@+id/textView9" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/imageView"
+
+                    android:src="@drawable/logo_android_chevbook"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_marginTop="3dp"
+                    android:text="v 1.0.0"
+                    android:textColor="@color/dark_black_grey"
+                    android:textAllCaps="true"
+                    android:id="@+id/textView10" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
+<!--</RelativeLayout>-->
 </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
