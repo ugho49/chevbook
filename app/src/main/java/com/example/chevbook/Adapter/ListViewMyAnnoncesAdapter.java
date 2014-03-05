@@ -103,6 +103,15 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
         String url_image = "https://d2jlgwxg7tqbdp.cloudfront.net/housing_images/Spain_Valencia_Alicante/For-Sale_Apartments/New-build-apartment-for-sale-in-Villamartin-Spain-2656292-7777850/photo/scaled_135766251666300089518.jpg";
         imageLoader.displayImage(url_image, holder.image);
 
+        holder.button_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentDetailAppartement = new Intent(activity, DeposerModifierAnnonceActivity.class);
+                intentDetailAppartement.putExtra("CONST", CONST_MODIFIER);
+                activity.startActivity(intentDetailAppartement);
+            }
+        });
+
         holder.button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,27 +127,6 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
                     }
                 });
                 adb.setMessage("Voulez-vous supprimer l'annonce " + position + " ???");
-                adb.show();
-            }
-        });
-
-        holder.button_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder adb = new AlertDialog.Builder(activity);
-                adb.setPositiveButton(activity.getResources().getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intentDetailAppartement = new Intent(activity, DeposerModifierAnnonceActivity.class);
-                        intentDetailAppartement.putExtra("CONST", CONST_MODIFIER);
-                        activity.startActivity(intentDetailAppartement);
-                    }
-                });
-                adb.setNegativeButton(activity.getResources().getString(R.string.btn_no), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                adb.setMessage("Voulez-vous modifier l'annonce " + position + " ???");
                 adb.show();
             }
         });
