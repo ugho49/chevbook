@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/card_border"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:hint="Titre de l'annonce"
+                android:id="@+id/textViewDeposerModifierAnnonceTitre"
+                android:textStyle="bold"
+                android:textSize="23dp"
+                android:textColor="@color/blue_account"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:inputType="text"
+                android:maxLength="50" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Vous pouvez ajouter jusqu'à 3 photos à votre annonce ! (Cliquer sur un rectangle pour en ajouter une)"
+                android:id="@+id/textView"
+                android:layout_marginTop="15dp"
+                android:fontFamily="sans-serif-light"
+                android:textSize="13dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_image"
+                android:id="@+id/imageViewDeposerModifierAnnonceImage1"
+                android:background="@drawable/dashed_border"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_image"
+                    android:id="@+id/imageViewDeposerModifierAnnonceImage2"
+                    android:background="@drawable/dashed_border"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_image"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/dashed_border"
+                    android:id="@+id/imageViewDeposerModifierAnnonceImage3"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/bg_card"
+                android:layout_marginTop="13dp"
+                android:visibility="visible"
+                android:id="@+id/linearLayout">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Adresse"
+                    android:id="@+id/textView3" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTextDeposerModifierAnnonceAdresse"
+                    android:layout_marginTop="3dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:hint="Adresse de l'appartement" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp">
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextDeposerModifierAnnonceCP"
+                        android:layout_weight="0.4"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:hint="CP" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextDeposerModifierAnnonceVille"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_weight="1"
+                        android:hint="Ville" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/bg_card"
+                android:layout_marginTop="10dp"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/anounce_description"
+                    android:id="@+id/textView5" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:ems="10"
+                    android:id="@+id/editTextDeposerModifierAnnonceDescription"
+                    android:layout_marginTop="3dp"
+                    android:minHeight="80dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:hint="Description"
+                    android:maxLines="20"
+                    android:maxLength="250" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/bg_card"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                android:id="@+id/linearLayout2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Quartier"
+                    android:id="@+id/textView4" />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:id="@+id/spinnerDeposerModifierAnnonceQuartier"
+                    android:layout_marginTop="3dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@drawable/bg_card"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                android:id="@+id/linearLayout3" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Catégorie"
+                    android:id="@+id/textView6" />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:id="@+id/spinnerDeposerModifierAnnonceCategorie"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_horizontal|center_vertical|right"
+                    android:id="@+id/tableRow3">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/anounce_room"
+                        android:id="@+id/textView13"
+                        android:layout_weight="1"
+                        android:layout_column="0" />
+
+                    <EditText
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:layout_gravity="right"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:layout_column="1"
+                        android:id="@+id/editTextDeposerModifierAnnonceNbPieces" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_horizontal|right|center_vertical"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/anounce_price_month"
+                        android:id="@+id/textView7"
+                        android:layout_column="0"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_gravity="right"
+                        android:gravity="center_vertical">
+
+                        <EditText
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:ems="10"
+                            android:id="@+id/editTextDeposerModifierAnnonceLoyer"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:maxLines="1"
+                            android:maxLength="5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="€"
+                            android:id="@+id/textView8"/>
+                    </LinearLayout>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Déposer l'annonce"
+                android:id="@+id/buttonDeposerModifierAnnonceValider"
+                android:textColor="@android:color/white"
+                android:background="@drawable/button_login_account"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Chevbook"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/dark_black_grey"
+                    android:textAllCaps="true"
+                    android:id="@+id/textView9" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/imageView"
+
+                    android:src="@drawable/logo_android_chevbook"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:layout_marginTop="3dp"
+                    android:text="v 1.0.0"
+                    android:textColor="@color/dark_black_grey"
+                    android:textAllCaps="true"
+                    android:id="@+id/textView10" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

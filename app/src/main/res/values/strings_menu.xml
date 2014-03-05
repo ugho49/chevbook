@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_refresh">Rafraîchir</string>
+    <string name="action_new_announce">Déposer une annonce</string>
     <string name="action_save">Enregistrer</string>
     <string name="action_add_favorite">Ajouter aux favoris</string>
     <string name="action_delete_favorite">Retirer des favoris</string>

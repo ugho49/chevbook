@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/my_announce_menu_new_announce"
+        android:icon="@drawable/ic_action_new_event"
+        android:title="@string/action_new_announce"
+        app:showAsAction="ifRoom" />
+
+</menu>

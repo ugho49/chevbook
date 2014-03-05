@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="105dp"
             android:layout_height="105dp"
-            android:id="@+id/imageViewRowItemFavorisPicture"
+            android:id="@+id/imageViewRowItemMyAnnouncePicture"
             android:scaleType="centerCrop"
             android:layout_gravity="center_vertical"
             android:src="@drawable/logo_android_chevbook" />
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Appartement T2 meublé"
-                android:id="@+id/textViewRowItemFavorisName"
+                android:id="@+id/textViewRowItemMyAnnounceName"
                 android:textStyle="bold"
                 android:textSize="17dp"
                 android:textColor="@color/blue_account"
@@ -46,7 +46,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="La roseraie"
                 android:textColor="@color/blue_account_light"
-                android:id="@+id/textViewRowItemFavorisQuartier"
+                android:id="@+id/textViewRowItemMyAnnounceQuartier"
                 android:textSize="16dp" />
 
             <TextView
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Loue 2 pièces meublé rue Tahiti à min du métro Daumesnil dans un bon immeuble ancien du 3ème étage..."
-                android:id="@+id/textViewRowItemFavorisDescription"
+                android:id="@+id/textViewRowItemMyAnnounceDescription"
                 android:maxLines="2"
                 android:textSize="11dp"
                 android:textIsSelectable="false"
@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="200€"
-                        android:id="@+id/textViewRowItemFavorisPrice"
+                        android:id="@+id/textViewRowItemMyAnnouncePrice"
                         android:textStyle="bold"
                         android:layout_gravity="left"
                         android:maxLines="1"
@@ -89,17 +89,28 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="18/02/2014 - 14h22"
-                        android:id="@+id/textViewRowItemFavorisDate"
+                        android:id="@+id/textViewRowItemMyAnnounceDate"
                         android:textSize="10dp" />
                 </LinearLayout>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:id="@+id/imageViewRowItemFavorisDelete"
+                    android:gravity="center"
+                    android:src="@drawable/ic_action_edit_light"
+                    android:background="@drawable/button_search_appartement"
+                    android:id="@+id/imageViewRowItemMyAnnounceEdit"
+                    android:layout_weight="0.3"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:id="@+id/imageViewRowItemMyAnnounceDelete"
                     android:src="@drawable/ic_action_discard_light"
                     android:background="@drawable/button_search_appartement"
-                    android:layout_weight="0.3" />
+                    android:layout_weight="0.3"
+                    android:layout_marginLeft="5dp"/>
 
             </LinearLayout>
 

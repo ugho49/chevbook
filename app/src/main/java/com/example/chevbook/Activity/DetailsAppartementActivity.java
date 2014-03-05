@@ -149,6 +149,8 @@ public class DetailsAppartementActivity extends ActionBarActivity {
             mImages.add("http://jeudepaumehotel.com/ile-saint-louis/wp-content/uploads/2010/09/jeudepaume-hotel-ile-saint-louis-appartement.jpg");
             mImages.add("http://www.ile-oleron-vacances.fr/img/appartement-ile-oleron.jpg");
             mImages.add("http://i-cms.journaldesfemmes.com/image_cms/original/511308-15-apparts-de-decorateurs.jpg");
+            mImages.add("http://walk2.francenet.fr/indicateur/images/PDF/CMS/articles/12604509.jpg");
+            mImages.add("http://www.mapetiteagence.com/img/referencement/vente-appartement-particulier.jpg");
         }
 
         private ImagePagerAdapter(ArrayList<String> mImages) {

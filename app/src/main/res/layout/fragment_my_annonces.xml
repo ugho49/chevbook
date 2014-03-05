@@ -1,17 +1,19 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.chevbook.Fragments.FragmentMyAnnonces">
+    tools:context="com.example.chevbook.Fragments.FragmentMyAnnonces"
+    android:background="@color/card_border">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listViewMyAnnounces"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="false"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:paddingBottom="5dp"
+        tools:listitem="@layout/row_item_my_annonces" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="My Announces"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+</FrameLayout>
