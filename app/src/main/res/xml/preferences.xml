@@ -70,20 +70,12 @@
 
     </PreferenceCategory>
 
-    <!--<PreferenceCategory android:title="@string/title_more_information">
+    <PreferenceCategory android:title="@string/title_more_information">
 
         <Preference
-            android:key="pref_more_assistance"
-            android:title="@string/title_more_assistance"/>
+            android:key="pref_more_clean_cache"
+            android:title="Vider le cache"/>
 
-        <Preference
-            android:key="pref_more_privacy"
-            android:title="@string/title_more_privacy"/>
-
-        <Preference
-            android:key="pref_more_conditions"
-            android:title="@string/title_more_conditions"/>
-
-    </PreferenceCategory>-->
+    </PreferenceCategory>
 
 </PreferenceScreen>

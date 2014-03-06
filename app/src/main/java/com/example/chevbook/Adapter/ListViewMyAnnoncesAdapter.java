@@ -13,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.chevbook.Activity.DeposerModifierAnnonceActivity;
-import com.example.chevbook.Class.Appartement;
+import com.example.chevbook.Class.Annonce;
 import com.example.chevbook.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ import java.util.List;
  */
 public class ListViewMyAnnoncesAdapter extends BaseAdapter {
 
-    private final List<Appartement> list;
+    private final List<Annonce> list;
     private final Context _c;
     private final Activity activity;
 
@@ -40,11 +41,11 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
         this.list = null;
     }
 
-    public ListViewMyAnnoncesAdapter(Activity activity, Context context, List<Appartement> ListAppartementsFavoris) {
+    public ListViewMyAnnoncesAdapter(Activity activity, Context context, List<Annonce> listMyAnnonces) {
 
         this.activity = activity;
         this._c = context;
-        this.list = ListAppartementsFavoris;
+        this.list = listMyAnnonces;
 
     }
 
@@ -62,8 +63,8 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        //return list.size();
-        return 3;
+        return list.size();
+        //return 3;
     }
 
     @Override
@@ -100,9 +101,6 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
 
-        String url_image = "https://d2jlgwxg7tqbdp.cloudfront.net/housing_images/Spain_Valencia_Alicante/For-Sale_Apartments/New-build-apartment-for-sale-in-Villamartin-Spain-2656292-7777850/photo/scaled_135766251666300089518.jpg";
-        imageLoader.displayImage(url_image, holder.image);
-
         holder.button_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,6 +128,17 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
                 adb.show();
             }
         });
+
+        imageLoader.displayImage(list.get(position).getUrl_images_annonces().get(0), holder.image);
+        holder.title.setText(list.get(position).getTitre_annonce());
+        holder.quartier.setText(list.get(position).getQuartier_annonce());
+        holder.description.setText(list.get(position).getDescription_annonce());
+        holder.price.setText(Double.toString(list.get(position).getPrix_annonce()) + "€");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+        String DateAndTime = sdf.format(list.get(position).getDate_create_annonce());
+
+        holder.date.setText(DateAndTime);
 
         return v;
     }

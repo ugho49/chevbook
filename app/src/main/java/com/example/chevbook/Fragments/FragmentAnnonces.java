@@ -1,7 +1,6 @@
 package com.example.chevbook.Fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -23,11 +22,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.chevbook.Activity.DetailsAppartementActivity;
+import com.example.chevbook.Activity.DetailsAnnonceActivity;
 import com.example.chevbook.Adapter.ListViewAnnonceAdapter;
-import com.example.chevbook.Class.Appartement;
+import com.example.chevbook.Class.Annonce;
 import com.example.chevbook.Class.Modele;
 import com.example.chevbook.R;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -70,14 +71,10 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
     private Modele vmodele;
     private ListViewAnnonceAdapter Adapter;
 
+    private ArrayList<Annonce> mAnnonces = new ArrayList<Annonce>();
+
     private PullToRefreshLayout mPullToRefreshLayout;
     private static LayoutInflater mInflater;
-
-    public static Fragment newInstance(Context context) {
-        FragmentAnnonces f = new FragmentAnnonces();
-
-        return f;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,16 +107,24 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
         mImageViewSearch.setOnClickListener(clickListener);
         mImageViewSearchMoreDetail.setOnClickListener(clickListener);
 
-        Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+
+        Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
         mListViewSearch.setAdapter(Adapter);
 
         mListViewSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                Intent intentDetailAppartement = new Intent(getActivity(), DetailsAppartementActivity.class);
-                intentDetailAppartement.putExtra("position", position);
-                intentDetailAppartement.putExtra("appartement", new Appartement());
+                Intent intentDetailAppartement = new Intent(getActivity(), DetailsAnnonceActivity.class);
+                intentDetailAppartement.putExtra("annonce", mAnnonces.get(position));
                 startActivity(intentDetailAppartement);
             }
 

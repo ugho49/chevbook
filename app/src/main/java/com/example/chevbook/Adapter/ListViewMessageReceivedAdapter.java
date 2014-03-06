@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.chevbook.Class.Messages;
+import com.example.chevbook.Class.Message;
 import com.example.chevbook.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ListViewMessageReceivedAdapter extends BaseAdapter {
 
-    private final List<Messages> list;
+    private final List<Message> list;
     private final Context _c;
 
     private final ImageLoader imageLoader = ImageLoader.getInstance();
@@ -30,10 +30,10 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
         this.list = null;
     }
 
-    public ListViewMessageReceivedAdapter(Context context, List<Messages> ListMessages) {
+    public ListViewMessageReceivedAdapter(Context context, List<Message> listMessages) {
 
         this._c = context;
-        this.list = ListMessages;
+        this.list = listMessages;
 
     }
 

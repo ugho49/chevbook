@@ -20,8 +20,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Appartement T2 meublé"
-                android:id="@+id/textView2"
+                android:text="title"
+                android:id="@+id/textViewDetailAnnonceTitre"
                 android:textStyle="bold"
                 android:textSize="23dp"
                 android:textColor="@color/blue_account"
@@ -84,8 +84,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="Studio de 18m² au RDC sur cour, comprenant pièce principale, cuisine, salle d'eau avec wc et dressing. Proche toutes commodités. Libre de suite ! Environ 10min à pied du RER A. Garantie et caution demandées."
-                    android:id="@+id/textView6"
+                    android:text="description"
+                    android:id="@+id/textViewDetailAppartementDescription"
                     android:layout_marginTop="3dp" />
             </LinearLayout>
 
@@ -116,8 +116,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="250€"
-                        android:id="@+id/textView8"
+                        android:text="xxx €"
+                        android:id="@+id/textViewDetailAppartementLoyer"
                         android:layout_column="1"
                         android:layout_gravity="right" />
                 </TableRow>
@@ -143,8 +143,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Lac de maine"
-                        android:id="@+id/textView10"
+                        android:text="quartier"
+                        android:id="@+id/textViewDetailAppartementQuartier"
                         android:layout_gravity="right"
                         android:layout_column="1" />
                 </TableRow>
@@ -170,8 +170,35 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="Locations"
-                        android:id="@+id/textView12"
+                        android:text="categorie"
+                        android:id="@+id/textViewDetailAppartementCategorie"
+                        android:layout_gravity="right"
+                        android:layout_column="1" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_horizontal|right"
+                    android:id="@+id/tableRow4"
+                    android:layout_marginTop="5dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Surface"
+                        android:id="@+id/textView15"
+                        android:layout_weight="1"
+                        android:layout_column="0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="xx m²"
+                        android:id="@+id/textViewDetailAppartementSurface"
                         android:layout_gravity="right"
                         android:layout_column="1" />
                 </TableRow>
@@ -197,8 +224,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="2"
-                        android:id="@+id/textView14"
+                        android:text="x"
+                        android:id="@+id/textViewDetailAppartementNbPiece"
                         android:layout_gravity="right"
                         android:layout_column="1" />
                 </TableRow>
@@ -227,9 +254,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="ugho49"
+                    android:text="****"
                     android:textColor="@color/blue_account_light"
-                    android:id="@+id/textView4"
+                    android:id="@+id/textViewDetailAppartementUser"
                     android:textStyle="italic"
                     android:textSize="13dp" />
             </LinearLayout>
@@ -238,8 +265,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Le 18/02/2014 à 14h12"
-                android:id="@+id/textView"
+                android:text="DATE"
+                android:id="@+id/textViewDetailAppartementDate"
                 android:layout_marginTop="2dp"
                 android:textSize="13dp"
                 android:layout_marginLeft="8dp"

@@ -12,10 +12,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.chevbook.Activity.DetailsAppartementActivity;
+import com.example.chevbook.Activity.DetailsAnnonceActivity;
 import com.example.chevbook.Adapter.ListViewFavorisAdapter;
-import com.example.chevbook.Class.Appartement;
+import com.example.chevbook.Class.Annonce;
 import com.example.chevbook.R;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,6 +32,8 @@ public class FragmentFavoris extends Fragment {
     ListView mListViewFavoris;
 
     private ListViewFavorisAdapter Adapter;
+
+    private ArrayList<Annonce> mAnnonces = new ArrayList<Annonce>();
 
     public FragmentFavoris() {
         // Required empty public constructor
@@ -48,15 +52,18 @@ public class FragmentFavoris extends Fragment {
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
         actionBar.setTitle(mNavigationTitles[5]);
 
-        Adapter = new ListViewFavorisAdapter(getActivity(), getActivity().getBaseContext());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+
+        Adapter = new ListViewFavorisAdapter(getActivity(), getActivity().getBaseContext(), mAnnonces);
         mListViewFavoris.setAdapter(Adapter);
 
         mListViewFavoris.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Intent intentDetailAppartement = new Intent(getActivity(), DetailsAppartementActivity.class);
-                intentDetailAppartement.putExtra("position", position);
-                intentDetailAppartement.putExtra("appartement", new Appartement());
+                Intent intentDetailAppartement = new Intent(getActivity(), DetailsAnnonceActivity.class);
+                intentDetailAppartement.putExtra("annonce", mAnnonces.get(position));
                 startActivity(intentDetailAppartement);
             }
 

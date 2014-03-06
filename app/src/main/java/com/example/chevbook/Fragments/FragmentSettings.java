@@ -1,6 +1,8 @@
 package com.example.chevbook.Fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -9,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
 import com.example.chevbook.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 
 public class FragmentSettings extends PreferenceFragment{
@@ -16,6 +19,8 @@ public class FragmentSettings extends PreferenceFragment{
     private SharedPreferences prefs;
     private SharedPreferences prefsUser;
     private PreferenceScreen screen;
+
+    private static ImageLoader imageLoader;
 
     // All Shared Preferences
     private static final String KEY_EMAIL = "emailUserChevbook";
@@ -33,6 +38,7 @@ public class FragmentSettings extends PreferenceFragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        imageLoader = ImageLoader.getInstance();
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         prefsUser = getActivity().getApplicationContext().getSharedPreferences(PREFS_USER, PRIVATE_MODE);
 
@@ -40,12 +46,37 @@ public class FragmentSettings extends PreferenceFragment{
 
         Preference user_name = (Preference) findPreference("pref_user_name");
         Preference user_email = (Preference) findPreference("pref_user_email");
-        /*Preference more_assistance = (Preference) findPreference("pref_more_assistance");
-        Preference more_privacy = (Preference) findPreference("pref_more_privacy");
-        Preference more_conditions = (Preference) findPreference("pref_more_conditions");*/
+
+        Preference clean_cache = (Preference) findPreference("pref_more_clean_cache");
 
         user_name.setSummary(prefsUser.getString(KEY_FIRSTNAME, "") + " " + prefsUser.getString(KEY_LASTNAME, ""));
         user_email.setSummary(prefsUser.getString(KEY_EMAIL, ""));
+        clean_cache.setSummary("Taille du cache " + imageLoader.getMemoryCache().toString());
+
+        clean_cache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
+
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                adb.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        imageLoader.clearDiscCache();
+                        imageLoader.clearMemoryCache();
+                    }
+                });
+                adb.setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                adb.setMessage("Voulez-vous vider le cache de l'application Chevbook ?");
+                adb.show();
+
+                return false;
+            }
+
+        });
     }
 
     //@SuppressWarnings("deprecation")

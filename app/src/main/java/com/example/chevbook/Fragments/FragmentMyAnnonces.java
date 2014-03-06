@@ -16,10 +16,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.chevbook.Activity.DeposerModifierAnnonceActivity;
-import com.example.chevbook.Activity.DetailsAppartementActivity;
+import com.example.chevbook.Activity.DetailsAnnonceActivity;
 import com.example.chevbook.Adapter.ListViewMyAnnoncesAdapter;
-import com.example.chevbook.Class.Appartement;
+import com.example.chevbook.Class.Annonce;
 import com.example.chevbook.R;
+
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -35,6 +37,8 @@ public class FragmentMyAnnonces extends Fragment {
 
     private static final int CONST_CREATE = 0;
     private static final int CONST_MODIFIER = 1;
+
+    private ArrayList<Annonce> mAnnonces = new ArrayList<Annonce>();
 
     public FragmentMyAnnonces() {
         // Required empty public constructor
@@ -58,15 +62,17 @@ public class FragmentMyAnnonces extends Fragment {
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
         actionBar.setTitle(mNavigationTitles[4]);
 
-        Adapter = new ListViewMyAnnoncesAdapter(getActivity(), getActivity().getBaseContext());
+        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());
+
+        Adapter = new ListViewMyAnnoncesAdapter(getActivity(), getActivity().getBaseContext(), mAnnonces);
         mListViewMyAnnounces.setAdapter(Adapter);
 
         mListViewMyAnnounces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                Intent intentDetailAppartement = new Intent(getActivity(), DetailsAppartementActivity.class);
-                intentDetailAppartement.putExtra("position", position);
-                intentDetailAppartement.putExtra("appartement", new Appartement());
+                Intent intentDetailAppartement = new Intent(getActivity(), DetailsAnnonceActivity.class);
+                intentDetailAppartement.putExtra("annonce", mAnnonces.get(position));
                 startActivity(intentDetailAppartement);
             }
 

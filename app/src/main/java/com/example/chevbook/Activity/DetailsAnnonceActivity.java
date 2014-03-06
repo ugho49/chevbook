@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.chevbook.Class.Annonce;
 import com.example.chevbook.CustomDialog.CustomDialogMap;
 import com.example.chevbook.CustomDialog.CustomDialogMessage;
 import com.example.chevbook.R;
@@ -27,7 +29,7 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class DetailsAppartementActivity extends ActionBarActivity {
+public class DetailsAnnonceActivity extends ActionBarActivity {
 
     @InjectView(R.id.view_pager_detail_appartement)
     ViewPager mViewPagerDetailAppartement;
@@ -35,10 +37,28 @@ public class DetailsAppartementActivity extends ActionBarActivity {
     CirclePageIndicator mIndicatorViewPagerDetailAppartement;
     @InjectView(R.id.buttonDetailAppartementLookOnMap)
     Button mButtonDetailAppartementLookOnMap;
+    @InjectView(R.id.textViewDetailAnnonceTitre)
+    TextView mTextViewDetailAnnonceTitre;
+    @InjectView(R.id.textViewDetailAppartementDescription)
+    TextView mTextViewDetailAppartementDescription;
+    @InjectView(R.id.textViewDetailAppartementLoyer)
+    TextView mTextViewDetailAppartementLoyer;
+    @InjectView(R.id.textViewDetailAppartementQuartier)
+    TextView mTextViewDetailAppartementQuartier;
+    @InjectView(R.id.textViewDetailAppartementCategorie)
+    TextView mTextViewDetailAppartementCategorie;
+    @InjectView(R.id.textViewDetailAppartementSurface)
+    TextView mTextViewDetailAppartementSurface;
+    @InjectView(R.id.textViewDetailAppartementNbPiece)
+    TextView mTextViewDetailAppartementNbPiece;
+    @InjectView(R.id.textViewDetailAppartementUser)
+    TextView mTextViewDetailAppartementUser;
+    @InjectView(R.id.textViewDetailAppartementDate)
+    TextView mTextViewDetailAppartementDate;
 
     private static ActionBarActivity actionBarActivity;
     private static ImageLoader imageLoader;
-    private ArrayList<String> mUrlImagesAppartement;
+    private Annonce mAnnonce;
 
     private MenuItem menuAddFavoris;
     private MenuItem menuDeleteFavoris;
@@ -62,15 +82,16 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         actionBarActivity = (ActionBarActivity) this;
 
 
+        mAnnonce = (Annonce)getIntent().getSerializableExtra("annonce");
 
-        ImagePagerAdapter adapter = new ImagePagerAdapter();
+        initData();
+
+        ImagePagerAdapter adapter = new ImagePagerAdapter(mAnnonce.getUrl_images_annonces());
         mViewPagerDetailAppartement.setAdapter(adapter);
-        /*mIndicatorViewPagerDetailAppartement.setFillColor(getResources().getColor(R.color.blue_account));
-        mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);*/
         mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
 
-        dialogMap = new CustomDialogMap(DetailsAppartementActivity.this, "65 rue du chèvrefeuille, 49000 Angers");
-        dialogMessage = new CustomDialogMessage(DetailsAppartementActivity.this);
+        dialogMap = new CustomDialogMap(DetailsAnnonceActivity.this, mAnnonce.getAdresse_annonce() + ", " + mAnnonce.getCode_postal_annonce() + " " + mAnnonce.getVille_annonce());
+        dialogMessage = new CustomDialogMessage(DetailsAnnonceActivity.this);
 
         dialogMap.createDialog();
         dialogMessage.createDialog();
@@ -82,6 +103,22 @@ public class DetailsAppartementActivity extends ActionBarActivity {
                 dialogMap.showDialog();
             }
         });
+    }
+
+    private void initData(){
+        mTextViewDetailAnnonceTitre.setText(mAnnonce.getTitre_annonce());
+        mTextViewDetailAppartementDescription.setText(mAnnonce.getDescription_annonce());
+        mTextViewDetailAppartementLoyer.setText(Double.toString(mAnnonce.getPrix_annonce()) + " €");
+        mTextViewDetailAppartementQuartier.setText(mAnnonce.getQuartier_annonce());
+        mTextViewDetailAppartementCategorie.setText(mAnnonce.getCategorie_annonce());
+        mTextViewDetailAppartementSurface.setText(Integer.toString(mAnnonce.getSurface_annonce()) + "m²");
+        mTextViewDetailAppartementNbPiece.setText(Integer.toString(mAnnonce.getNumber_room_annonce()));
+
+        mTextViewDetailAppartementUser.setText(mAnnonce.getEmail_user_annonce());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
+        String DateAndTime = sdf.format(mAnnonce.getDate_create_annonce());
+        mTextViewDetailAppartementDate.setText("Le " + DateAndTime);
     }
 
     @Override
@@ -146,11 +183,11 @@ public class DetailsAppartementActivity extends ActionBarActivity {
 
         //Constructor
         private ImagePagerAdapter() {
-            mImages.add("http://jeudepaumehotel.com/ile-saint-louis/wp-content/uploads/2010/09/jeudepaume-hotel-ile-saint-louis-appartement.jpg");
+            /*mImages.add("http://jeudepaumehotel.com/ile-saint-louis/wp-content/uploads/2010/09/jeudepaume-hotel-ile-saint-louis-appartement.jpg");
             mImages.add("http://www.ile-oleron-vacances.fr/img/appartement-ile-oleron.jpg");
             mImages.add("http://i-cms.journaldesfemmes.com/image_cms/original/511308-15-apparts-de-decorateurs.jpg");
             mImages.add("http://walk2.francenet.fr/indicateur/images/PDF/CMS/articles/12604509.jpg");
-            mImages.add("http://www.mapetiteagence.com/img/referencement/vente-appartement-particulier.jpg");
+            mImages.add("http://www.mapetiteagence.com/img/referencement/vente-appartement-particulier.jpg");*/
         }
 
         private ImagePagerAdapter(ArrayList<String> mImages) {
@@ -171,7 +208,7 @@ public class DetailsAppartementActivity extends ActionBarActivity {
         public Object instantiateItem(ViewGroup container, final int position) {
             ImageView imageView = new ImageView(getApplicationContext());
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(7,0,7,0);
+            imageView.setPadding(7, 0, 7, 0);
 
             // int padding = context.getResources().getDimensionPixelSize(
             //       R.dimen.padding_medium);

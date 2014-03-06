@@ -58,7 +58,7 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name="com.example.chevbook.Activity.DetailsAppartementActivity"
+            android:name=".Activity.DetailsAnnonceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
