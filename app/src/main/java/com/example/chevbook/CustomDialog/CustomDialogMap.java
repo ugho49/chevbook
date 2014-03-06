@@ -58,6 +58,7 @@ public class CustomDialogMap {
 
         dialog = new AlertDialog.Builder(mActivity)
                 .setView(custom_view_map)
+                .setCancelable(false)
                 .setNegativeButton(mActivity.getResources().getString(R.string.btn_return), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();

@@ -56,6 +56,7 @@ public class CustomDialogMessage {
         dialog = new AlertDialog.Builder(mActivity)
                 .setView(custom_view_message)
                 .setTitle("Message")
+                .setCancelable(false)
                 .setNegativeButton(mActivity.getResources().getString(R.string.btn_return), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();

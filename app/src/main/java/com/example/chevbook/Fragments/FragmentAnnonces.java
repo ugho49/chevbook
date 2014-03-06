@@ -164,6 +164,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(custom_view_change_password)
+                .setCancelable(false)
                 .setTitle(getString(R.string.search_details))
                 .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
