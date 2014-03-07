@@ -493,11 +493,11 @@ bold
                 </style>
             </file>
         </source>
-        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\build\res\rs\release" />
-        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\build\res\generated\release" />
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\build\res\rs\debug" />
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\build\res\generated\debug" />
     </dataSet>
-    <dataSet config="release" >
-        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\src\release\res" />
+    <dataSet config="debug" >
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\src\debug\res" />
     </dataSet>
 
 </merger>

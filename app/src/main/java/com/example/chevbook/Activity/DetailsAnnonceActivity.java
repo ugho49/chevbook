@@ -1,6 +1,7 @@
 package com.example.chevbook.Activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -88,6 +89,7 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
         ImagePagerAdapter adapter = new ImagePagerAdapter(mAnnonce.getUrl_images_annonces());
         mViewPagerDetailAppartement.setAdapter(adapter);
+        mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);
         mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
 
         dialogMap = new CustomDialogMap(DetailsAnnonceActivity.this, mAnnonce.getAdresse_annonce() + ", " + mAnnonce.getCode_postal_annonce() + " " + mAnnonce.getVille_annonce());
