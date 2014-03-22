@@ -25,8 +25,11 @@ public class Annonce implements Serializable {
     private String code_postal_annonce;
 
     private String categorie_annonce;
+    //categorie et sous categorie
     private String type_location_annonce;
     private String quartier_annonce;
+
+    private boolean est_meuble;
 
     private ArrayList<String> url_images_annonces = new ArrayList<String>();
 

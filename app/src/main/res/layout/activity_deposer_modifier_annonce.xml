@@ -36,45 +36,78 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Vous pouvez ajouter jusqu'à 3 photos à votre annonce ! (Cliquer sur un rectangle pour en ajouter une)"
+                android:text="Vous pouvez ajouter jusqu'à 5 photos à votre annonce ! (Cliquer sur un rectangle pour en ajouter une)"
                 android:id="@+id/textView"
                 android:layout_marginTop="15dp"
                 android:fontFamily="sans-serif-light"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                android:layout_marginBottom="2dp" />
 
-            <ImageView
-                android:layout_width="match_parent"
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_image"
-                android:id="@+id/imageViewDeposerModifierAnnonceImage1"
-                android:background="@drawable/dashed_border"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="10dp"
-                android:visibility="visible" />
+                android:id="@+id/horizontalScrollView"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginRight="-8dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <ImageView
+                        android:layout_width="260dp"
+                        android:layout_height="190dp"
+                        android:src="@drawable/ic_image"
+                        android:id="@+id/imageViewDeposerModifierAnnonceImage1"
+                        android:background="@drawable/dashed_border"
+                        android:visibility="visible"
+                        android:layout_marginLeft="8dp" />
+
+                    <ImageView
+                        android:layout_width="260dp"
+                        android:layout_height="190dp"
+                        android:src="@drawable/ic_image"
+                        android:scaleType="center"
+                        android:id="@+id/imageViewDeposerModifierAnnonceImage2"
+                        android:background="@drawable/dashed_border"
+                        android:layout_marginLeft="5dp" />
+
+                    <ImageView
+                        android:layout_width="260dp"
+                        android:layout_height="190dp"
+                        android:src="@drawable/ic_image"
+                        android:scaleType="center"
+                        android:background="@drawable/dashed_border"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/imageViewDeposerModifierAnnonceImage3" />
+
+                    <ImageView
+                        android:layout_width="260dp"
+                        android:layout_height="190dp"
+                        android:src="@drawable/ic_image"
+                        android:background="@drawable/dashed_border"
+                        android:scaleType="center"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/imageViewDeposerModifierAnnonceImage4" />
+
+                    <ImageView
+                        android:layout_width="260dp"
+                        android:layout_height="190dp"
+                        android:src="@drawable/ic_image"
+                        android:background="@drawable/dashed_border"
+                        android:scaleType="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="8dp"
+                        android:id="@+id/imageViewDeposerModifierAnnonceImage5" />
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:visibility="visible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_image"
-                    android:id="@+id/imageViewDeposerModifierAnnonceImage2"
-                    android:background="@drawable/dashed_border"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_image"
-                    android:layout_marginLeft="5dp"
-                    android:background="@drawable/dashed_border"
-                    android:id="@+id/imageViewDeposerModifierAnnonceImage3"
-                    android:layout_weight="1"/>
 
             </LinearLayout>
 

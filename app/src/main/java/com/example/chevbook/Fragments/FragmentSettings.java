@@ -20,6 +20,10 @@ public class FragmentSettings extends PreferenceFragment{
     private SharedPreferences prefsUser;
     private PreferenceScreen screen;
 
+    private Preference user_name;
+    private Preference user_email;
+    private Preference clean_cache;
+
     private static ImageLoader imageLoader;
 
     // All Shared Preferences
@@ -44,14 +48,13 @@ public class FragmentSettings extends PreferenceFragment{
 
         screen = getPreferenceScreen();
 
-        Preference user_name = (Preference) findPreference("pref_user_name");
-        Preference user_email = (Preference) findPreference("pref_user_email");
-
-        Preference clean_cache = (Preference) findPreference("pref_more_clean_cache");
+        user_name = (Preference) findPreference("pref_user_name");
+        user_email = (Preference) findPreference("pref_user_email");
+        clean_cache = (Preference) findPreference("pref_more_clean_cache");
 
         user_name.setSummary(prefsUser.getString(KEY_FIRSTNAME, "") + " " + prefsUser.getString(KEY_LASTNAME, ""));
         user_email.setSummary(prefsUser.getString(KEY_EMAIL, ""));
-        clean_cache.setSummary("Taille du cache " + imageLoader.getMemoryCache().toString());
+        clean_cache.setSummary("Taille du cache ");
 
         clean_cache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
 
@@ -104,5 +107,6 @@ public class FragmentSettings extends PreferenceFragment{
         screen.removePreference(user_lastname);
 
     }*/
+
 
 }
