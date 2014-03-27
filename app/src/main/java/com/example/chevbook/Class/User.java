@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
 import java.util.HashMap;
 
 /**
@@ -27,7 +29,7 @@ public class User {
 
     // All Shared Preferences
     private static final String KEY_EMAIL = "emailUserChevbook";
-    private static final String KEY_PASSWORD_MD5 = "passwordMD5UserChevbook";
+    private static final String KEY_PASSWORD_SHA1 = "passwordSha1UserChevbook";
     private static final String KEY_FIRSTNAME = "firstnameUserChevbook";
     private static final String KEY_LASTNAME = "lastnameUserChevbook";
     private static final String KEY_URL_PROFIL_PICTURE = "urlProfilPictureUserChevbook";
@@ -47,7 +49,7 @@ public class User {
         editor.putBoolean(IS_LOGIN, true);
 
         editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_PASSWORD_MD5, getMd5(password));
+        editor.putString(KEY_PASSWORD_SHA1, getSha1(password));
 
         editor.commit();
     }
@@ -57,7 +59,7 @@ public class User {
         editor.putBoolean(IS_LOGIN, true);
 
         editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_PASSWORD_MD5, getMd5(password));
+        editor.putString(KEY_PASSWORD_SHA1, getSha1(password));
         editor.putString(KEY_FIRSTNAME, firstname);
         editor.putString(KEY_LASTNAME, lastname);
         editor.putString(KEY_URL_PROFIL_PICTURE, url_picture);
@@ -82,7 +84,7 @@ public class User {
         // user name
 
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-        user.put(KEY_PASSWORD_MD5, pref.getString(KEY_PASSWORD_MD5, null));
+        user.put(KEY_PASSWORD_SHA1, pref.getString(KEY_PASSWORD_SHA1, null));
         user.put(KEY_FIRSTNAME, pref.getString(KEY_FIRSTNAME, null));
         user.put(KEY_LASTNAME, pref.getString(KEY_LASTNAME, null));
         user.put(KEY_URL_PROFIL_PICTURE, pref.getString(KEY_URL_PROFIL_PICTURE, null));
@@ -97,9 +99,9 @@ public class User {
         return pref.getString(KEY_EMAIL, null);
     }
 
-    public String getPasswordMD5()
+    public String getPasswordSha1()
     {
-        return pref.getString(KEY_PASSWORD_MD5, null);
+        return pref.getString(KEY_PASSWORD_SHA1, null);
     }
 
     public String getFirstName()
@@ -125,7 +127,7 @@ public class User {
 
     public void setPassword(String password)
     {
-        editor.putString(KEY_PASSWORD_MD5, getMd5(password));
+        editor.putString(KEY_PASSWORD_SHA1, getSha1(password));
     }
 
     public void setFirstname(String firstname)
@@ -144,7 +146,7 @@ public class User {
     }
 
     //Methode MD5
-    public static String getMd5(String input)
+    public static String getMD5(String input)
     {
         //Permet de crypter une chaîne donnée en MD5
         try {
@@ -163,5 +165,38 @@ public class User {
             Log.e("MD5", e.getLocalizedMessage());
             return null;
         }
+    }
+
+    private static String getSha1(String password)
+    {
+        String sha1 = "";
+        try
+        {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(password.getBytes("UTF-8"));
+            sha1 = byteToHex(crypt.digest());
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        return sha1;
+    }
+
+    private static String byteToHex(final byte[] hash)
+    {
+        Formatter formatter = new Formatter();
+        for (byte b : hash)
+        {
+            formatter.format("%02x", b);
+        }
+        String result = formatter.toString();
+        formatter.close();
+        return result;
     }
 }

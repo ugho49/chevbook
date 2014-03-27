@@ -27,6 +27,22 @@ import com.example.chevbook.Class.User;
 import com.example.chevbook.R;
 import com.google.analytics.tracking.android.EasyTracker;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
+
 
 public class LoginActivity extends ActionBarActivity {
     /**
@@ -321,30 +337,96 @@ public class LoginActivity extends ActionBarActivity {
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private String mFirstname = "Ugho"; //prenom
+        //mEmail
+        //mPassword
+       /* private String mFirstname = "Ugho"; //prenom
         private String mLastname = "Stephan"; //nom
-        private String mUrl_image = "https://scontent-a.xx.fbcdn.net/hphotos-frc3/t31/1501641_10202187145833021_172354652_o.jpg";
+        private String mUrl_image = "https://scontent-a.xx.fbcdn.net/hphotos-frc3/t31/1501641_10202187145833021_172354652_o.jpg";*/
+
+        private String mFirstname; //prenom
+        private String mLastname; //nom
+        private String mUrl_image;
+
+        private String ErreurLoginTask = "Erreur ";
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+
+            HttpURLConnection urlConnection = null;
+            StringBuilder sb = new StringBuilder();
 
             try {
-                // Simulate network access.
-                Thread.sleep(300);
+                URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_IDENTIFICATION));
+                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.setConnectTimeout(5000);
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
 
-            } catch (InterruptedException e) {
-                Toast.makeText(getApplicationContext(), "Erreur de connexion", Toast.LENGTH_SHORT).show();
-                return false;
+                // Création objet jsonn clé valeur
+                JSONObject jsonParam = new JSONObject();
+                // Exemple Clé valeur utiles à notre application
+                jsonParam.put("email", mEmail);
+                jsonParam.put("password", getSha1(mPassword));
+                out.write(jsonParam.toString());
+                out.flush();
+                out.close();
+
+                // récupération du serveur
+                int HttpResult = urlConnection.getResponseCode();
+                if (HttpResult == HttpURLConnection.HTTP_OK)
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    br.close();
+
+                    JSONArray jsonArray = new JSONArray(sb.toString());
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    boolean user_exist = jsonObject.getBoolean("connectSuccess");
+
+                    if(user_exist) {
+
+                        mFirstname = jsonObject.getString("Prenom_Personne"); //prenom
+                        mLastname = jsonObject.getString("Nom_Personne"); //nom
+                        mUrl_image = jsonObject.getString("Avatar_Personne");
+
+                        return true;
+                    }
+                    else {
+                        //Utilisateur existe pas
+                        ErreurLoginTask = ErreurLoginTask + "de mot de passe ou d'email";
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
-
-            if(mEmail.equals("test@test")){
-                if (mPassword.equals("test")){
-                    return true;
+            catch (MalformedURLException e){
+                ErreurLoginTask = ErreurLoginTask + "URL";
+                return false; //Erreur URL
+            } catch (java.net.SocketTimeoutException e) {
+                ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                return false; //Temps trop long
+            } catch (IOException e) {
+                ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                return false; //Pas de connexion internet
+            } catch (JSONException e) {
+                ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                return false; //Erreur JSON
+            } finally {
+                if (urlConnection != null){
+                    urlConnection.disconnect();
                 }
             }
 
-            return false;
         }
 
         @Override
@@ -353,10 +435,6 @@ public class LoginActivity extends ActionBarActivity {
             showProgress(false);
 
             if (success) {
-
-                /*User user = new User(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
-                user.SaveInPrefs(getApplicationContext());
-                vmodele.setCurrentUser(user);*/
 
                 mUser.loginUser(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
                 vmodele.setCurrentUser(mUser);
@@ -367,8 +445,10 @@ public class LoginActivity extends ActionBarActivity {
                 finish();
 
             } else {
-                mEmailView.setError(getString(R.string.error_invalid_email_or_password));
-                mPasswordView.requestFocus();
+                //mEmailView.setError(getString(R.string.error_invalid_email_or_password));
+                //mPasswordView.requestFocus();
+
+                Toast.makeText(getApplicationContext(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -377,5 +457,38 @@ public class LoginActivity extends ActionBarActivity {
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    private static String getSha1(String password)
+    {
+        String sha1 = "";
+        try
+        {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(password.getBytes("UTF-8"));
+            sha1 = byteToHex(crypt.digest());
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        return sha1;
+    }
+
+    private static String byteToHex(final byte[] hash)
+    {
+        Formatter formatter = new Formatter();
+        for (byte b : hash)
+        {
+            formatter.format("%02x", b);
+        }
+        String result = formatter.toString();
+        formatter.close();
+        return result;
     }
 }
