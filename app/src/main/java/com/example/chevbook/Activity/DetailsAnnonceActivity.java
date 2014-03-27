@@ -56,6 +56,12 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
     TextView mTextViewDetailAppartementUser;
     @InjectView(R.id.textViewDetailAppartementDate)
     TextView mTextViewDetailAppartementDate;
+    @InjectView(R.id.textViewDetailAppartementSousCategorie)
+    TextView mTextViewDetailAppartementSousCategorie;
+    @InjectView(R.id.textViewDetailAppartementType)
+    TextView mTextViewDetailAppartementType;
+    @InjectView(R.id.textViewDetailAppartementEstMeuble)
+    TextView mTextViewDetailAppartementEstMeuble;
 
     private static ActionBarActivity actionBarActivity;
     private static ImageLoader imageLoader;
@@ -92,7 +98,7 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
         mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);
         mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
 
-        dialogMap = new CustomDialogMap(DetailsAnnonceActivity.this, mAnnonce.getAdresse_annonce() + ", " + mAnnonce.getCode_postal_annonce() + " " + mAnnonce.getVille_annonce());
+        dialogMap = new CustomDialogMap(DetailsAnnonceActivity.this, mAnnonce.getAdresse_annonce());
         dialogMessage = new CustomDialogMessage(DetailsAnnonceActivity.this);
 
         dialogMap.createDialog();
@@ -115,6 +121,15 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
         mTextViewDetailAppartementCategorie.setText(mAnnonce.getCategorie_annonce());
         mTextViewDetailAppartementSurface.setText(Integer.toString(mAnnonce.getSurface_annonce()) + "m²");
         mTextViewDetailAppartementNbPiece.setText(Integer.toString(mAnnonce.getNumber_room_annonce()));
+        mTextViewDetailAppartementSousCategorie.setText(mAnnonce.getSousCategorie_annonce());
+        mTextViewDetailAppartementType.setText(mAnnonce.getType_location_annonce());
+
+        String est_meuble = "";
+
+        if(mAnnonce.get_isMeuble()){est_meuble = "oui";}
+        else{est_meuble = "non";}
+
+        mTextViewDetailAppartementEstMeuble.setText(est_meuble);
 
         mTextViewDetailAppartementUser.setText(mAnnonce.getEmail_user_annonce());
 
@@ -185,14 +200,11 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
         //Constructor
         private ImagePagerAdapter() {
-            /*mImages.add("http://jeudepaumehotel.com/ile-saint-louis/wp-content/uploads/2010/09/jeudepaume-hotel-ile-saint-louis-appartement.jpg");
-            mImages.add("http://www.ile-oleron-vacances.fr/img/appartement-ile-oleron.jpg");
-            mImages.add("http://i-cms.journaldesfemmes.com/image_cms/original/511308-15-apparts-de-decorateurs.jpg");
-            mImages.add("http://walk2.francenet.fr/indicateur/images/PDF/CMS/articles/12604509.jpg");
-            mImages.add("http://www.mapetiteagence.com/img/referencement/vente-appartement-particulier.jpg");*/
+            //empty constructor
         }
 
         private ImagePagerAdapter(ArrayList<String> mImages) {
+            //constructor
             this.mImages = mImages;
         }
 
@@ -238,24 +250,6 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
             container.removeView((ImageView) object);
         }
     }
-
-    /*public void showCustomDialogMessage()
-    {
-        View custom_view_change_password = getLayoutInflater().inflate(R.layout.custom_dialog_detail_appartement_message, null);
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(custom_view_change_password)
-                .setTitle("Envoi d'un message")
-                .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Toast.makeText(getActivity(), "Annulation", Toast.LENGTH_SHORT).show();
-                        dialog.cancel();
-                    }
-                })
-                .create();
-
-        dialog.show();
-    }*/
 
     @Override
     public void onStart() {

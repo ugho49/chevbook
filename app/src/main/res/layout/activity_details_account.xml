@@ -56,33 +56,6 @@
 
             </LinearLayout>
 
-            <RadioGroup
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="horizontal"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/border_text_grey"
-                android:gravity="center_horizontal">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/radio_button_man"
-                    android:textColor="#695b62"
-                    android:id="@+id/radioButtonHomme"
-                    android:checked="false" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/radio_button_woman"
-                    android:id="@+id/radioButtonFemme"
-                    android:checked="false"
-                    android:textColor="#695b62"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="80dp" />
-            </RadioGroup>
-
             <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -229,65 +202,7 @@
                         android:layout_column="1" />
                 </TableRow>
 
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/born_in_account"
-                        android:textColor="#695b62"
-                        android:id="@+id/textView3"
-                        android:layout_gravity="center_vertical"
-                        android:layout_column="0"
-                        android:layout_weight="1" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="date"
-                        android:ems="10"
-                        android:hint="@string/date_of_birth_account"
-                        android:background="@drawable/border_text_grey"
-                        android:minHeight="40dp"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#695b62"
-                        android:id="@+id/editTextDateOfBirthday"
-                        android:layout_weight="1"
-                        android:layout_column="1" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/phone_account"
-                        android:textColor="#695b62"
-                        android:id="@+id/textView3"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:layout_column="0" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:ems="10"
-                        android:hint="@string/phone_account"
-                        android:background="@drawable/border_text_grey"
-                        android:minHeight="40dp"
-                        android:layout_marginTop="8dp"
-                        android:textColor="#695b62"
-                        android:id="@+id/editTextPhone"
-                        android:layout_weight="1"
-                        android:layout_column="1" />
-                </TableRow>
 
             </TableLayout>
 

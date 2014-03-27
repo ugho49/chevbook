@@ -21,11 +21,10 @@ public class Annonce implements Serializable {
     private int surface_annonce; //m²
 
     private String adresse_annonce;
-    private String ville_annonce;
-    private String code_postal_annonce;
 
     private String categorie_annonce;
-    //categorie et sous categorie
+    private String sous_categorie_annonce;
+
     private String type_location_annonce;
     private String quartier_annonce;
 
@@ -36,7 +35,7 @@ public class Annonce implements Serializable {
     //Constructor
     public Annonce() {
         //Todo : delete this -->
-        id_annonce = 1212121;
+        /*id_annonce = 1212121;
         date_create_annonce = new Date();
         titre_annonce = "Appartement T3 meublé";
         prix_annonce = 378.35;
@@ -45,22 +44,34 @@ public class Annonce implements Serializable {
         number_room_annonce = 4;
         surface_annonce = 30;
 
-        adresse_annonce = "4 rue d'iéna";
-        ville_annonce = "Angers";
-        code_postal_annonce = "49000";
+        adresse_annonce = "4 rue d'iéna, ANGERS 49000";
 
         categorie_annonce = "loft";
+        sous_categorie_annonce = "T3";
         quartier_annonce = "Belle-beille";
-        type_location_annonce = "";
+        type_location_annonce = "Achat";
 
         url_images_annonces.add("http://media-cdn.tripadvisor.com/media/photo-s/03/8f/5c/42/appartements-riemergasse.jpg");
         url_images_annonces.add("http://www.apartmentbarcelona.com/fr/appartements-de-luxe/imageWeb/Apartamentos/fr/ID283/appartements-barcelone-283-0.jpg");
+    */
     }
 
-    //Constructor
-    public Annonce(int id, Date date) {
-        id_annonce = id;
-        date_create_annonce = date;
+    public Annonce(int id_annonce, Date date_create_annonce, String titre_annonce, double prix_annonce, String description_annonce, String email_user_annonce, int number_room_annonce, int surface_annonce, String adresse_annonce, String categorie_annonce, String sous_categorie_annonce, String type_location_annonce, String quartier_annonce, boolean est_meuble, ArrayList<String> url_images_annonces) {
+        this.id_annonce = id_annonce;
+        this.date_create_annonce = date_create_annonce;
+        this.titre_annonce = titre_annonce;
+        this.prix_annonce = prix_annonce;
+        this.description_annonce = description_annonce;
+        this.email_user_annonce = email_user_annonce;
+        this.number_room_annonce = number_room_annonce;
+        this.surface_annonce = surface_annonce;
+        this.adresse_annonce = adresse_annonce;
+        this.categorie_annonce = categorie_annonce;
+        this.sous_categorie_annonce = sous_categorie_annonce;
+        this.type_location_annonce = type_location_annonce;
+        this.quartier_annonce = quartier_annonce;
+        this.est_meuble = est_meuble;
+        this.url_images_annonces = url_images_annonces;
     }
 
     //Getters
@@ -100,16 +111,12 @@ public class Annonce implements Serializable {
         return adresse_annonce;
     }
 
-    public String getVille_annonce() {
-        return ville_annonce;
-    }
-
-    public String getCode_postal_annonce() {
-        return code_postal_annonce;
-    }
-
     public String getCategorie_annonce() {
         return categorie_annonce;
+    }
+
+    public String getSousCategorie_annonce() {
+        return sous_categorie_annonce;
     }
 
     public String getType_location_annonce() {
@@ -118,6 +125,10 @@ public class Annonce implements Serializable {
 
     public String getQuartier_annonce() {
         return quartier_annonce;
+    }
+
+    public Boolean get_isMeuble() {
+        return est_meuble;
     }
 
     public ArrayList<String> getUrl_images_annonces() {
@@ -153,16 +164,12 @@ public class Annonce implements Serializable {
         this.adresse_annonce = adresse_annonce;
     }
 
-    public void setVille_annonce(String ville_annonce) {
-        this.ville_annonce = ville_annonce;
-    }
-
-    public void setCode_postal_annonce(String code_postal_annonce) {
-        this.code_postal_annonce = code_postal_annonce;
-    }
-
     public void setCategorie_annonce(String categorie_annonce) {
         this.categorie_annonce = categorie_annonce;
+    }
+
+    public void setSousCategorie_annonce(String sous_categorie_annonce) {
+        this.sous_categorie_annonce = sous_categorie_annonce;
     }
 
     public void setType_location_annonce(String type_location_annonce) {
@@ -175,5 +182,9 @@ public class Annonce implements Serializable {
 
     public void setUrl_images_annonces(ArrayList<String> url_images_annonces) {
         this.url_images_annonces = url_images_annonces;
+    }
+
+    public void set_isMeuble(boolean isMeuble) {
+        this.est_meuble = isMeuble;
     }
 }

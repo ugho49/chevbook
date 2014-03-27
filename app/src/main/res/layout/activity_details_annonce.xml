@@ -181,6 +181,87 @@
                     android:layout_height="fill_parent"
                     android:background="@drawable/bg_card"
                     android:gravity="center_horizontal|right"
+                    android:id="@+id/tableRow10"
+                    android:layout_marginTop="5dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Sous-categorie"
+                        android:id="@+id/textView120"
+                        android:layout_weight="1"
+                        android:layout_column="0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="sous-categorie"
+                        android:id="@+id/textViewDetailAppartementSousCategorie"
+                        android:layout_gravity="right"
+                        android:layout_column="1" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_horizontal|right"
+                    android:id="@+id/tableRow100"
+                    android:layout_marginTop="5dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Type"
+                        android:id="@+id/textView121"
+                        android:layout_weight="1"
+                        android:layout_column="0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="type"
+                        android:id="@+id/textViewDetailAppartementType"
+                        android:layout_gravity="right"
+                        android:layout_column="1" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_horizontal|right"
+                    android:id="@+id/tableRow1000"
+                    android:layout_marginTop="5dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Est meublé"
+                        android:id="@+id/textView122"
+                        android:layout_weight="1"
+                        android:layout_column="0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="meublé"
+                        android:id="@+id/textViewDetailAppartementEstMeuble"
+                        android:layout_gravity="right"
+                        android:layout_column="1" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/bg_card"
+                    android:gravity="center_horizontal|right"
                     android:id="@+id/tableRow4"
                     android:layout_marginTop="5dp" >
 

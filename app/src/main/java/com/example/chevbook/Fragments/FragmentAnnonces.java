@@ -28,7 +28,19 @@ import com.example.chevbook.Class.Annonce;
 import com.example.chevbook.Class.Modele;
 import com.example.chevbook.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,6 +62,9 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
     LinearLayout mLinearLayoutSearchAppartementLoading;
     @InjectView(R.id.linearLayoutSearchAppartementNoResult)
     LinearLayout mLinearLayoutSearchAppartementNoResult;
+
+    private int AnnonceMax = 0;
+    private int AnnonceChargees = 0;
 
     //Custom Dialog
     private static EditText EditTextKeyWord;
@@ -107,17 +122,6 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
         mImageViewSearch.setOnClickListener(clickListener);
         mImageViewSearchMoreDetail.setOnClickListener(clickListener);
 
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-
-        Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
-        mListViewSearch.setAdapter(Adapter);
 
         mListViewSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
@@ -156,7 +160,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
         View custom_view_change_password = mInflater.inflate(R.layout.custom_dialog_search_annonce_more_detail, null);
 
         AppartementListQuartier = getResources().getStringArray(R.array.appartements_quartier_array);
-        AppartementListType = getResources().getStringArray(R.array.appartements_type_array);
+        AppartementListType = getResources().getStringArray(R.array.appartements_type_location_array);
 
         mSpinnerQuartier = (Spinner)custom_view_change_password.findViewById(R.id.spinnerCustomDialogSearchAppartDetailQuartier);
         mSpinnerType = (Spinner)custom_view_change_password.findViewById(R.id.spinnerCustomDialogSearchAppartDetailType);
@@ -184,10 +188,12 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
     @Override
     public void onRefreshStarted(View view) {
-        /**
-         * Simulate Refresh with 4 seconds sleep
-         */
-        new AsyncTask<Void, Void, Void>() {
+        listerAnnonces(AnnonceChargees, AnnonceChargees + 20);
+    }
+
+    public void listerAnnonces(final int debut, final int fin)
+    {
+        new AsyncTask<Void, Void, Boolean>() {
 
             @Override
             protected void onPreExecute() {
@@ -197,19 +203,139 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
             }
 
             @Override
-            protected Void doInBackground(Void... params) {
-                try {
+            protected Boolean doInBackground(Void... params) {
+                /*try {
                     Thread.sleep(4000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                return null;
+
+                return null;*/
+
+                HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
+                try {
+                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_LIST_ANNONCES));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
+                    // Exemple Clé valeur utiles à notre application
+                    jsonParam.put("debut", debut);
+                    jsonParam.put("fin", fin);
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
+
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        JSONArray jsonArray = new JSONArray(sb.toString());
+
+                        AnnonceMax = jsonArray.getJSONArray(0).getJSONObject(0).getInt("Nb");
+
+                        JSONArray listAnnonces = jsonArray.getJSONArray(1); //contient des JSON objets
+
+                        if(listAnnonces.length()>0){
+                            for(int j = 0; j < listAnnonces.length(); j++){
+                                try {
+                                    JSONObject jsonObject = jsonArray.getJSONObject(j);
+
+                                    int id_annonce = jsonObject.getInt("");
+                                    //Date date_create_annonce;
+                                    String titre_annonce;
+                                    double prix_annonce = jsonObject.getDouble("");
+                                    String description_annonce;
+                                    String email_user_annonce;
+                                    int number_room_annonce;
+                                    int surface_annonce;
+                                    String adresse_annonce;
+                                    String categorie_annonce;
+                                    String sous_categorie_annonce;
+                                    String type_location_annonce;
+                                    String quartier_annonce;
+                                    boolean est_meuble = jsonObject.getBoolean("");
+                                    ArrayList<String> url_images_annonces = new ArrayList<String>();
+
+                                    JSONArray arr = jsonObject.getJSONArray("liste_image");
+                                    if(arr.length()>0){
+                                        for(int z = 0; z < arr.length(); z++){
+                                            try {
+                                                url_images_annonces.add(arr.getString(z));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+
+                                    Annonce a = new Annonce();
+                                    mAnnonces.add(a);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        return true;
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    return false; //Erreur URL
+                } catch (java.net.SocketTimeoutException e) {
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    return false; //Erreur JSON
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
+                }
             }
 
             @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
+            protected void onPostExecute(final Boolean result) {
 
+                if (result)
+                {
+                    //todo : success
+                    /*mAnnonces.add(new Annonce());
+                    mAnnonces.add(new Annonce());
+                    mAnnonces.add(new Annonce());
+                    mAnnonces.add(new Annonce());
+                    mAnnonces.add(new Annonce());
+                    mAnnonces.add(new Annonce());
+                    mAnnonces.add(new Annonce());
+                    mAnnonces.add(new Annonce());*/
+
+                    Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
+                    mListViewSearch.setAdapter(Adapter);
+                }
+                else {
+                    //todo : error
+                }
                 // Notify PullToRefreshLayout that the refresh has finished
                 mPullToRefreshLayout.setRefreshComplete();
             }

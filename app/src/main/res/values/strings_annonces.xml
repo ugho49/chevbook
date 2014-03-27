@@ -28,11 +28,16 @@
         <item>Justices</item>
     </string-array>
 
-    <string-array name="appartements_type_array"><!--sous-categ-->
+    <string-array name="appartements_sous_categorie_array"><!--sous-categ-->
         <item>T1</item>
         <item>T2</item>
         <item>T3</item>
         <item>T4</item>
+    </string-array>
+
+    <string-array name="appartements_type_location_array"><!--sous-categ-->
+        <item>Location</item>
+        <item>Achat</item>
     </string-array>
 
     <string-array name="appartements_categorie_array"><!--categ-->

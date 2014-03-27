@@ -23,7 +23,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.chevbook.CustomsView.CircularImageView;
@@ -44,20 +43,12 @@ public class DetailsAccountActivity extends ActionBarActivity {
     CircularImageView mImageViewPictureUser;
     @InjectView(R.id.btnChangePicture)
     LinearLayout mBtnChangePicture;
-    @InjectView(R.id.radioButtonHomme)
-    RadioButton mRadioButtonHomme;
-    @InjectView(R.id.radioButtonFemme)
-    RadioButton mRadioButtonFemme;
     @InjectView(R.id.editTextFirstName)
     EditText mEditTextFirstName;
     @InjectView(R.id.editTextLastName)
     EditText mEditTextLastName;
     @InjectView(R.id.editTextEmail)
     EditText mEditTextEmail;
-    @InjectView(R.id.editTextDateOfBirthday)
-    EditText mEditTextDateOfBirthday;
-    @InjectView(R.id.editTextPhone)
-    EditText mEditTextPhone;
     @InjectView(R.id.buttonChangePassword)
     Button mButtonChangePassword;
     @InjectView(R.id.buttonSaveModif)
@@ -223,6 +214,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(custom_view_change_password)
+                .setCancelable(false)
                 .setTitle(getString(R.string.change_password))
                 .setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
