@@ -8,7 +8,7 @@
     <string name="GOOGLE_API_KEY">AIzaSyB72jWDb2z1aeL0HrnocKSzIeH37qSiwSQ</string>
 
     <!-- Serveur -->
-    <string name="URL_SERVEUR">http://192.168.157.104/Chevbook/</string>
+    <string name="URL_SERVEUR">http://biche.no-ip.org/chevbook/</string>
     <string name="URL_SERVEUR_IDENTIFICATION">compte.php?action=login</string>
     <string name="URL_SERVEUR_LIST_ANNONCES">index.php?action=list</string>
 

@@ -442,7 +442,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     private void remplirSpinner()
     {
         AppartementListQuartier = getResources().getStringArray(R.array.appartements_quartier_array);
-        AppartementListType = getResources().getStringArray(R.array.appartements_type_array);
+        AppartementListType = getResources().getStringArray(R.array.appartements_type_location_array);
 
         ArrayAdapter<String> spinnerQuartierArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, AppartementListQuartier);
         ArrayAdapter<String> spinnerTypeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, AppartementListType);

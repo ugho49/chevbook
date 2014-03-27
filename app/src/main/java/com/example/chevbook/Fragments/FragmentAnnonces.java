@@ -134,6 +134,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
         });
 
+        listerAnnonces(AnnonceChargees, AnnonceChargees + 20);
+
         return root;
     }
 
@@ -195,6 +197,9 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
     {
         new AsyncTask<Void, Void, Boolean>() {
 
+            String AfficherJSON = null;
+            String ErreurLoginTask = "Erreur ";
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -245,55 +250,94 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
                         }
                         br.close();
 
+                        //AfficherJSON = sb.toString();
+
                         JSONArray jsonArray = new JSONArray(sb.toString());
 
                         AnnonceMax = jsonArray.getJSONArray(0).getJSONObject(0).getInt("Nb");
+
+                        /*String annonces = jsonArray.getJSONArray(1).toString();
+                        JsonElement json = new JsonParser().parse(annonces);
+                        JsonArray varray = json.getAsJsonArray();
+                        Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd").create();
+
+                        for(JsonElement obj : varray )
+                        {
+                            Annonce a = gson.fromJson(obj.getAsJsonObject(), Annonce.class);
+                            gson.fromJson(obj.getAsJsonObject(), Annonce.class);
+
+                            mAnnonces.add(a);
+                        }
+
+                        return true;*/
 
                         JSONArray listAnnonces = jsonArray.getJSONArray(1); //contient des JSON objets
 
                         if(listAnnonces.length()>0){
                             for(int j = 0; j < listAnnonces.length(); j++){
+
+                                AfficherJSON = listAnnonces.getJSONObject(j).toString();
+                                JSONObject jsonObject = listAnnonces.getJSONObject(j);
+
+                                int id_annonce = jsonObject.getInt("Id_Annonce");
+
+                                /*SimpleDateFormat sdf = new SimpleDateFormat("aaaa/MM/dd HH:mm:ss");
+
                                 try {
-                                    JSONObject jsonObject = jsonArray.getJSONObject(j);
-
-                                    int id_annonce = jsonObject.getInt("");
-                                    //Date date_create_annonce;
-                                    String titre_annonce;
-                                    double prix_annonce = jsonObject.getDouble("");
-                                    String description_annonce;
-                                    String email_user_annonce;
-                                    int number_room_annonce;
-                                    int surface_annonce;
-                                    String adresse_annonce;
-                                    String categorie_annonce;
-                                    String sous_categorie_annonce;
-                                    String type_location_annonce;
-                                    String quartier_annonce;
-                                    boolean est_meuble = jsonObject.getBoolean("");
-                                    ArrayList<String> url_images_annonces = new ArrayList<String>();
-
-                                    JSONArray arr = jsonObject.getJSONArray("liste_image");
-                                    if(arr.length()>0){
-                                        for(int z = 0; z < arr.length(); z++){
-                                            try {
-                                                url_images_annonces.add(arr.getString(z));
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-
-                                    Annonce a = new Annonce();
-                                    mAnnonces.add(a);
-
-                                } catch (JSONException e) {
+                                    Date date_create_annonce = sdf.parse(jsonObject.get("Date_Ajout_Annonce").toString());
+                                } catch (ParseException e) {
                                     e.printStackTrace();
+                                }*/
+                                Date date_create_annonce = new Date();
+
+                                String titre_annonce = jsonObject.getString("Titre_Annonce");
+                                double prix_annonce = jsonObject.getDouble("Prix_Annonce");
+                                String description_annonce = jsonObject.getString("Description_Annonce");
+                                String email_user_annonce = jsonObject.getString("E_mail_Personne_Annonce");
+
+                                //int number_room_annonce = jsonObject.getInt("");
+                                int number_room_annonce = 0;
+
+                                int surface_annonce = jsonObject.getInt("Surface_Annonce");
+                                String adresse_annonce = jsonObject.getString("Adresse_Annonce");
+                                String categorie_annonce = jsonObject.getString("Libelle_Ctagorie");
+                                String sous_categorie_annonce = jsonObject.getString("Libelle_Sous_Categorie");
+                                String type_location_annonce = jsonObject.getString("Libelle_Type_Location");
+                                String quartier_annonce = jsonObject.getString("Libelle_Quartier");
+                                boolean est_meuble = jsonObject.getBoolean("Est_Meuble");
+
+                                ArrayList<String> url_images_annonces = new ArrayList<String>();
+
+                                JSONArray arr = jsonObject.getJSONArray("listeImage");
+                                if(arr.length()>0){
+                                    for(int z = 0; z < arr.length(); z++){
+                                        url_images_annonces.add(arr.getString(z));
+                                    }
                                 }
+
+                                mAnnonces.add(new Annonce(id_annonce,
+                                        date_create_annonce,
+                                        titre_annonce,
+                                        prix_annonce,
+                                        description_annonce,
+                                        email_user_annonce,
+                                        number_room_annonce,
+                                        surface_annonce,
+                                        adresse_annonce,
+                                        categorie_annonce,
+                                        sous_categorie_annonce,
+                                        type_location_annonce,
+                                        quartier_annonce,
+                                        est_meuble,
+                                        url_images_annonces));
+
                             }
+
+                            return true;
                         }
-
-                        return true;
-
+                        else {
+                            return false;
+                        }
                     }
                     else
                     {
@@ -301,12 +345,16 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
                     }
                 }
                 catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
                     return false; //Erreur URL
                 } catch (java.net.SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
                     return false; //Temps trop long
                 } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
                     return false; //Pas de connexion internet
                 } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
                     return false; //Erreur JSON
                 } finally {
                     if (urlConnection != null){
@@ -330,11 +378,23 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
                     mAnnonces.add(new Annonce());
                     mAnnonces.add(new Annonce());*/
 
+                    Toast.makeText(getActivity(), "Succes", Toast.LENGTH_SHORT).show();
+
                     Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
                     mListViewSearch.setAdapter(Adapter);
                 }
                 else {
                     //todo : error
+                    Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
+
+                    /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                    adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    adb.setMessage(AfficherJSON);
+                    adb.show();*/
                 }
                 // Notify PullToRefreshLayout that the refresh has finished
                 mPullToRefreshLayout.setRefreshComplete();
