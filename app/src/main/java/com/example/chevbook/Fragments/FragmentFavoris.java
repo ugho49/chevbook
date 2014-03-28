@@ -52,9 +52,9 @@ public class FragmentFavoris extends Fragment {
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
         actionBar.setTitle(mNavigationTitles[5]);
 
+        /*mAnnonces.add(new Annonce());
         mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());*/
 
         Adapter = new ListViewFavorisAdapter(getActivity(), getActivity().getBaseContext(), mAnnonces);
         mListViewFavoris.setAdapter(Adapter);

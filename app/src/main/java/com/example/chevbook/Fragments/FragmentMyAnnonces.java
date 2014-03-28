@@ -62,8 +62,8 @@ public class FragmentMyAnnonces extends Fragment {
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
         actionBar.setTitle(mNavigationTitles[4]);
 
-        mAnnonces.add(new Annonce());
-        mAnnonces.add(new Annonce());
+        /*mAnnonces.add(new Annonce());
+        mAnnonces.add(new Annonce());*/
 
         Adapter = new ListViewMyAnnoncesAdapter(getActivity(), getActivity().getBaseContext(), mAnnonces);
         mListViewMyAnnounces.setAdapter(Adapter);

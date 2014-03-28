@@ -39,6 +39,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -279,32 +281,36 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
                                 AfficherJSON = listAnnonces.getJSONObject(j).toString();
                                 JSONObject jsonObject = listAnnonces.getJSONObject(j);
 
-                                int id_annonce = jsonObject.getInt("Id_Annonce");
-
-                                /*SimpleDateFormat sdf = new SimpleDateFormat("aaaa/MM/dd HH:mm:ss");
-
-                                try {
-                                    Date date_create_annonce = sdf.parse(jsonObject.get("Date_Ajout_Annonce").toString());
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }*/
                                 Date date_create_annonce = new Date();
 
+                                SimpleDateFormat sdf = new SimpleDateFormat("aaaa/MM/dd HH:mm:ss");
+                                try {
+                                    date_create_annonce = sdf.parse(jsonObject.get("Date_Ajout_Annonce").toString());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                //Date date_create_annonce = new Date();
+
+                                int id_annonce = jsonObject.getInt("Id_Annonce");
                                 String titre_annonce = jsonObject.getString("Titre_Annonce");
+
                                 double prix_annonce = jsonObject.getDouble("Prix_Annonce");
                                 String description_annonce = jsonObject.getString("Description_Annonce");
                                 String email_user_annonce = jsonObject.getString("E_mail_Personne_Annonce");
-
-                                //int number_room_annonce = jsonObject.getInt("");
-                                int number_room_annonce = 0;
-
+                                int number_room_annonce = jsonObject.getInt("Nb_Pieces_Annonce");
                                 int surface_annonce = jsonObject.getInt("Surface_Annonce");
                                 String adresse_annonce = jsonObject.getString("Adresse_Annonce");
-                                String categorie_annonce = jsonObject.getString("Libelle_Ctagorie");
+                                String categorie_annonce = jsonObject.getString("Libelle_Categorie");
                                 String sous_categorie_annonce = jsonObject.getString("Libelle_Sous_Categorie");
                                 String type_location_annonce = jsonObject.getString("Libelle_Type_Location");
                                 String quartier_annonce = jsonObject.getString("Libelle_Quartier");
-                                boolean est_meuble = jsonObject.getBoolean("Est_Meuble");
+
+                                int b = Integer.parseInt(jsonObject.get("Est_Meuble").toString());
+
+                                boolean est_meuble;
+                                if(b == 0){est_meuble = false;}
+                                else {est_meuble = true;}
 
                                 ArrayList<String> url_images_annonces = new ArrayList<String>();
 

@@ -93,10 +93,25 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
         initData();
 
-        ImagePagerAdapter adapter = new ImagePagerAdapter(mAnnonce.getUrl_images_annonces());
-        mViewPagerDetailAppartement.setAdapter(adapter);
-        mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);
-        mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
+        Boolean afficheGallerieImage = false;
+
+        for(String S : mAnnonce.getUrl_images_annonces())
+        {
+            if(!S.equals(""))
+            {
+                afficheGallerieImage = true;
+            }
+        }
+
+        if(afficheGallerieImage) {
+            ImagePagerAdapter adapter = new ImagePagerAdapter(mAnnonce.getUrl_images_annonces());
+            mViewPagerDetailAppartement.setAdapter(adapter);
+            mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);
+            mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
+        }else {
+            mViewPagerDetailAppartement.setVisibility(View.GONE);
+            mIndicatorViewPagerDetailAppartement.setVisibility(View.GONE);
+        }
 
         dialogMap = new CustomDialogMap(DetailsAnnonceActivity.this, mAnnonce.getAdresse_annonce());
         dialogMessage = new CustomDialogMessage(DetailsAnnonceActivity.this);

@@ -86,16 +86,25 @@ public class ListViewAnnonceAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
 
-        //imageLoader.displayImage(list.get(position).getUrl_images_annonces().get(0), holder.image);
+        String url_image = list.get(position).getUrl_images_annonces().get(0);
+
+        if(!url_image.equals(""))
+        {
+            imageLoader.displayImage(url_image, holder.image);
+        }
+        else {
+            holder.image.setImageResource(R.drawable.logo_android_chevbook);
+        }
+
         holder.title.setText(list.get(position).getTitre_annonce());
         holder.quartier.setText(list.get(position).getQuartier_annonce());
         holder.description.setText(list.get(position).getDescription_annonce());
         holder.price.setText(Double.toString(list.get(position).getPrix_annonce()) + "€");
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
-        /*String DateAndTime = sdf.format(list.get(position).getDate_create_annonce());
+        String DateAndTime = sdf.format(list.get(position).getDate_create_annonce());
 
-        holder.date.setText(DateAndTime);*/
+        holder.date.setText(DateAndTime);
 
         return v;
     }
