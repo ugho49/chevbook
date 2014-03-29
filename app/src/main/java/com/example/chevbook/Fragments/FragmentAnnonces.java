@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,8 +40,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -50,7 +49,7 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class FragmentAnnonces extends Fragment implements OnRefreshListener {
+public class FragmentAnnonces extends Fragment implements OnRefreshListener, AbsListView.OnScrollListener {
 
     @InjectView(R.id.editTextSearch)
     EditText mEditTextSearch;
@@ -67,6 +66,9 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
     private int AnnonceMax = 0;
     private int AnnonceChargees = 0;
+
+    private int AnnonceDebut = 0;
+    private int AnnonceFin = 10;
 
     //Custom Dialog
     private static EditText EditTextKeyWord;
@@ -92,6 +94,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
     private PullToRefreshLayout mPullToRefreshLayout;
     private static LayoutInflater mInflater;
+    private ActionBarActivity actionBarActivity;
+    private boolean flag_loading = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_annonce, null);
         ButterKnife.inject(this, root);
         mInflater = inflater;
+        actionBarActivity = (ActionBarActivity) getActivity();
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 
         // Now find the PullToRefreshLayout to setup
@@ -136,7 +141,12 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
         });
 
-        listerAnnonces(AnnonceChargees, AnnonceChargees + 20);
+        mListViewSearch.setOnScrollListener(FragmentAnnonces.this);
+
+        Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
+        mListViewSearch.setAdapter(Adapter);
+
+        listerAnnonces(AnnonceDebut, AnnonceFin);
 
         return root;
     }
@@ -159,6 +169,32 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
             }
         }
     };
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+        int currentPage = (int) Math.floor(AnnonceChargees / 10) + 1;
+        int maxPage = (int) Math.floor(AnnonceMax / 10) + 1;
+
+        if(currentPage != maxPage){
+            if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0) {
+                if (flag_loading == false){
+                    flag_loading = true;
+
+                    //Toast.makeText(getActivity(), "Bas de la listView", Toast.LENGTH_SHORT).show();
+                    if(AnnonceMax > AnnonceChargees)
+                    {
+                        listerAnnonces(AnnonceDebut, AnnonceFin);
+                    }
+                }
+            }
+        }
+    }
 
     private void custom_dialog_more_detail() {
         View custom_view_change_password = mInflater.inflate(R.layout.custom_dialog_search_annonce_more_detail, null);
@@ -192,7 +228,16 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
     @Override
     public void onRefreshStarted(View view) {
-        listerAnnonces(AnnonceChargees, AnnonceChargees + 20);
+
+        mAnnonces.clear();
+
+        if(AnnonceChargees == 0)
+        {
+            listerAnnonces(AnnonceDebut, AnnonceFin);
+        }
+        else {
+            listerAnnonces(0, AnnonceChargees);
+        }
     }
 
     public void listerAnnonces(final int debut, final int fin)
@@ -206,18 +251,12 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                mPullToRefreshLayout.setRefreshing(true);
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                //mPullToRefreshLayout.setRefreshing(true);
             }
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                /*try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                return null;*/
 
                 HttpURLConnection urlConnection = null;
                 StringBuilder sb = new StringBuilder();
@@ -258,21 +297,6 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
                         AnnonceMax = jsonArray.getJSONArray(0).getJSONObject(0).getInt("Nb");
 
-                        /*String annonces = jsonArray.getJSONArray(1).toString();
-                        JsonElement json = new JsonParser().parse(annonces);
-                        JsonArray varray = json.getAsJsonArray();
-                        Gson gson = new GsonBuilder().setDateFormat("yyyy-mm-dd").create();
-
-                        for(JsonElement obj : varray )
-                        {
-                            Annonce a = gson.fromJson(obj.getAsJsonObject(), Annonce.class);
-                            gson.fromJson(obj.getAsJsonObject(), Annonce.class);
-
-                            mAnnonces.add(a);
-                        }
-
-                        return true;*/
-
                         JSONArray listAnnonces = jsonArray.getJSONArray(1); //contient des JSON objets
 
                         if(listAnnonces.length()>0){
@@ -283,12 +307,9 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
                                 Date date_create_annonce = new Date();
 
-                                SimpleDateFormat sdf = new SimpleDateFormat("aaaa/MM/dd HH:mm:ss");
-                                try {
-                                    date_create_annonce = sdf.parse(jsonObject.get("Date_Ajout_Annonce").toString());
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
+                                /*SimpleDateFormat sdf = new SimpleDateFormat("aaaa/MM/dd HH:mm:ss");
+                                date_create_annonce = sdf.parse(jsonObject.get("Date_Ajout_Annonce").toString());*/
+
 
                                 //Date date_create_annonce = new Date();
 
@@ -374,23 +395,35 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
 
                 if (result)
                 {
-                    //todo : success
-                    /*mAnnonces.add(new Annonce());
-                    mAnnonces.add(new Annonce());
-                    mAnnonces.add(new Annonce());
-                    mAnnonces.add(new Annonce());
-                    mAnnonces.add(new Annonce());
-                    mAnnonces.add(new Annonce());
-                    mAnnonces.add(new Annonce());
-                    mAnnonces.add(new Annonce());*/
+                    //Toast.makeText(getActivity(), "Succes", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(getActivity(), "Succes", Toast.LENGTH_SHORT).show();
+                    /*Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
+                    //Adapter.notifyDataSetChanged();
+                    mListViewSearch.setAdapter(Adapter);*/
 
-                    Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
-                    mListViewSearch.setAdapter(Adapter);
+                    Adapter.setList(mAnnonces);
+                    Adapter.notifyDataSetChanged();
+
+                    if(debut != 0) {
+                        mListViewSearch.smoothScrollToPosition(AnnonceChargees);
+                    }
+
+                    int annonceChargeesInThisTask = fin - debut;
+                    AnnonceChargees = AnnonceChargees + annonceChargeesInThisTask;
+                    int nbAnnoncesNonChargeesRestantes = AnnonceMax - AnnonceChargees;
+
+                    if(nbAnnoncesNonChargeesRestantes >= 10)
+                    {
+                        AnnonceDebut = AnnonceDebut + 10;
+                        AnnonceFin = AnnonceFin + 10;
+                    }
+                    else {
+                        AnnonceDebut = AnnonceDebut + nbAnnoncesNonChargeesRestantes;
+                        AnnonceFin = AnnonceFin + nbAnnoncesNonChargeesRestantes;
+                    }
+
                 }
                 else {
-                    //todo : error
                     Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
 
                     /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -402,8 +435,11 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener {
                     adb.setMessage(AfficherJSON);
                     adb.show();*/
                 }
+
                 // Notify PullToRefreshLayout that the refresh has finished
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 mPullToRefreshLayout.setRefreshComplete();
+                flag_loading = false;
             }
         }.execute();
     }

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ListViewAnnonceAdapter extends BaseAdapter {
 
-    private final List<Annonce> list;
+    private List<Annonce> list;
     private final Context _c;
 
     private final ImageLoader imageLoader = ImageLoader.getInstance();
@@ -107,5 +107,9 @@ public class ListViewAnnonceAdapter extends BaseAdapter {
         holder.date.setText(DateAndTime);
 
         return v;
+    }
+
+    public void setList(List<Annonce> list) {
+        this.list = list;
     }
 }
