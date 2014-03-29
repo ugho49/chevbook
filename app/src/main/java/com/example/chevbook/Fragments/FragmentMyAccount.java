@@ -1,6 +1,7 @@
 package com.example.chevbook.Fragments;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,10 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.chevbook.Activity.DetailsAccountActivity;
+import com.example.chevbook.Activity.LoginActivity;
 import com.example.chevbook.Class.Modele;
 import com.example.chevbook.Class.User;
 import com.example.chevbook.CustomsView.CircularImageView;
@@ -34,6 +37,10 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
     @InjectView(R.id.profilePicture)CircularImageView mProfilePicture;
     @InjectView(R.id.profilePrenomNom)TextView mProfilePrenomNom;
     @InjectView(R.id.profileEmail)TextView mProfileEmail;
+    @InjectView(R.id.profileMesAnnonces)TextView mProfileMesAnnonces;
+    @InjectView(R.id.profileContact)TextView mProfileContact;
+    @InjectView(R.id.profileDesactivateAccount)TextView mProfileDesactivateAccount;
+    @InjectView(R.id.profileDeconnect)Button mButtonProfileDeconnect;
 
     private Modele vmodele;
     private User vuser;
@@ -47,12 +54,6 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
     private static ImageLoader imageLoader;
 
     private PullToRefreshLayout mPullToRefreshLayout;
-
-    public static Fragment newInstance(Context context) {
-        FragmentMyAccount f = new FragmentMyAccount();
-
-        return f;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         actionBar.setTitle(mNavigationTitles[0]);
 
         //click Button
-        //mProfileFavoris.setOnClickListener(clickListener);
+        mButtonProfileDeconnect.setOnClickListener(clickListener);
 
         return root;
     }
@@ -128,23 +129,33 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         public void onClick(View v)
         {
 
-            /*switch(v.getId())
+            switch(v.getId())
             {
-                case R.id.profileAppartement:
-                    Toast.makeText(getActivity(), "Mes Appartements", Toast.LENGTH_SHORT).show();
+                case R.id.profileDeconnect:
+                    AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                    adb.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            //Toast.makeText(getActivity(), getString(R.string.success_logout), Toast.LENGTH_SHORT).show();
+                            Intent myIntent = new Intent(getActivity(), LoginActivity.class);
+                            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(myIntent);
+                            //vmodele.UserLogOut(getApplicationContext());
+                            vuser.logoutUser();
+                            getActivity().finish();
+                        }
+                    });
+                    adb.setNegativeButton(getString(R.string.btn_cancel),new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.cancel();
+                        }
+                    });
+                    adb.setMessage(getString(R.string.message_logout));
+                    adb.show();
 
                     break;
-
-                case R.id.profileMessages:
-                    Toast.makeText(getActivity(), "Mes Messages", Toast.LENGTH_SHORT).show();
-
-                    break;
-
-                case R.id.profileFavoris:
-                    Toast.makeText(getActivity(), "Mes Favoris", Toast.LENGTH_SHORT).show();
-
-                    break;
-            }*/
+            }
         }
     };
 
