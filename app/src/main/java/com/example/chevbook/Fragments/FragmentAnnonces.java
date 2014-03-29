@@ -40,6 +40,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -344,11 +346,9 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                                 AfficherJSON = listAnnonces.getJSONObject(j).toString();
                                 JSONObject jsonObject = listAnnonces.getJSONObject(j);
 
-                                Date date_create_annonce = new Date();
+                                Date date_create_annonce = null;
 
-                                /*SimpleDateFormat sdf = new SimpleDateFormat("aaaa/MM/dd HH:mm:ss");
-                                date_create_annonce = sdf.parse(jsonObject.get("Date_Ajout_Annonce").toString());*/
-
+                                date_create_annonce = ConvertToDate(jsonObject.get("Date_Ajout_Annonce").toString());
 
                                 //Date date_create_annonce = new Date();
 
@@ -490,5 +490,17 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                 flag_loading = false;
             }
         }.execute();
+    }
+
+    private Date ConvertToDate(String dateString){
+
+        SimpleDateFormat  format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return format.parse(dateString);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new Date();
+        }
     }
 }

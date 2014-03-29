@@ -16,14 +16,9 @@ public class Modele {
     private String DB4OFILENAME;
     private ObjectContainer db;
     private File appDir;
-
-    private static Controlleur vcontroleur = null;
     private static User currentUser = null;
 
     //Getter & Setter
-    public Controlleur getControleur() {
-        return vcontroleur;
-    }
     public User getCurrentUser() {
         return currentUser;
     }
