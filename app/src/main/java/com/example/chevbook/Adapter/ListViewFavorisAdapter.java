@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class ListViewFavorisAdapter extends BaseAdapter {
 
-    private final List<Annonce> list;
+    private List<Annonce> list;
     private final Context _c;
     private final Activity activity;
 
@@ -100,7 +100,7 @@ public class ListViewFavorisAdapter extends BaseAdapter {
                 AlertDialog.Builder adb = new AlertDialog.Builder(activity);
                 adb.setPositiveButton(activity.getResources().getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //todo
+                        deleteFavoris(position);
                     }
                 });
                 adb.setNegativeButton(activity.getResources().getString(R.string.btn_no), new DialogInterface.OnClickListener() {
@@ -108,7 +108,7 @@ public class ListViewFavorisAdapter extends BaseAdapter {
                         dialog.cancel();
                     }
                 });
-                adb.setMessage("Voulez-vous supprimer le favoris " + position + " ???");
+                adb.setMessage("Voulez-vous enlever cette annnonce de vos favoris ?");
                 adb.show();
             }
         });
@@ -125,5 +125,11 @@ public class ListViewFavorisAdapter extends BaseAdapter {
         holder.date.setText(DateAndTime);
 
         return v;
+    }
+
+    private void deleteFavoris(int pos)
+    {
+        list.remove(pos);
+        this.notifyDataSetChanged();
     }
 }

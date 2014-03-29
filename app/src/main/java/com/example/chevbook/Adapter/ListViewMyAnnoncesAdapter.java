@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ListViewMyAnnoncesAdapter extends BaseAdapter {
 
-    private final List<Annonce> list;
+    private List<Annonce> list;
     private final Context _c;
     private final Activity activity;
 
@@ -106,6 +106,7 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intentDetailAppartement = new Intent(activity, DeposerModifierAnnonceActivity.class);
                 intentDetailAppartement.putExtra("CONST", CONST_MODIFIER);
+                intentDetailAppartement.putExtra("annonce", list.get(position));
                 activity.startActivity(intentDetailAppartement);
             }
         });
@@ -116,7 +117,7 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
                 AlertDialog.Builder adb = new AlertDialog.Builder(activity);
                 adb.setPositiveButton(activity.getResources().getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //todo
+                        deleteAnnonce(position);
                     }
                 });
                 adb.setNegativeButton(activity.getResources().getString(R.string.btn_no), new DialogInterface.OnClickListener() {
@@ -124,7 +125,8 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
                         dialog.cancel();
                     }
                 });
-                adb.setMessage("Voulez-vous supprimer l'annonce " + position + " ???");
+                adb.setMessage("Voulez-vous vraiment supprimer l'annonce ?\n" +
+                        "Si vous cliquez sur oui, elle n'apparaitra plus dans les annonces du site Chevbook ainsi que dans l'application.");
                 adb.show();
             }
         });
@@ -141,5 +143,11 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
         holder.date.setText(DateAndTime);
 
         return v;
+    }
+
+    private void deleteAnnonce(int pos)
+    {
+        list.remove(pos);
+        this.notifyDataSetChanged();
     }
 }
