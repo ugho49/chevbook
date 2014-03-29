@@ -63,6 +63,9 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     LinearLayout mLinearLayoutSearchAppartementLoading;
     @InjectView(R.id.linearLayoutSearchAppartementNoResult)
     LinearLayout mLinearLayoutSearchAppartementNoResult;
+    @InjectView(R.id.buttonNoResultRafraichirAnnonce)
+    Button mButtonNoResultRafraichirAnnonce;
+
 
     private int AnnonceMax = 0;
     private int AnnonceChargees = 0;
@@ -128,6 +131,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         //click Button
         mImageViewSearch.setOnClickListener(clickListener);
         mImageViewSearchMoreDetail.setOnClickListener(clickListener);
+        mButtonNoResultRafraichirAnnonce.setOnClickListener(clickListener);
 
 
         mListViewSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -164,6 +168,10 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
 
                 case R.id.imageViewSearch:
                     Toast.makeText(getActivity(), "Recherche lancée...", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case R.id.buttonNoResultRafraichirAnnonce:
+                    listerAnnonces(AnnonceDebut, AnnonceFin);
                     break;
 
             }
@@ -252,6 +260,14 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                 super.onPreExecute();
 
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+
+                mLinearLayoutSearchAppartementNoResult.setVisibility(View.GONE);
+
+                if(AnnonceChargees == 0)
+                {
+                    mListViewSearch.setVisibility(View.GONE);
+                    mLinearLayoutSearchAppartementLoading.setVisibility(View.VISIBLE);
+                }
                 //mPullToRefreshLayout.setRefreshing(true);
             }
 
@@ -393,13 +409,15 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
             @Override
             protected void onPostExecute(final Boolean result) {
 
+
+                mListViewSearch.setVisibility(View.VISIBLE);
+                mLinearLayoutSearchAppartementLoading.setVisibility(View.GONE);
+                mLinearLayoutSearchAppartementNoResult.setVisibility(View.GONE);
+
+
                 if (result)
                 {
                     //Toast.makeText(getActivity(), "Succes", Toast.LENGTH_SHORT).show();
-
-                    /*Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
-                    //Adapter.notifyDataSetChanged();
-                    mListViewSearch.setAdapter(Adapter);*/
 
                     Adapter.setList(mAnnonces);
                     Adapter.notifyDataSetChanged();
@@ -434,6 +452,9 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                     });
                     adb.setMessage(AfficherJSON);
                     adb.show();*/
+
+                    mListViewSearch.setVisibility(View.GONE);
+                    mLinearLayoutSearchAppartementNoResult.setVisibility(View.VISIBLE);
                 }
 
                 // Notify PullToRefreshLayout that the refresh has finished

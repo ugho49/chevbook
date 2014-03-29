@@ -17,7 +17,8 @@
         android:dividerHeight="0dp"
         android:divider="@null"
         android:layout_below="@+id/linearLayoutSearchAppartementEditText"
-        tools:listitem="@layout/row_item_annonce"/>
+        tools:listitem="@layout/row_item_annonce"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -83,7 +84,7 @@
                 android:id="@+id/textView" />
 
             <TextView
-                android:id="@+id/list_appartement_status_message"
+                android:id="@+id/list_appartement_status_messagee"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:fontFamily="sans-serif-light"
                 android:layout_width="wrap_content"
@@ -101,6 +102,14 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="=("
                 android:id="@+id/textView2" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rafraîchir les annonces"
+                android:id="@+id/buttonNoResultRafraichirAnnonce"
+                android:layout_marginTop="15dp" />
+
         </LinearLayout>
 
         <LinearLayout
