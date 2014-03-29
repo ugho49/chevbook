@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.chevbook.Class.Annonce;
 import com.example.chevbook.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -81,6 +82,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     private static final int REQUEST_SELECT_PICTURE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
 
+    private Annonce mAnnonce = new Annonce();
+
     private String selectedPathImage1;
     private String selectedPathImage2;
     private String selectedPathImage3;
@@ -113,6 +116,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             //Toast.makeText(getApplicationContext(), "CREATE", Toast.LENGTH_SHORT).show();
         } else if (param == CONST_MODIFIER) {
             //Toast.makeText(getApplicationContext(), "MODIFIER", Toast.LENGTH_SHORT).show();
+            mAnnonce = (Annonce)getIntent().getSerializableExtra("annonce");
+            initData();
         }
 
         mImageViewDeposerModifierAnnonceImage1.setOnClickListener(clickListener);
@@ -437,6 +442,11 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
             actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
         }
+    }
+
+    private void initData()
+    {
+
     }
 
     private void remplirSpinner()
