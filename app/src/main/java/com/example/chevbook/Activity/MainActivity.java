@@ -24,6 +24,8 @@ import com.google.analytics.tracking.android.EasyTracker;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    int nbClick = 0;
+
     final String[] fragments = {
             "com.example.chevbook.Fragments.FragmentMyAccount",
             "com.example.chevbook.Fragments.FragmentAnnonces",
@@ -89,14 +91,23 @@ public class MainActivity extends ActionBarActivity
             adb.show();
         }
         else{
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, Fragment.instantiate(MainActivity.this, fragments[position]))
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(null)
-                    .commit();
-
-
+            if(nbClick == 0)
+            {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, Fragment.instantiate(MainActivity.this, fragments[position]))
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+            }
+            else {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, Fragment.instantiate(MainActivity.this, fragments[position]))
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .addToBackStack(null)
+                        .commit();
+            }
         }
+
+        nbClick++;
 
     }
 

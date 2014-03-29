@@ -73,6 +73,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     private int AnnonceDebut = 0;
     private int AnnonceFin = 10;
 
+    private Boolean onResume = false;
+
     //Custom Dialog
     private static EditText EditTextKeyWord;
     private static EditText EditTextPrixMin;
@@ -105,6 +107,13 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         super.onCreate(savedInstanceState);
 
         vmodele = new Modele();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        onResume = true;
     }
 
     @Override
@@ -150,7 +159,12 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         Adapter = new ListViewAnnonceAdapter(getActivity().getBaseContext(), mAnnonces);
         mListViewSearch.setAdapter(Adapter);
 
-        listerAnnonces(AnnonceDebut, AnnonceFin);
+        if(onResume == false) {
+            listerAnnonces(AnnonceDebut, AnnonceFin);
+        }
+        else {
+            onResume = false;
+        }
 
         return root;
     }
