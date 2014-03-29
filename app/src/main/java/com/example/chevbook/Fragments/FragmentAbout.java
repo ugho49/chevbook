@@ -34,7 +34,7 @@ public class FragmentAbout extends Fragment {
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        actionBar.setTitle(mNavigationTitles[7]);
+        actionBar.setTitle(mNavigationTitles[6]);
 
         mTabsTitles = getResources().getStringArray(R.array.fragment_about_tab_array);
 

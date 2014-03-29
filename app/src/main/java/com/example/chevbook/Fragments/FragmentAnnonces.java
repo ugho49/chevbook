@@ -123,7 +123,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         //ActionBar
         actionBar.setDisplayShowTitleEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        actionBar.setTitle(mNavigationTitles[2]);
+        actionBar.setTitle(mNavigationTitles[1]);
 
         //click Button
         mImageViewSearch.setOnClickListener(clickListener);

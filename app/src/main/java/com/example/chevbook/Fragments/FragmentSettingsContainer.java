@@ -30,7 +30,7 @@ public class FragmentSettingsContainer extends Fragment {
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        actionBar.setTitle(mNavigationTitles[6]);
+        actionBar.setTitle(mNavigationTitles[5]);
 
         getActivity().getFragmentManager().beginTransaction()
                 .replace(R.id.containerSettings, new FragmentSettings())

@@ -26,7 +26,6 @@ public class MainActivity extends ActionBarActivity
 
     final String[] fragments = {
             "com.example.chevbook.Fragments.FragmentMyAccount",
-            "com.example.chevbook.Fragments.FragmentAccueil",
             "com.example.chevbook.Fragments.FragmentAnnonces",
             "com.example.chevbook.Fragments.FragmentMessages",
             "com.example.chevbook.Fragments.FragmentMyAnnonces",
@@ -65,7 +64,7 @@ public class MainActivity extends ActionBarActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if(position == 8)
+        if(position == 7)
         {
             AlertDialog.Builder adb = new AlertDialog.Builder(this);
             adb.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {

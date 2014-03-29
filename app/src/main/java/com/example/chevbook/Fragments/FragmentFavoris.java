@@ -50,7 +50,7 @@ public class FragmentFavoris extends Fragment {
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        actionBar.setTitle(mNavigationTitles[5]);
+        actionBar.setTitle(mNavigationTitles[4]);
 
         /*mAnnonces.add(new Annonce());
         mAnnonces.add(new Annonce());
