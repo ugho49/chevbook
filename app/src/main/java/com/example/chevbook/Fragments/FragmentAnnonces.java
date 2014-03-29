@@ -469,7 +469,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
 
                 }
                 else {
-                    Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
 
                     /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                     adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {

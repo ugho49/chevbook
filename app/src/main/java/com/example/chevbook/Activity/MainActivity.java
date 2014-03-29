@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.example.chevbook.Class.Modele;
 import com.example.chevbook.Class.User;
@@ -72,7 +71,7 @@ public class MainActivity extends ActionBarActivity
             adb.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which)
                 {
-                    Toast.makeText(getApplicationContext(), getString(R.string.success_logout), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), getString(R.string.success_logout), Toast.LENGTH_SHORT).show();
                     Intent myIntent = new Intent(getApplicationContext(), LoginActivity.class);
                     myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(myIntent);
