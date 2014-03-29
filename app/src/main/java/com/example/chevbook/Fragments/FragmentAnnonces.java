@@ -49,7 +49,7 @@ import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class FragmentAnnonces extends Fragment implements OnRefreshListener, AbsListView.OnScrollListener {
+public class FragmentAnnonces extends Fragment implements OnRefreshListener, AbsListView.OnScrollListener{
 
     @InjectView(R.id.editTextSearch)
     EditText mEditTextSearch;
@@ -155,6 +155,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         return root;
     }
 
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
 
         @Override
@@ -238,13 +239,18 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     public void onRefreshStarted(View view) {
 
         mAnnonces.clear();
+        mAnnonces = new ArrayList<Annonce>();
+        flag_loading = false;
 
         if(AnnonceChargees == 0)
         {
             listerAnnonces(AnnonceDebut, AnnonceFin);
         }
         else {
-            listerAnnonces(0, AnnonceChargees);
+
+            int a = AnnonceChargees;
+            AnnonceChargees = 0;
+            listerAnnonces(0, a);
         }
     }
 
@@ -254,6 +260,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
 
             String AfficherJSON = null;
             String ErreurLoginTask = "Erreur ";
+            int annonceChargeesInThisTask;
 
             @Override
             protected void onPreExecute() {
@@ -315,8 +322,10 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
 
                         JSONArray listAnnonces = jsonArray.getJSONArray(1); //contient des JSON objets
 
-                        if(listAnnonces.length()>0){
-                            for(int j = 0; j < listAnnonces.length(); j++){
+                        annonceChargeesInThisTask = listAnnonces.length();
+
+                        if(annonceChargeesInThisTask>0){
+                            for(int j = 0; j < annonceChargeesInThisTask; j++){
 
                                 AfficherJSON = listAnnonces.getJSONObject(j).toString();
                                 JSONObject jsonObject = listAnnonces.getJSONObject(j);
@@ -426,18 +435,22 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                         mListViewSearch.smoothScrollToPosition(AnnonceChargees);
                     }
 
-                    int annonceChargeesInThisTask = fin - debut;
+
                     AnnonceChargees = AnnonceChargees + annonceChargeesInThisTask;
                     int nbAnnoncesNonChargeesRestantes = AnnonceMax - AnnonceChargees;
 
                     if(nbAnnoncesNonChargeesRestantes >= 10)
                     {
-                        AnnonceDebut = AnnonceDebut + 10;
-                        AnnonceFin = AnnonceFin + 10;
+                        /*AnnonceDebut = AnnonceDebut + 10;
+                        AnnonceFin = AnnonceFin + 10;*/
+                        AnnonceDebut = AnnonceFin + 1;
+                        AnnonceFin = 10;
                     }
                     else {
-                        AnnonceDebut = AnnonceDebut + nbAnnoncesNonChargeesRestantes;
-                        AnnonceFin = AnnonceFin + nbAnnoncesNonChargeesRestantes;
+                        /*AnnonceDebut = AnnonceDebut + nbAnnoncesNonChargeesRestantes;
+                        AnnonceFin = AnnonceFin + nbAnnoncesNonChargeesRestantes;*/
+                        AnnonceDebut = AnnonceFin + 1;
+                        AnnonceFin = nbAnnoncesNonChargeesRestantes;
                     }
 
                 }

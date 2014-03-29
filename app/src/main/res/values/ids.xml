@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Parse -->
-    <string name="PARSE_APP_ID">4voOBuyi2iBdGk0LvZ3C4zHndULnXc8wvwwSEkmx</string>
-    <string name="PARSE_CLIENT_KEY">Hch0DeVQ70Q0eSiwfPsF93ygY9mcX8kKcUYbE8gm</string>
-
     <!-- Google -->
     <string name="GOOGLE_API_KEY">AIzaSyB72jWDb2z1aeL0HrnocKSzIeH37qSiwSQ</string>
 
