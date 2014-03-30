@@ -2,8 +2,10 @@ package com.example.chevbook.Fragments;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -23,6 +25,7 @@ public class FragmentSettings extends PreferenceFragment{
     private Preference user_name;
     private Preference user_email;
     private Preference clean_cache;
+    private Preference version_app;
 
     private static ImageLoader imageLoader;
 
@@ -51,10 +54,22 @@ public class FragmentSettings extends PreferenceFragment{
         user_name = (Preference) findPreference("pref_user_name");
         user_email = (Preference) findPreference("pref_user_email");
         clean_cache = (Preference) findPreference("pref_more_clean_cache");
+        version_app = (Preference) findPreference("pref_more_version_app");
 
         user_name.setSummary(prefsUser.getString(KEY_FIRSTNAME, "") + " " + prefsUser.getString(KEY_LASTNAME, ""));
         user_email.setSummary(prefsUser.getString(KEY_EMAIL, ""));
-        clean_cache.setSummary("Taille du cache ");
+        //clean_cache.setSummary("Taille du cache ");
+
+        try {
+            Context c = getActivity().getApplicationContext();
+            String versionName = c.getPackageManager()
+                    .getPackageInfo(c.getPackageName(), 0).versionName;
+
+            version_app.setSummary(versionName);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         clean_cache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
 

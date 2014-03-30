@@ -76,6 +76,11 @@
             android:key="pref_more_clean_cache"
             android:title="Vider le cache"/>
 
+        <Preference
+            android:key="pref_more_version_app"
+            android:title="Version"
+            android:selectable="false"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

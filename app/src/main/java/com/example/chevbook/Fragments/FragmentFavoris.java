@@ -64,6 +64,7 @@ public class FragmentFavoris extends Fragment {
                                     int position, long id) {
                 Intent intentDetailAppartement = new Intent(getActivity(), DetailsAnnonceActivity.class);
                 intentDetailAppartement.putExtra("annonce", mAnnonces.get(position));
+                intentDetailAppartement.putExtra("is_favoris", true);
                 startActivity(intentDetailAppartement);
             }
 
