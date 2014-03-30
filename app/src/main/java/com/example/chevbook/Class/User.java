@@ -69,6 +69,15 @@ public class User {
 
     public void logoutUser(){
         editor.clear();
+
+        editor.putBoolean(IS_LOGIN, false);
+
+        editor.putString(KEY_EMAIL, "");
+        editor.putString(KEY_PASSWORD_SHA1, "");
+        editor.putString(KEY_FIRSTNAME, "");
+        editor.putString(KEY_LASTNAME, "");
+        editor.putString(KEY_URL_PROFIL_PICTURE, "");
+
         editor.commit();
 
         /*editor.putBoolean(IS_LOGIN, false);

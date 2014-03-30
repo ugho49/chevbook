@@ -220,7 +220,6 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:id="@+id/imageView"
-
                     android:src="@drawable/logo_android_chevbook"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp" />
@@ -230,10 +229,9 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_marginTop="3dp"
-                    android:text="v 1.0.0"
+                    android:text=""
                     android:textColor="@color/dark_black_grey"
-                    android:textAllCaps="true"
-                    android:id="@+id/textView10" />
+                    android:id="@+id/profileAppVersion" />
             </LinearLayout>
 
         </LinearLayout>

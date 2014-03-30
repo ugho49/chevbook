@@ -75,14 +75,9 @@ public class MenuDrawerAdapter extends BaseAdapter {
             item_profile.setVisibility(View.VISIBLE);
             item.setVisibility(View.GONE);
 
-            //String url = "https://scontent-a.xx.fbcdn.net/hphotos-frc3/t31/1501641_10202187145833021_172354652_o.jpg";
-            //String url = vPersonne.getUrl_image();
-            //String url = prefs.getString("pref_user_url_image","");
             String url = currentUser.getUrlProfilPicture();
             String name = currentUser.getFirstName() + " " + currentUser.getLastName();
 
-            //mettre le nom
-            //txtTitle.setText(vPersonne.getPrenom() + " " + vPersonne.getNom());
             txtTitle.setText(name);
 
             if(url.length() > 0)

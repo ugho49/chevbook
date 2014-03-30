@@ -106,6 +106,8 @@ public class MainActivity extends ActionBarActivity
             }
         }
 
+
+
         nbClick++;
 
     }

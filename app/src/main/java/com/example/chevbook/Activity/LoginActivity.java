@@ -339,13 +339,9 @@ public class LoginActivity extends ActionBarActivity {
 
         //mEmail
         //mPassword
-       /* private String mFirstname = "Ugho"; //prenom
-        private String mLastname = "Stephan"; //nom
-        private String mUrl_image = "https://scontent-a.xx.fbcdn.net/hphotos-frc3/t31/1501641_10202187145833021_172354652_o.jpg";*/
-
-        private String mFirstname; //prenom
-        private String mLastname; //nom
-        private String mUrl_image;
+        private String mFirstname = ""; //prenom
+        private String mLastname = ""; //nom
+        private String mUrl_image = "";
 
         private String ErreurLoginTask = "Erreur ";
 

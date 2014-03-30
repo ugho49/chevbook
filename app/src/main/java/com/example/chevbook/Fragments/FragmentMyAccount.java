@@ -1,8 +1,10 @@
 package com.example.chevbook.Fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,6 +43,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
     @InjectView(R.id.profileContact)TextView mProfileContact;
     @InjectView(R.id.profileDesactivateAccount)TextView mProfileDesactivateAccount;
     @InjectView(R.id.profileDeconnect)Button mButtonProfileDeconnect;
+    @InjectView(R.id.profileAppVersion)TextView mProfileAppVersion;
 
     private Modele vmodele;
     private User vuser;
@@ -91,6 +94,17 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
 
         //click Button
         mButtonProfileDeconnect.setOnClickListener(clickListener);
+
+        try {
+            Context c = getActivity().getApplicationContext();
+            String versionName = c.getPackageManager()
+                    .getPackageInfo(c.getPackageName(), 0).versionName;
+
+            mProfileAppVersion.setText("V " + versionName);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return root;
     }

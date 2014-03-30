@@ -2,10 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.chevbook" >
 
-    <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="19" />
-
     <permission
         android:name="com.example.chevbook.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
