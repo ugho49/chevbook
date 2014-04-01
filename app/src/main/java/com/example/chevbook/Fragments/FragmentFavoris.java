@@ -1,6 +1,8 @@
 package com.example.chevbook.Fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -81,7 +83,7 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
         mUser = new User(getActivity().getApplicationContext());
 
         // Now find the PullToRefreshLayout to setup
-        mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout_list_my_appartements);
+        mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_layout_list_my_favoris);
         ActionBarPullToRefresh.from(getActivity())
                 .allChildrenArePullable()
                 .listener(this)
@@ -186,7 +188,7 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
                         if(annonceChargeesInThisTask>0){
                             for(int j = 0; j < annonceChargeesInThisTask; j++){
 
-                                AfficherJSON = jsonArray.getJSONObject(j).toString();
+                                //AfficherJSON = jsonArray.getJSONObject(j).toString();
                                 JSONObject jsonObject = jsonArray.getJSONObject(j);
 
                                 Date date_create_annonce = null;
@@ -286,14 +288,14 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
 
                 }
 
-                /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
                 adb.setMessage(AfficherJSON);
-                adb.show();*/
+                adb.show();
 
                 // Notify PullToRefreshLayout that the refresh has finished
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);

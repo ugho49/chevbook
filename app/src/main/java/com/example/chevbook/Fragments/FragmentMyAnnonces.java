@@ -216,7 +216,7 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                         if(annonceChargeesInThisTask>0){
                             for(int j = 0; j < annonceChargeesInThisTask; j++){
 
-                                AfficherJSON = jsonArray.getJSONObject(j).toString();
+                                //AfficherJSON = jsonArray.getJSONObject(j).toString();
                                 JSONObject jsonObject = jsonArray.getJSONObject(j);
 
                                 Date date_create_annonce = null;
