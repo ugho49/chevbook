@@ -132,4 +132,8 @@ public class ListViewFavorisAdapter extends BaseAdapter {
         list.remove(pos);
         this.notifyDataSetChanged();
     }
+
+    public void setList(List<Annonce> list) {
+        this.list = list;
+    }
 }

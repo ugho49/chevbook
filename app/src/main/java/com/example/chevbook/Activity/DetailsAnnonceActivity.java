@@ -196,6 +196,11 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
             {
                 setMenuFavorisFullstar(true);
             }
+            else {
+                menuAddFavoris.setVisible(false);
+                menuDeleteFavoris.setVisible(false);
+                IsFavorisTask();
+            }
         }
 
         return true;
@@ -366,6 +371,52 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Erreur pour l'ajout aux favoris", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }.execute();
+    }
+
+    public void IsFavorisTask()
+    {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                favoris_loading = true;
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    // Simulate network access.
+                    Thread.sleep(100);
+
+                    //return true; // true = is_favoris
+                    return false; // false = is_not_favoris
+
+                } catch (InterruptedException e) {
+
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(final Boolean success) {
+
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+                favoris_loading = false;
+
+                if (success)
+                {
+                    setMenuFavorisFullstar(true);
+                    is_my_favoris = true;
+                }
+                else {
+                    setMenuFavorisFullstar(false);
+                    is_my_favoris = false;
                 }
 
             }
