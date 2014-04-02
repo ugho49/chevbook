@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login_container"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:background="@color/dark_black"
     tools:context="com.example.chevbook.Activity.LoginActivity">
 
     <!-- Login progress -->
@@ -23,6 +25,7 @@
             android:id="@+id/login_status_message"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -34,104 +37,142 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:layout_above="@+id/login_buttons"
+        android:background="@color/dark_black"
         android:visibility="visible">
 
-        <LinearLayout style="@style/LoginFormContainer"
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_height="200dp"
-                android:id="@+id/imageView"
-                android:src="@drawable/logo_chevbook"
-                android:layout_weight="2.3" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="16dp">
 
-            <EditText
-                android:id="@+id/email"
-                android:background="@drawable/border_text_grey"
-                android:fontFamily="sans-serif-light"
-                android:singleLine="true"
-                android:maxLines="1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:inputType="textEmailAddress"
-                android:layout_marginTop="10dp"
+                <ImageView
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:id="@+id/imageView"
+                    android:src="@drawable/logo_android_chevbook" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="17dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="36dp"
+                        android:textColor="@android:color/white"
+                        android:text="Chevbook"
+                        android:id="@+id/textView"
+                        android:fontFamily="@android:string/yes" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="12dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="L'application dédié au partage d'appartements entre étudiants"
+                        android:id="@+id/textView2" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:hint="@string/prompt_email"
-                android:textColor="@color/grey_chevbook"
-                android:textSize="20dp"
-                android:layout_weight="1" />
+                android:layout_marginTop="40dp">
 
-            <EditText
-                android:id="@+id/password"
-                android:singleLine="true"
-                android:background="@drawable/border_text_grey"
-                android:maxLines="1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:hint="@string/prompt_password"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
-                android:inputType="textPassword"
-                android:fontFamily="sans-serif-light"
-                android:imeOptions="actionUnspecified"
-                android:textColor="@color/grey_chevbook"
-                android:textSize="20dp"
-                android:layout_weight="1" />
+                <EditText
+                    android:id="@+id/email"
+                    android:fontFamily="sans-serif-light"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/prompt_email"
+                    android:background="@drawable/round_edittext"
+                    android:textColor="#d6d6d6"
+                    android:textColorHint="@color/grey_chevbook"
+                    android:textSize="20dp"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:singleLine="true"
+                    android:background="@drawable/round_edittext"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/prompt_password"
+                    android:layout_marginTop="10dp"
+                    android:inputType="textPassword"
+                    android:fontFamily="sans-serif-light"
+                    android:imeOptions="actionUnspecified"
+                    android:textColor="#d6d6d6"
+                    android:textColorHint="@color/grey_chevbook"
+                    android:textSize="20dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_forgot_password"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="#c8c8c8"
                 android:layout_marginRight="24dp"
                 android:layout_marginTop="20dp"
                 android:id="@+id/login_forgot_password"
                 android:layout_gravity="right"
                 android:layout_weight="0.5" />
 
+            <!-- Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/login_buttons">
+
+                <Button android:id="@+id/sign_in_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="@string/action_sign_in_register"
+                    android:textColor="@android:color/white"
+                    android:textSize="28dp"
+                    android:background="@drawable/button_green_login"
+                    android:layout_weight="1" />
+
+                <Button android:id="@+id/create_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:text="@string/create_account"
+                    android:textColor="@android:color/white"
+                    android:textSize="18dp"
+                    android:background="@drawable/button_blue_login"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
-
-
-    <!-- Button -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:id="@+id/login_buttons"
-        android:baselineAligned="false"
-        android:layout_alignParentBottom="true">
-
-        <Button android:id="@+id/sign_in_button"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:text="@string/action_sign_in_register"
-            style="@android:style/ButtonBar"
-            android:textColor="@android:color/white"
-            android:fontFamily="sans-serif-light"
-            android:textSize="22dp"
-            android:textStyle="bold"
-            android:background="@drawable/button_login_account"
-            android:layout_weight="1" />
-
-        <Button android:id="@+id/create_account"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/create_account"
-            style="@android:style/ButtonBar"
-            android:textColor="@android:color/white"
-            android:textSize="22dp"
-            android:background="@drawable/button_create_account"
-            android:layout_weight="1" />
-    </LinearLayout>
 </RelativeLayout>
