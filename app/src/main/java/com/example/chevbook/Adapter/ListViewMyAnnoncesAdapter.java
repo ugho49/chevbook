@@ -131,7 +131,16 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
             }
         });
 
-        imageLoader.displayImage(list.get(position).getUrl_images_annonces().get(0), holder.image);
+        String url_image = list.get(position).getUrl_images_annonces().get(0);
+
+        if(!url_image.equals(""))
+        {
+            imageLoader.displayImage(url_image, holder.image);
+        }
+        else {
+            holder.image.setImageResource(R.drawable.logo_android_chevbook);
+        }
+
         holder.title.setText(list.get(position).getTitre_annonce());
         holder.quartier.setText(list.get(position).getQuartier_annonce());
         holder.description.setText(list.get(position).getDescription_annonce());
