@@ -2,119 +2,119 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res" >
+        <source path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res" >
             <file
                 name="vpi__dark_theme"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\color\vpi__dark_theme.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\color\vpi__dark_theme.xml"
                 qualifiers=""
                 type="color" />
             <file
                 name="vpi__light_theme"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\color\vpi__light_theme.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\color\vpi__light_theme.xml"
                 qualifiers=""
                 type="color" />
             <file
                 name="drop_shadow"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable\drop_shadow.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable\drop_shadow.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="vpi__tab_indicator"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable\vpi__tab_indicator.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable\vpi__tab_indicator.xml"
                 qualifiers=""
                 type="drawable" />
             <file
                 name="vpi__tab_selected_focused_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_selected_focused_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_selected_focused_holo.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_selected_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_selected_holo.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_pressed_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_selected_pressed_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_selected_pressed_holo.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_focused_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_unselected_focused_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_unselected_focused_holo.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_unselected_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_unselected_holo.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_pressed_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_unselected_pressed_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-hdpi\vpi__tab_unselected_pressed_holo.9.png"
                 qualifiers="hdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_focused_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_selected_focused_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_selected_focused_holo.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_selected_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_selected_holo.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_pressed_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_selected_pressed_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_selected_pressed_holo.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_focused_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_unselected_focused_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_unselected_focused_holo.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_unselected_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_unselected_holo.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_pressed_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_unselected_pressed_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-mdpi\vpi__tab_unselected_pressed_holo.9.png"
                 qualifiers="mdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_focused_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_selected_focused_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_selected_focused_holo.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_selected_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_selected_holo.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_selected_pressed_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_selected_pressed_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_selected_pressed_holo.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_focused_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_unselected_focused_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_unselected_focused_holo.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_unselected_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_unselected_holo.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
                 name="vpi__tab_unselected_pressed_holo"
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_unselected_pressed_holo.9.png"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\drawable-xhdpi\vpi__tab_unselected_pressed_holo.9.png"
                 qualifiers="xhdpi"
                 type="drawable" />
             <file
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__attrs.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__attrs.xml"
                 qualifiers="" >
                 <attr
                     name="centered"
@@ -301,7 +301,7 @@
                 </declare-styleable>
             </file>
             <file
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__colors.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__colors.xml"
                 qualifiers="" >
                 <color name="vpi__bright_foreground_holo_dark" >@color/vpi__background_holo_light
                 </color>
@@ -321,7 +321,7 @@
                 </color>
             </file>
             <file
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__defaults.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__defaults.xml"
                 qualifiers="" >
                 <dimen name="default_circle_indicator_radius" >3dp
                 </dimen>
@@ -421,7 +421,7 @@ true
                 </color>
             </file>
             <file
-                path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__styles.xml"
+                path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\res\values\vpi__styles.xml"
                 qualifiers="" >
 
                 <style
@@ -493,11 +493,11 @@ bold
                 </style>
             </file>
         </source>
-        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\build\res\rs\release" />
-        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\build\res\generated\release" />
+        <source path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\build\res\rs\release" />
+        <source path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\build\res\generated\release" />
     </dataSet>
     <dataSet config="release" >
-        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\src\release\res" />
+        <source path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\src\release\res" />
     </dataSet>
 
 </merger>

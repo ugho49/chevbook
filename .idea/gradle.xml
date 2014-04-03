@@ -7,12 +7,12 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="D:\AndroidStudioProjects\ChevBook" />
-            <option value="D:\AndroidStudioProjects\ChevBook\app" />
-            <option value="D:\AndroidStudioProjects\ChevBook\projectlibs" />
-            <option value="D:\AndroidStudioProjects\ChevBook\projectlibs\ActionBar-PullToRefresh-master" />
-            <option value="D:\AndroidStudioProjects\ChevBook\projectlibs\ActionBar-PullToRefresh-master\library" />
-            <option value="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator" />
+            <option value="D:\AndroidStudioProjects\chevbook_v2\chevbook" />
+            <option value="D:\AndroidStudioProjects\chevbook_v2\chevbook\ChevbookApp" />
+            <option value="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs" />
+            <option value="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\ActionBar-PullToRefresh-master" />
+            <option value="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\ActionBar-PullToRefresh-master\library" />
+            <option value="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator" />
           </set>
         </option>
       </GradleProjectSettings>

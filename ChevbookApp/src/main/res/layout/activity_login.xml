@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_container"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@color/dark_black"
+    tools:context="com.chevbook.chevbookapp.Activity.LoginActivity">
+
+    <!-- Login progress -->
+    <LinearLayout android:id="@+id/login_status"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal">
+        <ProgressBar style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+        <TextView
+            android:id="@+id/login_status_message"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/login_progress_signing_in" />
+    </LinearLayout>
+
+    <!-- Login form -->
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_black"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="16dp">
+
+                <ImageView
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:id="@+id/imageView"
+                    android:src="@drawable/logo_android_chevbook" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="17dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textSize="36dp"
+                        android:textColor="@android:color/white"
+                        android:text="Chevbook"
+                        android:id="@+id/textView"
+                        android:fontFamily="@android:string/yes" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:textSize="12dp"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="L'application dédié au partage d'appartements entre étudiants"
+                        android:id="@+id/textView2" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="40dp">
+
+                <EditText
+                    android:id="@+id/email"
+                    android:fontFamily="sans-serif-light"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/prompt_email"
+                    android:background="@drawable/round_edittext"
+                    android:textColor="#d6d6d6"
+                    android:textColorHint="@color/grey_chevbook"
+                    android:textSize="20dp"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:id="@+id/password"
+                    android:singleLine="true"
+                    android:background="@drawable/round_edittext"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/prompt_password"
+                    android:layout_marginTop="10dp"
+                    android:inputType="textPassword"
+                    android:fontFamily="sans-serif-light"
+                    android:imeOptions="actionUnspecified"
+                    android:textColor="#d6d6d6"
+                    android:textColorHint="@color/grey_chevbook"
+                    android:textSize="20dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_forgot_password"
+                android:textColor="#c8c8c8"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="20dp"
+                android:id="@+id/login_forgot_password"
+                android:layout_gravity="right"
+                android:layout_weight="0.5" />
+
+            <!-- Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:id="@+id/login_buttons">
+
+                <Button android:id="@+id/sign_in_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="@string/action_sign_in_register"
+                    android:textColor="@android:color/white"
+                    android:textSize="28dp"
+                    android:background="@drawable/button_green_login"
+                    android:layout_weight="1" />
+
+                <Button android:id="@+id/create_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginLeft="35dp"
+                    android:text="@string/create_account"
+                    android:textColor="@android:color/white"
+                    android:textSize="18dp"
+                    android:background="@drawable/button_blue_login"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

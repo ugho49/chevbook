@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/projectlibs/Android_View_Pager_Indicator/Android_View_Pager_Indicator.iml" filepath="$PROJECT_DIR$/projectlibs/Android_View_Pager_Indicator/Android_View_Pager_Indicator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ChevBook.iml" filepath="$PROJECT_DIR$/ChevBook.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ChevbookApp/ChevbookApp.iml" filepath="$PROJECT_DIR$/ChevbookApp/ChevbookApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chevbook.iml" filepath="$PROJECT_DIR$/chevbook.iml" />
       <module fileurl="file://$PROJECT_DIR$/projectlibs/ActionBar-PullToRefresh-master/library/library.iml" filepath="$PROJECT_DIR$/projectlibs/ActionBar-PullToRefresh-master/library/library.iml" />
     </modules>
   </component>

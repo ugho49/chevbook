@@ -22,4 +22,4 @@
     <!--item android:state_activated="true" android:color="@color/vpi__bright_foreground_holo_dark"/-->
     <item android:color="@color/vpi__bright_foreground_holo_dark"/> <!-- not selected -->
 </selector>
-<!-- From: file:/D:/AndroidStudioProjects/ChevBook/projectlibs/Android_View_Pager_Indicator/res/color/vpi__dark_theme.xml -->
+<!-- From: file:/D:/AndroidStudioProjects/chevbook_v2/chevbook/projectlibs/Android_View_Pager_Indicator/res/color/vpi__dark_theme.xml -->

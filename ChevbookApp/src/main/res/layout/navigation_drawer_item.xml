@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/item_drawer_profile">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <com.chevbook.chevbookapp.CustomsView.CircularImageView
+                    android:id="@+id/icon_navigation_drawer_profile"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_profile"/>
+
+                <TextView
+                    android:id="@+id/title_navigation_drawer_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:textColor="@android:color/white"
+                    android:text="Ugho Stephan"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:id="@+id/item_drawer">
+
+            <ImageView
+                android:id="@+id/icon_navigation_drawer"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_profile"/>
+
+            <TextView
+                android:id="@+id/title_navigation_drawer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minHeight="?android:attr/listPreferredItemHeightSmall"
+                android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical"
+                android:text="ListeItem"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical|right"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:background="@android:color/white"
+                    android:visibility="gone"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:text="99+"
+                    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+                    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+                    android:textColor="@color/dark_black_grey"
+                    android:textSize="11dp"
+                    android:gravity="center_vertical"
+                    android:id="@+id/textView" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

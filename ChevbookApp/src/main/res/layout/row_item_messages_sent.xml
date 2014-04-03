@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/card_border">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_card"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="6dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/linearLayout"
+            android:gravity="center_vertical">
+
+            <com.chevbook.chevbookapp.CustomsView.CircularImageView
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:id="@+id/imageViewRowItemMessagesSentPicture"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_user_drag_drop" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Appartement T3 meublé"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="bold"
+                    android:id="@+id/textViewRowItemMessagesSentTitleAnnounce"
+                    android:textColor="@color/blue_account"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Message envoyé à"
+                        android:id="@+id/textView"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="filipeNex"
+                        android:id="@+id/textViewRowItemMessagesSentUserName"
+                        android:textColor="@color/blue_account_light"
+                        android:textStyle="italic"
+                        android:layout_marginLeft="4dp"
+                        android:textSize="15dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="le"
+                        android:id="@+id/textView3"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:text="28/09/2014"
+                        android:id="@+id/textViewRowItemMessagesSentDate"
+                        android:layout_marginLeft="4dp"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Bonjour, je suis très intéressé par votre annonce, pouvez-vous me recontacter au plus vite pour en connaître d'avantage ? Mon numéro : 06.88.10.65.38. Coordialement, Ugho STEPHAN"
+            android:id="@+id/textViewRowItemMessagesSentMessage"
+            android:textSize="12dp"
+            android:layout_marginTop="1dp"
+            android:maxLines="2" />
+
+    </LinearLayout>
+
+</RelativeLayout>
