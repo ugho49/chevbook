@@ -1,4 +1,4 @@
-<!-- From: file:/D:/AndroidStudioProjects/chevbook_v2/chevbook/projectlibs/Android_View_Pager_Indicator/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="65" android:versionName="2.4.1" package="com.viewpagerindicator">
+<!-- From: file:/D:/AndroidStudioProjects/ChevBook/projectlibs/Android_View_Pager_Indicator/AndroidManifest.xml --><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="65" android:versionName="2.4.1" package="com.viewpagerindicator">
     <application/>
     <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19"/>
 </manifest>

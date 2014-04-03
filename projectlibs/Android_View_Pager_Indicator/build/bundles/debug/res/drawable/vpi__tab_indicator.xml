@@ -32,4 +32,4 @@
     <item android:state_focused="true" android:state_selected="false" android:state_pressed="true" android:drawable="@drawable/vpi__tab_unselected_pressed_holo" />
     <item android:state_focused="true" android:state_selected="true"  android:state_pressed="true" android:drawable="@drawable/vpi__tab_selected_pressed_holo" />
 </selector>
-<!-- From: file:/D:/AndroidStudioProjects/chevbook_v2/chevbook/projectlibs/Android_View_Pager_Indicator/res/drawable/vpi__tab_indicator.xml -->
+<!-- From: file:/D:/AndroidStudioProjects/ChevBook/projectlibs/Android_View_Pager_Indicator/res/drawable/vpi__tab_indicator.xml -->

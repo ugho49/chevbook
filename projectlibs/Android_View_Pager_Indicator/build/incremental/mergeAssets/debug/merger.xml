@@ -2,10 +2,10 @@
 <merger>
 
     <dataSet config="main" >
-        <source path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\assets" />
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="D:\AndroidStudioProjects\chevbook_v2\chevbook\projectlibs\Android_View_Pager_Indicator\src\debug\assets" />
+        <source path="D:\AndroidStudioProjects\ChevBook\projectlibs\Android_View_Pager_Indicator\src\debug\assets" />
     </dataSet>
 
 </merger>
