@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import com.chevbook.chevbookapp.CustomsView.CircularImageView;
 import com.chevbook.chevbookapp.R;
 import com.google.analytics.tracking.android.EasyTracker;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -64,6 +66,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
     private static final int REQUEST_SELECT_PICTURE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
     private String selectedImagePath;
+    private String Base64Image = "";
     private static Uri fileUri;
 
     private static ActionBarActivity actionBarActivity;
@@ -135,14 +138,22 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 afterTakingPictureTask.execute((Void) null);
 
             } else if (requestCode == REQUEST_SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
+                /*Uri selectedImageUri = data.getData();
 
                 String tempPath = getPath(selectedImageUri, DetailsAccountActivity.this);
                 selectedImagePath = tempPath;
                 Bitmap bm;
                 BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
                 bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
-                mImageViewPictureUser.setImageBitmap(bm);
+
+                mImageViewPictureUser.setImageBitmap(bm);*/
+
+                Uri selectedImageUri = data.getData();
+                String tempPath = getPath(selectedImageUri, DetailsAccountActivity.this);
+                selectedImagePath = tempPath;
+
+                AfterTakingPictureTask afterTakingPictureTask = new AfterTakingPictureTask();
+                afterTakingPictureTask.execute((Void) null);
             }
         }
 
@@ -256,12 +267,12 @@ public class DetailsAccountActivity extends ActionBarActivity {
     private static File getOutputMediaFile(int type){
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "chevbook/temp");
+                Environment.DIRECTORY_PICTURES), "chevbook");
 
 
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
-                Log.d("chevbook", "failed to create directory chevbook/temp");
+                Log.d("chevbook", "failed to create directory chevbook");
                 return null;
             }
         }
@@ -311,21 +322,25 @@ public class DetailsAccountActivity extends ActionBarActivity {
             Matrix matrix = new Matrix();
             matrix.postRotate(angle);
             bm = Bitmap.createBitmap(bm , 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+            Base64Image = encodeTobase64(bm);
+            //f.deleteOnExit();
 
             return true;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(Boolean success) {
             actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+            //Toast.makeText(getApplication(), base64, Toast.LENGTH_SHORT).show();
 
             if (!success) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
             }
             else {
+                //Toast.makeText(getApplication(), base64, Toast.LENGTH_SHORT).show();
                 mImageViewPictureUser.setImageBitmap(bm);
+                Log.i("encodeBase64", Base64Image);
             }
-
         }
 
         @Override
@@ -334,6 +349,14 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
             actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
         }
+    }
+
+    public String encodeTobase64(Bitmap image)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
 }

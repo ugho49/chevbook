@@ -415,7 +415,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             else {
                 ImageView mImageViewPicture = null;
 
-                switch(ImageSelected)
+                /*switch(ImageSelected)
                 {
                     case 1:
                         mImageViewPicture = mImageViewDeposerModifierAnnonceImage1;
@@ -431,7 +431,22 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                         break;
                 }
 
-                mImageViewPicture.setImageBitmap(bm);
+                mImageViewPicture.setImageBitmap(bm);*/
+
+                switch(ImageSelected)
+                {
+                    case 1:
+                        mImageViewDeposerModifierAnnonceImage1.setImageBitmap(bm);
+                        break;
+
+                    case 2:
+                        mImageViewDeposerModifierAnnonceImage2.setImageBitmap(bm);
+                        break;
+
+                    case 3:
+                        mImageViewDeposerModifierAnnonceImage3.setImageBitmap(bm);
+                        break;
+                }
             }
 
         }
