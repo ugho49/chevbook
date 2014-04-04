@@ -7,15 +7,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,10 +27,7 @@ import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.ByteArrayOutputStream;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,6 +42,10 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     ImageView mImageViewDeposerModifierAnnonceImage2;
     @InjectView(R.id.imageViewDeposerModifierAnnonceImage3)
     ImageView mImageViewDeposerModifierAnnonceImage3;
+    @InjectView(R.id.imageViewDeposerModifierAnnonceImage4)
+    ImageView mImageViewDeposerModifierAnnonceImage4;
+    @InjectView(R.id.imageViewDeposerModifierAnnonceImage5)
+    ImageView mImageViewDeposerModifierAnnonceImage5;
     @InjectView(R.id.editTextDeposerModifierAnnonceAdresse)
     EditText mEditTextDeposerModifierAnnonceAdresse;
     @InjectView(R.id.editTextDeposerModifierAnnonceCP)
@@ -80,18 +77,11 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 10;
     private static final int REQUEST_SELECT_PICTURE = 100;
-    public static final int MEDIA_TYPE_IMAGE = 1;
 
     private Annonce mAnnonce = new Annonce();
 
-    private String selectedPathImage1;
-    private String selectedPathImage2;
-    private String selectedPathImage3;
-
     private int ImageSelected = 0;
-
-    private static Uri fileUri;
-
+    private String[] Base64Image = new String[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +113,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         mImageViewDeposerModifierAnnonceImage1.setOnClickListener(clickListener);
         mImageViewDeposerModifierAnnonceImage2.setOnClickListener(clickListener);
         mImageViewDeposerModifierAnnonceImage3.setOnClickListener(clickListener);
+        mImageViewDeposerModifierAnnonceImage4.setOnClickListener(clickListener);
+        mImageViewDeposerModifierAnnonceImage5.setOnClickListener(clickListener);
         mButtonDeposerModifierAnnonceValider.setOnClickListener(clickListener);
     }
 
@@ -135,66 +127,28 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             switch(v.getId())
             {
                 case R.id.imageViewDeposerModifierAnnonceImage1:
-                    Toast.makeText(getApplicationContext(), "Image 1", Toast.LENGTH_SHORT).show();
-
-                    AlertDialog.Builder adb = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
-                    adb.setPositiveButton(getString(R.string.take_picture_from_camera), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ImageSelected = 1;
-                            TakePictureIntent();
-                        }
-                    });
-                    adb.setNegativeButton(getString(R.string.take_picture_from_gallery), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ImageSelected = 1;
-                            SelectPictureIntent();
-                        }
-                    });
-                    adb.setMessage(getString(R.string.where_take_picture));
-                    adb.show();
-
+                    ImageSelected = 1;
+                    showDialogForPicture();
                     break;
 
                 case R.id.imageViewDeposerModifierAnnonceImage2:
-                    Toast.makeText(getApplicationContext(), "Image 2", Toast.LENGTH_SHORT).show();
-
-                    AlertDialog.Builder adb2 = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
-                    adb2.setPositiveButton(getString(R.string.take_picture_from_camera), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ImageSelected = 2;
-                            TakePictureIntent();
-                        }
-                    });
-                    adb2.setNegativeButton(getString(R.string.take_picture_from_gallery), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ImageSelected = 2;
-                            SelectPictureIntent();
-                        }
-                    });
-                    adb2.setMessage(getString(R.string.where_take_picture));
-                    adb2.show();
-
+                    ImageSelected = 2;
+                    showDialogForPicture();
                     break;
 
                 case R.id.imageViewDeposerModifierAnnonceImage3:
-                    Toast.makeText(getApplicationContext(), "Image 3", Toast.LENGTH_SHORT).show();
+                    ImageSelected = 3;
+                    showDialogForPicture();
+                    break;
 
-                    AlertDialog.Builder adb3 = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
-                    adb3.setPositiveButton(getString(R.string.take_picture_from_camera), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ImageSelected = 3;
-                            TakePictureIntent();
-                        }
-                    });
-                    adb3.setNegativeButton(getString(R.string.take_picture_from_gallery), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            ImageSelected = 3;
-                            SelectPictureIntent();
-                        }
-                    });
-                    adb3.setMessage(getString(R.string.where_take_picture));
-                    adb3.show();
+                case R.id.imageViewDeposerModifierAnnonceImage4:
+                    ImageSelected = 4;
+                    showDialogForPicture();
+                    break;
 
+                case R.id.imageViewDeposerModifierAnnonceImage5:
+                    ImageSelected = 5;
+                    showDialogForPicture();
                     break;
 
                 case R.id.buttonDeposerModifierAnnonceValider:
@@ -215,9 +169,6 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         /*if (id == R.id.action_settings) {
             return true;
@@ -230,71 +181,75 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
-
-                String selectedPath = fileUri.getPath();
-
-                switch(ImageSelected)
-                {
-                    case 1:
-                        selectedPathImage1 = selectedPath;
-                        break;
-
-                    case 2:
-                        selectedPathImage2 = selectedPath;
-
-                        break;
-
-                    case 3:
-                        selectedPathImage3 = selectedPath;
-
-                        break;
-                }
-
-                AfterTakingPictureTask afterTakingPictureTask = new AfterTakingPictureTask();
-                afterTakingPictureTask.execute((Void) null);
-
-            } else if (requestCode == REQUEST_SELECT_PICTURE) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                setBitmapAndEncodeInBase64(imageBitmap, ImageSelected);
+            }
+            else if (requestCode == REQUEST_SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                String tempPath = getPath(selectedImageUri, DeposerModifierAnnonceActivity.this);
-                ImageView mImageViewPicture = null;
-
-                switch(ImageSelected)
-                {
-                    case 1:
-                        selectedPathImage1 = tempPath;
-                        mImageViewPicture = mImageViewDeposerModifierAnnonceImage1;
-                        break;
-
-                    case 2:
-                        selectedPathImage2 = tempPath;
-                        mImageViewPicture = mImageViewDeposerModifierAnnonceImage2;
-
-                        break;
-
-                    case 3:
-                        selectedPathImage3 = tempPath;
-                        mImageViewPicture = mImageViewDeposerModifierAnnonceImage3;
-                        break;
-                }
-
-                //String selectedPath = tempPath;
-                Bitmap bm;
+                String selectedPath = getPath(selectedImageUri, DeposerModifierAnnonceActivity.this);
                 BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-                bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
-                mImageViewPicture.setImageBitmap(bm);
+                btmapOptions.inSampleSize = 4;
+                Bitmap imageBitmap = BitmapFactory.decodeFile(selectedPath, btmapOptions);
+                setBitmapAndEncodeInBase64(imageBitmap, ImageSelected);
             }
         }
+    }
 
+    private void showDialogForPicture()
+    {
+        AlertDialog.Builder adb = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
+        adb.setPositiveButton(getString(R.string.take_picture_from_camera), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                TakePictureIntent();
+            }
+        });
+        adb.setNegativeButton(getString(R.string.take_picture_from_gallery), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                SelectPictureIntent();
+            }
+        });
+        adb.setMessage(getString(R.string.where_take_picture));
+        adb.show();
+    }
+
+    private void setBitmapAndEncodeInBase64(Bitmap bm, int number)
+    {
+        switch(number)
+        {
+            case 1:
+                mImageViewDeposerModifierAnnonceImage1.setImageBitmap(bm);
+                Base64Image[0] = encodeTobase64(bm);
+                break;
+
+            case 2:
+                mImageViewDeposerModifierAnnonceImage2.setImageBitmap(bm);
+                Base64Image[1] = encodeTobase64(bm);
+                break;
+
+            case 3:
+                mImageViewDeposerModifierAnnonceImage3.setImageBitmap(bm);
+                Base64Image[2] = encodeTobase64(bm);
+                break;
+
+            case 4:
+                mImageViewDeposerModifierAnnonceImage4.setImageBitmap(bm);
+                Base64Image[3] = encodeTobase64(bm);
+                break;
+
+            case 5:
+                mImageViewDeposerModifierAnnonceImage5.setImageBitmap(bm);
+                Base64Image[4] = encodeTobase64(bm);
+                break;
+        }
     }
 
     private void TakePictureIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
-        //intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, "portrait");
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
     }
 
     private void SelectPictureIntent() {
@@ -317,146 +272,13 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         return cursor.getString(column_index);
     }
 
-    /** Create a file Uri for saving an image or video */
-    private static Uri getOutputMediaFileUri(int type){
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
-
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "chevbook/temp");
-
-
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("chevbook", "failed to create directory chevbook/temp");
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile = null;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        }
-
-        return mediaFile;
-    }
-
-    public class AfterTakingPictureTask extends AsyncTask<Void, Void, Boolean> {
-
-        Bitmap bm;
-
-
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            String selectedPath = null;
-
-            switch(ImageSelected)
-            {
-                case 1:
-                    selectedPath = selectedPathImage1;
-                    break;
-
-                case 2:
-                    selectedPath = selectedPathImage2;
-
-                    break;
-
-                case 3:
-                    selectedPath = selectedPathImage3;
-                    break;
-            }
-
-            BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-            bm = BitmapFactory.decodeFile(selectedPath, btmapOptions);
-
-            File f = new File(selectedPath);
-            ExifInterface exif = null;
-            try {
-                exif = new ExifInterface(f.getPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-
-            int angle = 0;
-
-            if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                angle = 90;
-            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                angle = 180;
-            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                angle = 270;
-            }
-
-            Matrix matrix = new Matrix();
-            matrix.postRotate(angle);
-            bm = Bitmap.createBitmap(bm , 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
-
-            if (!success) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error), Toast.LENGTH_SHORT).show();
-            }
-            else {
-                ImageView mImageViewPicture = null;
-
-                /*switch(ImageSelected)
-                {
-                    case 1:
-                        mImageViewPicture = mImageViewDeposerModifierAnnonceImage1;
-                        break;
-
-                    case 2:
-                        mImageViewPicture = mImageViewDeposerModifierAnnonceImage2;
-
-                        break;
-
-                    case 3:
-                        mImageViewPicture = mImageViewDeposerModifierAnnonceImage3;
-                        break;
-                }
-
-                mImageViewPicture.setImageBitmap(bm);*/
-
-                switch(ImageSelected)
-                {
-                    case 1:
-                        mImageViewDeposerModifierAnnonceImage1.setImageBitmap(bm);
-                        break;
-
-                    case 2:
-                        mImageViewDeposerModifierAnnonceImage2.setImageBitmap(bm);
-                        break;
-
-                    case 3:
-                        mImageViewDeposerModifierAnnonceImage3.setImageBitmap(bm);
-                        break;
-                }
-            }
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
-        }
+    public String encodeTobase64(Bitmap image)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+        //return "";
     }
 
     private void initData()
@@ -475,4 +297,5 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         mSpinnerDeposerModifierAnnonceQuartier.setAdapter(spinnerQuartierArrayAdapter);
         mSpinnerDeposerModifierAnnonceCategorie.setAdapter(spinnerTypeArrayAdapter);
     }
+
 }

@@ -307,7 +307,7 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
 
                 if (result)
                 {
-                    Toast.makeText(getActivity(), "reussite", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "reussite", Toast.LENGTH_SHORT).show();
                     Adapter.setList(mAnnonces);
                     Adapter.notifyDataSetChanged();
                 }

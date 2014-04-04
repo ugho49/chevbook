@@ -7,16 +7,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,10 +27,6 @@ import com.chevbook.chevbookapp.R;
 import com.google.analytics.tracking.android.EasyTracker;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -64,10 +56,8 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 10;
     private static final int REQUEST_SELECT_PICTURE = 100;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    private String selectedImagePath;
+
     private String Base64Image = "";
-    private static Uri fileUri;
 
     private static ActionBarActivity actionBarActivity;
 
@@ -132,48 +122,21 @@ public class DetailsAccountActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                selectedImagePath = fileUri.getPath();
-
-                AfterTakingPictureTask afterTakingPictureTask = new AfterTakingPictureTask();
-                afterTakingPictureTask.execute((Void) null);
-
-            } else if (requestCode == REQUEST_SELECT_PICTURE) {
-                /*Uri selectedImageUri = data.getData();
-
-                String tempPath = getPath(selectedImageUri, DetailsAccountActivity.this);
-                selectedImagePath = tempPath;
-                Bitmap bm;
-                BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-                bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
-
-                mImageViewPictureUser.setImageBitmap(bm);*/
-
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                mImageViewPictureUser.setImageBitmap(imageBitmap);
+                Base64Image = encodeTobase64(imageBitmap);
+            }
+            else if (requestCode == REQUEST_SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                String tempPath = getPath(selectedImageUri, DetailsAccountActivity.this);
-                selectedImagePath = tempPath;
-
-                AfterTakingPictureTask afterTakingPictureTask = new AfterTakingPictureTask();
-                afterTakingPictureTask.execute((Void) null);
+                String selectedPath = getPath(selectedImageUri, DetailsAccountActivity.this);
+                BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
+                btmapOptions.inSampleSize = 4;
+                Bitmap imageBitmap = BitmapFactory.decodeFile(selectedPath, btmapOptions);
+                mImageViewPictureUser.setImageBitmap(imageBitmap);
+                Base64Image = encodeTobase64(imageBitmap);
             }
         }
-
-        /* REMOVE */
-            //Toast.makeText(getApplicationContext(), selectedImagePath, Toast.LENGTH_LONG).show();
-        /* REMOVE */
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        EasyTracker.getInstance(this).activityStart(this);  // Start Google Analytics
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
 
     @Override
@@ -199,14 +162,42 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
     public void saveData() {
         Toast.makeText(getApplicationContext(), getString(R.string.save_in_progress), Toast.LENGTH_SHORT).show();
+        UpdateUserTask();
     }
 
     private void TakePictureIntent() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
-        //intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, "portrait");
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    private void SelectPictureIntent() {
+        Intent intent = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(
+                Intent.createChooser(intent, "Select File"),
+                REQUEST_SELECT_PICTURE);
+    }
+
+    @SuppressWarnings("deprecation")
+    public String getPath(Uri uri, Activity activity) {
+        String[] projection = { MediaStore.MediaColumns.DATA };
+        Cursor cursor = activity
+                .managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    public String encodeTobase64(Bitmap image)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
     private void alertDialogChangePassword() {
@@ -238,125 +229,47 @@ public class DetailsAccountActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    private void SelectPictureIntent() {
-        Intent intent = new Intent(
-                Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        startActivityForResult(
-                Intent.createChooser(intent, "Select File"),
-                REQUEST_SELECT_PICTURE);
-    }
-
-    @SuppressWarnings("deprecation")
-    public String getPath(Uri uri, Activity activity) {
-        String[] projection = { MediaStore.MediaColumns.DATA };
-        Cursor cursor = activity
-                .managedQuery(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    /** Create a file Uri for saving an image or video */
-    private static Uri getOutputMediaFileUri(int type){
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    /** Create a File for saving an image or video */
-    private static File getOutputMediaFile(int type){
-
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "chevbook");
-
-
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("chevbook", "failed to create directory chevbook");
-                return null;
-            }
-        }
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile = null;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        }
-
-        return mediaFile;
-    }
-
-    public class AfterTakingPictureTask extends AsyncTask<Void, Void, Boolean> {
-
-        Bitmap bm;
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-            bm = BitmapFactory.decodeFile(selectedImagePath, btmapOptions);
-
-            File f = new File(selectedImagePath);
-            ExifInterface exif = null;
-            try {
-                exif = new ExifInterface(f.getPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-            int orientation = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
-
-            int angle = 0;
-
-            if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                angle = 90;
-            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                angle = 180;
-            } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                angle = 270;
-            }
-
-            Matrix matrix = new Matrix();
-            matrix.postRotate(angle);
-            bm = Bitmap.createBitmap(bm , 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-            Base64Image = encodeTobase64(bm);
-            //f.deleteOnExit();
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
-            //Toast.makeText(getApplication(), base64, Toast.LENGTH_SHORT).show();
-
-            if (!success) {
-                Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
-            }
-            else {
-                //Toast.makeText(getApplication(), base64, Toast.LENGTH_SHORT).show();
-                mImageViewPictureUser.setImageBitmap(bm);
-                Log.i("encodeBase64", Base64Image);
-            }
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
-        }
-    }
-
-    public String encodeTobase64(Bitmap image)
+    public void UpdateUserTask()
     {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+
+                if (success) {
+                    //Toast.makeText(getApplication(), Base64Image, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EasyTracker.getInstance(this).activityStart(this);  // Start Google Analytics
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
+    }
 }
