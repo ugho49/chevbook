@@ -22,11 +22,17 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.CustomsView.CircularImageView;
 import com.chevbook.chevbookapp.R;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -41,8 +47,6 @@ public class DetailsAccountActivity extends ActionBarActivity {
     EditText mEditTextFirstName;
     @InjectView(R.id.editTextLastName)
     EditText mEditTextLastName;
-    @InjectView(R.id.editTextEmail)
-    EditText mEditTextEmail;
     @InjectView(R.id.buttonChangePassword)
     Button mButtonChangePassword;
     @InjectView(R.id.buttonSaveModif)
@@ -59,7 +63,12 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
     private String Base64Image = "";
 
+    private User mUser;
+
+    private static ImageLoader imageLoader;
     private static ActionBarActivity actionBarActivity;
+
+    private String PasswordModifieSHA1 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +76,9 @@ public class DetailsAccountActivity extends ActionBarActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_details_account);
         ButterKnife.inject(this);
+
+        imageLoader = ImageLoader.getInstance();
+        mUser = new User(getApplicationContext());
 
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -78,6 +90,8 @@ public class DetailsAccountActivity extends ActionBarActivity {
         mBtnChangePicture.setOnClickListener(clickListener);
         mButtonChangePassword.setOnClickListener(clickListener);
         mButtonSaveModif.setOnClickListener(clickListener);
+
+        initData();
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -117,6 +131,21 @@ public class DetailsAccountActivity extends ActionBarActivity {
             }
         }
     };
+
+    private void initData()
+    {
+        String url_image = mUser.getUrlProfilPicture();
+        if(!url_image.equals(""))
+        {
+            imageLoader.displayImage(url_image, mImageViewPictureUser);
+        }
+        else {
+            mImageViewPictureUser.setImageResource(R.drawable.ic_user_drag_drop);
+        }
+
+        mEditTextFirstName.setText(mUser.getFirstName());
+        mEditTextLastName.setText(mUser.getLastName());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -161,7 +190,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
     }
 
     public void saveData() {
-        Toast.makeText(getApplicationContext(), getString(R.string.save_in_progress), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.save_in_progress), Toast.LENGTH_SHORT).show();
         UpdateUserTask();
     }
 
@@ -208,13 +237,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
         mCustomDialogConfirmNewPass = (EditText)custom_view_change_password.findViewById(R.id.editTextCustomDialogChangePasswordConfirmNewPass);
         mCustomDialogButtonConfirmChange = (Button)custom_view_change_password.findViewById(R.id.buttonCustomDialogConfirmChangePass);
 
-        mCustomDialogButtonConfirmChange.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "click change", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(custom_view_change_password)
                 .setCancelable(false)
                 .setTitle(getString(R.string.change_password))
@@ -225,6 +248,44 @@ public class DetailsAccountActivity extends ActionBarActivity {
                     }
                 })
                 .create();
+
+        mCustomDialogButtonConfirmChange.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //Toast.makeText(getApplicationContext(), "click change", Toast.LENGTH_SHORT).show();
+                //PasswordModifieSHA1
+                String old_pass = mCustomDialogActualPass.getText().toString();
+                String new_pass = mCustomDialogNewPass.getText().toString();
+                String confirm_new_pass = mCustomDialogConfirmNewPass.getText().toString();
+
+                if(old_pass.equals("") || new_pass.equals("") || confirm_new_pass.equals(""))
+                {
+                    Toast.makeText(getApplicationContext(), "Veuillez remplir tout les champs !!!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(getSha1(old_pass).equals(mUser.getPasswordSha1()))
+                    {
+                        if(new_pass.equals(confirm_new_pass))
+                        {
+                            if(new_pass.equals(old_pass))
+                            {
+                                Toast.makeText(getApplicationContext(), "Votre nouveau mot de passe doit être différent de l'ancien", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                PasswordModifieSHA1 = getSha1(new_pass);
+                                Toast.makeText(getApplicationContext(), "Votre mot de passe changera lors de l'enregistrement des modifications", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Erreur dans la confirmation de votre nouveau mot de passe", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Le mot de passe Actuel n'est pas le bon", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
 
         dialog.show();
     }
@@ -250,13 +311,48 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
 
                 if (success) {
-                    //Toast.makeText(getApplication(), Base64Image, Toast.LENGTH_SHORT).show();
+                    //todo save data in user
+                    Toast.makeText(getApplication(), "Modifications enregistrés", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                 }
             }
         }.execute();
+    }
+
+    private static String getSha1(String password)
+    {
+        String sha1 = "";
+        try
+        {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(password.getBytes("UTF-8"));
+            sha1 = byteToHex(crypt.digest());
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        return sha1;
+    }
+
+    private static String byteToHex(final byte[] hash)
+    {
+        Formatter formatter = new Formatter();
+        for (byte b : hash)
+        {
+            formatter.format("%02x", b);
+        }
+        String result = formatter.toString();
+        formatter.close();
+        return result;
     }
 
     @Override

@@ -28,6 +28,18 @@ import com.chevbook.chevbookapp.CustomsView.CircularImageView;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
@@ -85,7 +97,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                 .setup(mPullToRefreshLayout);
 
         //Load Data
-        LoadData();
+        InitData();
 
         //ActionBar
         actionBar.setDisplayShowTitleEnabled(true);
@@ -107,34 +119,6 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         }
 
         return root;
-    }
-
-    @Override
-    public void onRefreshStarted(View view) {
-        /**
-         * Simulate Refresh with 4 seconds sleep
-         */
-        LoadData();
-        /*new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                super.onPostExecute(result);
-
-                // Notify PullToRefreshLayout that the refresh has finished
-                mPullToRefreshLayout.setRefreshComplete();
-            }
-        }.execute();*/
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -173,21 +157,24 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         }
     };
 
-    public void LoadData() {
+    @Override
+    public void onRefreshStarted(View view) {
+        LoadUserTask mLoadUserTask = new LoadUserTask();
+        mLoadUserTask.execute((Void) null);
+    }
+
+    public void InitData() {
         mProfilePrenomNom.setText(vuser.getFirstName() + " " + vuser.getLastName().toUpperCase());
         mProfileEmail.setText(vuser.getEmail());
         imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
+        mProfileMesAnnonces.setText("0");
 
         LoadUserTask mLoadUserTask = new LoadUserTask();
         mLoadUserTask.execute((Void) null);
     }
 
     public void EditProfil() {
-        //Toast.makeText(getActivity(), getString(R.string.edit_profil), Toast.LENGTH_SHORT).show();
-
         Intent intentDetailAccount = new Intent(getActivity(), DetailsAccountActivity.class);
-        //intentDetailAccount.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        //intentDetailAccount.putExtra("url_image","bsjeibjsprjbopsrj");
         startActivity(intentDetailAccount);
     }
 
@@ -207,7 +194,8 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                 if (refreshing) {
                     Toast.makeText(getActivity(), getString(R.string.action_refresh_in_process), Toast.LENGTH_SHORT).show();
                 } else {
-                    LoadData();
+                    LoadUserTask mLoadUserTask = new LoadUserTask();
+                    mLoadUserTask.execute((Void) null);
                 }
 
                 return true;
@@ -245,6 +233,9 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
 
     public class LoadUserTask extends AsyncTask<Void, Void, Boolean> {
 
+        private String ErreurLoginTask = "Erreur ";
+        private Boolean userExist = true;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -256,71 +247,90 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            /* DELETABLE */
+            HttpURLConnection urlConnection = null;
+            StringBuilder sb = new StringBuilder();
+
             try {
-                // Simulate network access.
-                Thread.sleep(1000);
+                URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_IDENTIFICATION));
+                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.setConnectTimeout(5000);
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
 
-                return true;
+                // Création objet jsonn clé valeur
+                JSONObject jsonParam = new JSONObject();
+                // Exemple Clé valeur utiles à notre application
+                jsonParam.put("email", vuser.getEmail());
+                jsonParam.put("password", vuser.getPasswordSha1());
+                out.write(jsonParam.toString());
+                out.flush();
+                out.close();
 
-            } catch (InterruptedException e) {
-
-                return false;
-            } /* DELETABLE */
-
-            /*
-            // Creating service handler class instance
-            ServiceHandlerHTTPCalls sh = new ServiceHandlerHTTPCalls();
-
-            // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url, ServiceHandlerHTTPCalls.GET);
-
-            Log.d("Response: ", "> " + jsonStr);
-
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-
-                    // Getting JSON Array node
-                    contacts = jsonObj.getJSONArray(TAG_CONTACTS);
-
-                    // looping through All Contacts
-                    for (int i = 0; i < contacts.length(); i++) {
-                        JSONObject c = contacts.getJSONObject(i);
-
-                        String id = c.getString(TAG_ID);
-                        String name = c.getString(TAG_NAME);
-                        String email = c.getString(TAG_EMAIL);
-                        String address = c.getString(TAG_ADDRESS);
-                        String gender = c.getString(TAG_GENDER);
-
-                        // Phone node is JSON Object
-                        JSONObject phone = c.getJSONObject(TAG_PHONE);
-                        String mobile = phone.getString(TAG_PHONE_MOBILE);
-                        String home = phone.getString(TAG_PHONE_HOME);
-                        String office = phone.getString(TAG_PHONE_OFFICE);
-
-                        // tmp hashmap for single contact
-                        HashMap<String, String> contact = new HashMap<String, String>();
-
-                        // adding each child node to HashMap key => value
-                        contact.put(TAG_ID, id);
-                        contact.put(TAG_NAME, name);
-                        contact.put(TAG_EMAIL, email);
-                        contact.put(TAG_PHONE_MOBILE, mobile);
-
-                        // adding contact to contact list
-                        contactList.add(contact);
+                // récupération du serveur
+                int HttpResult = urlConnection.getResponseCode();
+                if (HttpResult == HttpURLConnection.HTTP_OK)
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
                     }
-                    return true;
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    br.close();
+
+                    JSONArray jsonArray = new JSONArray(sb.toString());
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                    boolean user_exist = jsonObject.getBoolean("connectSuccess");
+
+                    if(user_exist) {
+
+                        String mFirstname = jsonObject.getString("Prenom_Personne"); //prenom
+                        String mLastname = jsonObject.getString("Nom_Personne"); //nom
+                        String mUrl_image = jsonObject.getString("Avatar_Personne");
+                        String mPassword = jsonObject.getString("Mdp_Personne");
+                        String mEmail = jsonObject.getString("Email");
+                        //int mNbAnnonces = jsonObject.getInt("Nb_annonces_Personne");;
+
+                        vuser.setFirstname(mFirstname);
+                        vuser.setLastname(mLastname);
+                        vuser.setUrlProfilPicture(mUrl_image);
+                        vuser.setEmail(mEmail);
+
+                        return true;
+                    }
+                    else {
+                        //Utilisateur existe pas
+                        ErreurLoginTask = ErreurLoginTask + "de mot de passe ou d'email";
+                        userExist = false;
+                        return false;
+                    }
                 }
-            } else {
-                Log.e("ServiceHandler", "Couldn't get any data from the url");
+                else
+                {
+                    return false;
+                }
+            }
+            catch (MalformedURLException e){
+                ErreurLoginTask = ErreurLoginTask + "URL";
+                return false; //Erreur URL
+            } catch (java.net.SocketTimeoutException e) {
+                ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                return false; //Temps trop long
+            } catch (IOException e) {
+                ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                return false; //Pas de connexion internet
+            } catch (JSONException e) {
+                ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                return false; //Erreur JSON
+            } finally {
+                if (urlConnection != null){
+                    urlConnection.disconnect();
+                }
             }
 
-            return false;*/
         }
 
         @Override
@@ -330,8 +340,30 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
             mPullToRefreshLayout.setRefreshComplete();
 
             if (success) {
-                //todo
-
+                mProfilePrenomNom.setText(vuser.getFirstName() + " " + vuser.getLastName().toUpperCase());
+                mProfileEmail.setText(vuser.getEmail());
+                imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
+                mProfileMesAnnonces.setText("0");
+            } else {
+                if(!userExist)
+                {
+                    AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                    adb.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent myIntent = new Intent(getActivity(), LoginActivity.class);
+                            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(myIntent);
+                            vuser.logoutUser();
+                            getActivity().finish();
+                        }
+                    });
+                    adb.setMessage("Votre compte à changer, veuillez-vous re-connecter !");
+                    adb.setCancelable(false);
+                    adb.show();
+                }
+                else {
+                    Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
