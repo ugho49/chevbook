@@ -200,7 +200,13 @@ public class DetailsAccountActivity extends ActionBarActivity {
             finish();
         }
         else {
-            UpdateUserTask();
+            if(nom.equals("") || prenom.equals(""))
+            {
+                Toast.makeText(getApplicationContext(), "Certains champs obligatoires ne sont pas remplis", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                UpdateUserTask();
+            }
         }
     }
 

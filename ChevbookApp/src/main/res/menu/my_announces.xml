@@ -6,6 +6,6 @@
     <item android:id="@+id/my_announce_menu_new_announce"
         android:icon="@drawable/ic_action_new_event"
         android:title="@string/action_new_announce"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|withText" />
 
 </menu>

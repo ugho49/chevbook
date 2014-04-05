@@ -3,9 +3,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/list_appartements_menuSearch"
+    <!--<item android:id="@+id/list_appartements_menuSearch"
         android:icon="@drawable/ic_action_search"
         android:title="@string/action_search"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" />-->
+
+    <item android:id="@+id/list_appartements_menu_new_announce"
+        android:icon="@drawable/ic_action_new_event"
+        android:title="@string/action_new_announce"
+        app:showAsAction="ifRoom|withText" />
 
 </menu>

@@ -9,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -23,6 +26,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.Activity.DeposerModifierAnnonceActivity;
 import com.chevbook.chevbookapp.Activity.DetailsAnnonceActivity;
 import com.chevbook.chevbookapp.Adapter.ListViewAnnonceAdapter;
 import com.chevbook.chevbookapp.Class.Annonce;
@@ -104,9 +108,13 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     private ActionBarActivity actionBarActivity;
     private boolean flag_loading = false;
 
+    private static final int CONST_CREATE = 0;
+    private static final int CONST_MODIFIER = 1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         vmodele = new Modele();
     }
@@ -194,6 +202,26 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
             }
         }
     };
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.list_appartements, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.list_appartements_menu_new_announce:
+                //Toast.makeText(getActivity(), getString(R.string.action_new_announce), Toast.LENGTH_SHORT).show();
+                Intent intentDetailAppartement = new Intent(getActivity(), DeposerModifierAnnonceActivity.class);
+                intentDetailAppartement.putExtra("CONST", CONST_CREATE);
+                startActivity(intentDetailAppartement);
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
