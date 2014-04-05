@@ -2,12 +2,16 @@ package com.chevbook.chevbookapp.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -18,9 +22,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Class.Annonce;
@@ -28,6 +34,7 @@ import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -58,19 +65,33 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     Spinner mSpinnerDeposerModifierAnnonceQuartier;
     @InjectView(R.id.spinnerDeposerModifierAnnonceCategorie)
     Spinner mSpinnerDeposerModifierAnnonceCategorie;
+    @InjectView(R.id.spinnerDeposerModifierAnnonceSousCategorie)
+    Spinner mSpinnerDeposerModifierAnnonceSousCategorie;
+    @InjectView(R.id.spinnerDeposerModifierAnnonceType)
+    Spinner mSpinnerDeposerModifierAnnonceType;
     @InjectView(R.id.editTextDeposerModifierAnnonceNbPieces)
     EditText mEditTextDeposerModifierAnnonceNbPieces;
     @InjectView(R.id.editTextDeposerModifierAnnonceLoyer)
     EditText mEditTextDeposerModifierAnnonceLoyer;
+    @InjectView(R.id.checkBoxDeposerModifierAnnonceEstMeuble)
+    CheckBox mCheckBoxDeposerModifierAnnonceEstMeuble;
+    @InjectView(R.id.editTextDeposerModifierAnnonceSurface)
+    EditText mEditTextDeposerModifierAnnonceSurface;
     @InjectView(R.id.buttonDeposerModifierAnnonceValider)
     Button mButtonDeposerModifierAnnonceValider;
+    @InjectView(R.id.textViewVersionApp)
+    TextView mTextViewVersionApp;
 
 
     private static final int CONST_CREATE = 0;
     private static final int CONST_MODIFIER = 1;
 
-    private static String [] AppartementListQuartier;
-    private static String [] AppartementListType;
+    private int CONSTANTE_EN_PARAM;
+
+    private static String [] SpinnerListQuartier;
+    private static String [] SpinnerListCategorie;
+    private static String [] SpinnerListSousCategorie;
+    private static String [] SpinnerListType;
 
     private static ActionBarActivity actionBarActivity;
     private static ImageLoader imageLoader;
@@ -79,6 +100,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     private static final int REQUEST_SELECT_PICTURE = 100;
 
     private Annonce mAnnonce = new Annonce();
+
+    private ProgressDialog progress;
 
     private int ImageSelected = 0;
     private String[] Base64Image = new String[5];
@@ -97,17 +120,27 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         getSupportActionBar().setTitle(mNavigationTitles[2]);
         actionBarActivity = (ActionBarActivity) this;
 
-        remplirSpinner();
+        try {
+            Context c = getApplicationContext();
+            String versionName = c.getPackageManager()
+                    .getPackageInfo(c.getPackageName(), 0).versionName;
+
+            mTextViewVersionApp.setText("V " + versionName);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Bundle b = getIntent().getExtras();
         int param = b.getInt("CONST");
 
         if (param == CONST_CREATE) {
-            //Toast.makeText(getApplicationContext(), "CREATE", Toast.LENGTH_SHORT).show();
+            CONSTANTE_EN_PARAM = param;
+            LoadingSpinnerTask();
         } else if (param == CONST_MODIFIER) {
-            //Toast.makeText(getApplicationContext(), "MODIFIER", Toast.LENGTH_SHORT).show();
+            CONSTANTE_EN_PARAM = param;
             mAnnonce = (Annonce)getIntent().getSerializableExtra("annonce");
-            initData();
+            LoadingSpinnerTask();
         }
 
         mImageViewDeposerModifierAnnonceImage1.setOnClickListener(clickListener);
@@ -255,7 +288,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     private void SelectPictureIntent() {
         Intent intent = new Intent(
                 Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(
                 Intent.createChooser(intent, "Select File"),
@@ -281,21 +314,202 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         //return "";
     }
 
-    private void initData()
+    public void LoadingSpinnerTask()
     {
+        new AsyncTask<Void, Void, Boolean>() {
 
+            String AfficherJSON = null;
+            String ErreurLoginTask = "Erreur ";
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
+                progress.setMessage(getResources().getString(R.string.loading_in_progress));
+                progress.setCancelable(false);
+                progress.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    Thread.sleep(300);
+                    return true;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+                /*HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
+                try {
+                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_LIST_SPINNER));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        AfficherJSON = sb.toString();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
+                    return false; //Erreur URL
+                } catch (java.net.SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                    return false; //Pas de connexion internet
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
+                }*/
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+
+                if (progress.isShowing()) {
+                    progress.dismiss();
+                }
+
+                if (success) {
+
+                    /*AlertDialog.Builder adb = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
+                    adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    adb.setMessage(AfficherJSON);
+                    adb.show();*/
+
+                    //todo : remplirSpinner();
+
+                    //Toast.makeText(getApplication(), "Spinners Remplis", Toast.LENGTH_SHORT).show();
+
+                    if(CONSTANTE_EN_PARAM == CONST_MODIFIER)
+                    {
+                        initDataAnnonce();
+                    }
+                }
+                else {
+                    Toast.makeText(getApplication(), "Erreur de chargement des spinners", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        }.execute();
     }
 
     private void remplirSpinner()
     {
-        AppartementListQuartier = getResources().getStringArray(R.array.appartements_quartier_array);
-        AppartementListType = getResources().getStringArray(R.array.appartements_type_location_array);
-
-        ArrayAdapter<String> spinnerQuartierArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, AppartementListQuartier);
-        ArrayAdapter<String> spinnerTypeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, AppartementListType);
+        ArrayAdapter<String> spinnerQuartierArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListQuartier);
+        ArrayAdapter<String> spinnerCategorieArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListCategorie);
+        ArrayAdapter<String> spinnerSousCategorieArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListSousCategorie);
+        ArrayAdapter<String> spinnerTypeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListType);
 
         mSpinnerDeposerModifierAnnonceQuartier.setAdapter(spinnerQuartierArrayAdapter);
-        mSpinnerDeposerModifierAnnonceCategorie.setAdapter(spinnerTypeArrayAdapter);
+        mSpinnerDeposerModifierAnnonceCategorie.setAdapter(spinnerCategorieArrayAdapter);
+        mSpinnerDeposerModifierAnnonceSousCategorie.setAdapter(spinnerSousCategorieArrayAdapter);
+        mSpinnerDeposerModifierAnnonceType.setAdapter(spinnerTypeArrayAdapter);
+    }
+
+    private void initDataAnnonce()
+    {
+        //titre
+        mTextViewDeposerModifierAnnonceTitre.setText(mAnnonce.getTitre_annonce());
+
+        //Adresse
+        mEditTextDeposerModifierAnnonceAdresse.setText(mAnnonce.getAdresse_annonce());
+        mEditTextDeposerModifierAnnonceCP.setVisibility(View.GONE);
+        mEditTextDeposerModifierAnnonceVille.setVisibility(View.GONE);
+
+        //Description
+        mEditTextDeposerModifierAnnonceDescription.setText(mAnnonce.getDescription_annonce());
+
+        //Photos
+        ArrayList<String> photos_annonce = mAnnonce.getUrl_images_annonces();
+        if(photos_annonce.size() > 0)
+        {
+            ArrayList<ImageView> imageViews = new ArrayList<ImageView>();
+            imageViews.add(0, mImageViewDeposerModifierAnnonceImage1);
+            imageViews.add(1, mImageViewDeposerModifierAnnonceImage2);
+            imageViews.add(2, mImageViewDeposerModifierAnnonceImage3);
+            imageViews.add(3, mImageViewDeposerModifierAnnonceImage4);
+            imageViews.add(4, mImageViewDeposerModifierAnnonceImage5);
+
+            for(int i=0; i<=4 && i<photos_annonce.size(); i++)
+            {
+                if(!photos_annonce.get(i).equals("")){
+                    imageLoader.displayImage(photos_annonce.get(i), imageViews.get(i));
+                }
+            }
+        }
+
+        //Spinner
+        /*for(int i=0; i< SpinnerListType.length; i++)
+        {
+            if(SpinnerListType[i].equals(mAnnonce.getType_location_annonce())){
+                mSpinnerDeposerModifierAnnonceType.setSelection(i);
+            }
+        }
+
+        for(int i=0; i< SpinnerListQuartier.length; i++)
+        {
+            if(SpinnerListQuartier[i].equals(mAnnonce.getQuartier_annonce())){
+                mSpinnerDeposerModifierAnnonceQuartier.setSelection(i);
+            }
+        }
+
+        for(int i=0; i< SpinnerListCategorie.length; i++)
+        {
+            if(SpinnerListCategorie[i].equals(mAnnonce.getCategorie_annonce())){
+                mSpinnerDeposerModifierAnnonceCategorie.setSelection(i);
+            }
+        }
+
+        for(int i=0; i< SpinnerListSousCategorie.length; i++)
+        {
+            if(SpinnerListSousCategorie[i].equals(mAnnonce.getSousCategorie_annonce())){
+                mSpinnerDeposerModifierAnnonceSousCategorie.setSelection(i);
+            }
+        }*/
+
+        //Reste
+        if(mAnnonce.get_isMeuble()){
+            mCheckBoxDeposerModifierAnnonceEstMeuble.setChecked(true);
+        }
+        else {
+            mCheckBoxDeposerModifierAnnonceEstMeuble.setChecked(false);
+        }
+
+        mEditTextDeposerModifierAnnonceNbPieces.setText(Integer.toString(mAnnonce.getNumber_room_annonce()));
+        mEditTextDeposerModifierAnnonceSurface.setText(Integer.toString(mAnnonce.getSurface_annonce()));
+        mEditTextDeposerModifierAnnonceLoyer.setText(Double.toString(mAnnonce.getPrix_annonce()));
     }
 
 }

@@ -48,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/horizontalScrollView"
                 android:layout_marginLeft="-8dp"
-                android:layout_marginRight="-8dp">
+                android:layout_marginRight="-8dp"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -99,14 +100,6 @@
 
                 </LinearLayout>
             </HorizontalScrollView>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:visibility="visible">
-
-            </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
@@ -187,65 +180,140 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/bg_card"
-                android:layout_marginTop="10dp"
-                android:visibility="visible"
-                android:id="@+id/linearLayout2">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Quartier"
-                    android:id="@+id/textView4" />
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:id="@+id/spinnerDeposerModifierAnnonceQuartier"
-                    android:layout_marginTop="3dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/bg_card"
-                android:layout_marginTop="10dp"
-                android:visibility="visible"
-                android:id="@+id/linearLayout3" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Catégorie"
-                    android:id="@+id/textView6" />
-
-                <Spinner
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:id="@+id/spinnerDeposerModifierAnnonceCategorie"
-                    android:layout_marginTop="3dp" />
-            </LinearLayout>
-
             <TableLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="16dp">
 
                 <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/bg_card"
-                    android:gravity="center_horizontal|center_vertical|right"
-                    android:id="@+id/tableRow3">
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Quartier"
+                        android:layout_column="0"
+                        android:layout_weight="1"
+                        android:id="@+id/textView4" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_column="1"
+                        android:layout_gravity="right"
+                        android:id="@+id/spinnerDeposerModifierAnnonceQuartier"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Catégorie"
+                        android:layout_column="0"
+                        android:layout_weight="1"
+                        android:id="@+id/textView6" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_column="1"
+                        android:layout_gravity="right"
+                        android:id="@+id/spinnerDeposerModifierAnnonceCategorie" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Sous-catégorie"
+                        android:layout_column="0"
+                        android:layout_weight="1"
+                        android:id="@+id/textView61" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_column="1"
+                        android:layout_gravity="right"
+                        android:id="@+id/spinnerDeposerModifierAnnonceSousCategorie" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Type"
+                        android:layout_column="0"
+                        android:layout_weight="1"
+                        android:id="@+id/textView611" />
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_column="1"
+                        android:layout_gravity="right"
+                        android:id="@+id/spinnerDeposerModifierAnnonceType" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:id="@+id/tableRow">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Est Meublé"
+                        android:id="@+id/textView222"
+                        android:layout_column="0"
+                        android:layout_weight="1" />
+
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_gravity="right"
+                        android:checked="false"
+                        android:id="@+id/checkBoxDeposerModifierAnnonceEstMeuble" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -261,6 +329,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:ems="10"
+                        android:maxLines="1"
+                        android:maxLength="2"
                         android:layout_gravity="right"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:layout_column="1"
@@ -268,11 +338,54 @@
                 </TableRow>
 
                 <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/bg_card"
-                    android:gravity="center_horizontal|right|center_vertical"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Surface"
+                        android:id="@+id/textView77"
+                        android:layout_column="0"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:layout_gravity="right"
+                        android:gravity="center_vertical">
+
+                        <EditText
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:ems="10"
+                            android:id="@+id/editTextDeposerModifierAnnonceSurface"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:maxLines="1"
+                            android:maxLength="3" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="m²"
+                            android:id="@+id/textView88"/>
+                    </LinearLayout>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -308,9 +421,7 @@
                             android:text="€"
                             android:id="@+id/textView8"/>
                     </LinearLayout>
-
                 </TableRow>
-
             </TableLayout>
 
             <Button
@@ -355,10 +466,9 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:layout_marginTop="3dp"
-                    android:text="v 1.0.0"
+                    android:text=""
                     android:textColor="@color/dark_black_grey"
-                    android:textAllCaps="true"
-                    android:id="@+id/textView10" />
+                    android:id="@+id/textViewVersionApp" />
             </LinearLayout>
 
         </LinearLayout>
