@@ -191,7 +191,17 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
     public void saveData() {
         //Toast.makeText(getApplicationContext(), getString(R.string.save_in_progress), Toast.LENGTH_SHORT).show();
-        UpdateUserTask();
+        String nom = mEditTextLastName.getText().toString();
+        String prenom = mEditTextFirstName.getText().toString();
+
+        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.equals("") && PasswordModifieSHA1.equals(""))
+        {
+            Toast.makeText(getApplicationContext(), "Aucune modification.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        else {
+            UpdateUserTask();
+        }
     }
 
     private void TakePictureIntent() {
