@@ -282,8 +282,7 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
                     Adapter.notifyDataSetChanged();
                 }
                 else {
-                    Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getActivity(), "erreur", Toast.LENGTH_SHORT).show();
                 }
 
                 /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());

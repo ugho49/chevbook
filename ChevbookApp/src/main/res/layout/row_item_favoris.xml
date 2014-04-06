@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/imageViewRowItemFavorisDelete"
-                    android:src="@drawable/ic_action_discard_light"
+                    android:src="@drawable/ic_action_important"
                     android:background="@drawable/button_search_appartement"
                     android:layout_weight="0.3" />
 

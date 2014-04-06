@@ -166,8 +166,16 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
     public void InitData() {
         mProfilePrenomNom.setText(vuser.getFirstName() + " " + vuser.getLastName().toUpperCase());
         mProfileEmail.setText(vuser.getEmail());
-        imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
         mProfileMesAnnonces.setText("0");
+
+        if(vuser.getUrlProfilPicture().length() > 0)
+        {
+            imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
+        }
+        else
+        {
+            mProfilePicture.setImageResource(R.drawable.ic_profile);
+        }
 
         LoadUserTask mLoadUserTask = new LoadUserTask();
         mLoadUserTask.execute((Void) null);
@@ -342,8 +350,17 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
             if (success) {
                 mProfilePrenomNom.setText(vuser.getFirstName() + " " + vuser.getLastName().toUpperCase());
                 mProfileEmail.setText(vuser.getEmail());
-                imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
                 mProfileMesAnnonces.setText("0");
+
+                if(vuser.getUrlProfilPicture().length() > 0)
+                {
+                    imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
+                }
+                else
+                {
+                    mProfilePicture.setImageResource(R.drawable.ic_profile);
+                }
+
             } else {
                 if(!userExist)
                 {

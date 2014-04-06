@@ -147,10 +147,12 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
         if (param == CONST_CREATE) {
             CONSTANTE_EN_PARAM = param;
+            mButtonDeposerModifierAnnonceValider.setText("Déposer l'annonce");
             LoadingSpinnerTask();
         } else if (param == CONST_MODIFIER) {
             CONSTANTE_EN_PARAM = param;
             mAnnonce = (Annonce)getIntent().getSerializableExtra("annonce");
+            mButtonDeposerModifierAnnonceValider.setText("Modifier l'annonce");
             LoadingSpinnerTask();
         }
 
