@@ -33,7 +33,18 @@ import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -333,15 +344,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
-                try {
-                    Thread.sleep(300);
-                    return true;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return false;
-                }
 
-                /*HttpURLConnection urlConnection = null;
+                HttpURLConnection urlConnection = null;
                 StringBuilder sb = new StringBuilder();
 
                 try {
@@ -367,6 +371,46 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                         br.close();
 
                         AfficherJSON = sb.toString();
+
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+
+                        JSONArray jsonArrayCategorie = jsonObject.getJSONArray("categorie");
+                        JSONArray jsonArrayQuartier = jsonObject.getJSONArray("quartier");
+                        JSONArray jsonArraySousCategorie = jsonObject.getJSONArray("sous_categorie");
+                        JSONArray jsonArrayType = jsonObject.getJSONArray("type_location");
+
+                        if(jsonArrayCategorie.length() > 0){
+                            SpinnerListCategorie = new String[jsonArrayCategorie.length()];
+                            for(int i = 0; i < jsonArrayCategorie.length(); i++){
+                                JSONObject Object = jsonArrayCategorie.getJSONObject(i);
+                                SpinnerListCategorie[i] = Object.getString("Libelle_Ctagorie");
+                            }
+                        }
+
+                        if(jsonArrayQuartier.length() > 0){
+                            SpinnerListQuartier = new String[jsonArrayQuartier.length()];
+                            for(int i = 0; i < jsonArrayQuartier.length(); i++){
+                                JSONObject Object = jsonArrayQuartier.getJSONObject(i);
+                                SpinnerListQuartier[i] = Object.getString("Libelle_Quartier");
+                            }
+                        }
+
+                        if(jsonArraySousCategorie.length() > 0){
+                            SpinnerListSousCategorie = new String[jsonArraySousCategorie.length()];
+                            for(int i = 0; i < jsonArraySousCategorie.length(); i++){
+                                JSONObject Object = jsonArraySousCategorie.getJSONObject(i);
+                                SpinnerListSousCategorie[i] = Object.getString("Libelle_Sous_Categorie");
+                            }
+                        }
+
+                        if(jsonArrayType.length() > 0){
+                            SpinnerListType = new String[jsonArrayType.length()];
+                            for(int i = 0; i < jsonArrayType.length(); i++){
+                                JSONObject Object = jsonArrayType.getJSONObject(i);
+                                SpinnerListType[i] = Object.getString("Libelle_Type_Location");
+                            }
+                        }
+
                         return true;
                     }
                     else
@@ -383,11 +427,14 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 } catch (IOException e) {
                     ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
                     return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                    return false; //Erreur JSON
                 } finally {
                     if (urlConnection != null){
                         urlConnection.disconnect();
                     }
-                }*/
+                }
             }
 
             @Override
@@ -408,7 +455,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                     adb.setMessage(AfficherJSON);
                     adb.show();*/
 
-                    //todo : remplirSpinner();
+                    remplirSpinner();
 
                     //Toast.makeText(getApplication(), "Spinners Remplis", Toast.LENGTH_SHORT).show();
 
@@ -471,7 +518,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         }
 
         //Spinner
-        /*for(int i=0; i< SpinnerListType.length; i++)
+        for(int i=0; i< SpinnerListType.length; i++)
         {
             if(SpinnerListType[i].equals(mAnnonce.getType_location_annonce())){
                 mSpinnerDeposerModifierAnnonceType.setSelection(i);
@@ -497,7 +544,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             if(SpinnerListSousCategorie[i].equals(mAnnonce.getSousCategorie_annonce())){
                 mSpinnerDeposerModifierAnnonceSousCategorie.setSelection(i);
             }
-        }*/
+        }
 
         //Reste
         if(mAnnonce.get_isMeuble()){

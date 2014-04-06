@@ -1,8 +1,6 @@
 package com.chevbook.chevbookapp.Fragments;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -279,23 +277,23 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
 
                 if (result)
                 {
-                    Toast.makeText(getActivity(), "reussite", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "reussite", Toast.LENGTH_SHORT).show();
                     Adapter.setList(mAnnonces);
                     Adapter.notifyDataSetChanged();
                 }
                 else {
-                    Toast.makeText(getActivity(), "erreur", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
 
                 }
 
-                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
                 adb.setMessage(AfficherJSON);
-                adb.show();
+                adb.show();*/
 
                 // Notify PullToRefreshLayout that the refresh has finished
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
