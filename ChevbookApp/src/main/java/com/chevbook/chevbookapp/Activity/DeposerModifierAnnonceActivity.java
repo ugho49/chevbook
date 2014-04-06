@@ -198,8 +198,15 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                     break;
 
                 case R.id.buttonDeposerModifierAnnonceValider:
-                    Toast.makeText(getApplicationContext(), "Deposer annonce", Toast.LENGTH_SHORT).show();
-
+                    if(CONSTANTE_EN_PARAM == CONST_MODIFIER)
+                    {
+                        Toast.makeText(getApplicationContext(), "Modifier annonce", Toast.LENGTH_SHORT).show();
+                        UpdateAnnonceTask();
+                    }
+                    else if(CONSTANTE_EN_PARAM == CONST_CREATE){
+                        Toast.makeText(getApplicationContext(), "Créer annonce", Toast.LENGTH_SHORT).show();
+                        CreateAnnonceTask();
+                    }
                     break;
             }
         }
@@ -561,4 +568,69 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         mEditTextDeposerModifierAnnonceLoyer.setText(Double.toString(mAnnonce.getPrix_annonce()));
     }
 
+    public void UpdateAnnonceTask()
+    {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    Thread.sleep(300);
+                    return true;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+
+                if (success) {
+                    //todo
+                }
+                else {
+                    Toast.makeText(getApplication(), "Erreur", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
+    }
+
+    public void CreateAnnonceTask()
+    {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                try {
+                    Thread.sleep(300);
+                    return true;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+
+                if (success) {
+                    //todo
+                }
+                else {
+                    Toast.makeText(getApplication(), "Erreur", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
+    }
 }
