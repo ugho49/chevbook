@@ -9,6 +9,7 @@
     <string name="URL_SERVEUR_LIST_ANNONCES">index.php?action=list</string>
     <string name="URL_SERVEUR_LIST_SPINNER">android/spinner.php?action=list</string>
     <string name="URL_SERVEUR_IDENTIFICATION">compte.php?action=login</string>
+    <string name="URL_SERVEUR_MODIFICATION_USER">compte.php?action=modif</string>
     <string name="URL_SERVEUR_LIST_MY_ANNONCES">compte.php?action=annonces</string>
     <string name="URL_SERVEUR_LIST_MY_FAVORIS">compte.php?action=favoris</string>
 

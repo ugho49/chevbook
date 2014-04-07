@@ -28,8 +28,18 @@ import com.chevbook.chevbookapp.R;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
@@ -69,6 +79,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
     private static ActionBarActivity actionBarActivity;
 
     private String PasswordModifieSHA1 = "";
+    private String PasswordModifieSansSHA1 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,6 +299,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
                             }
                             else {
                                 PasswordModifieSHA1 = getSha1(new_pass);
+                                PasswordModifieSansSHA1 = new_pass;
                                 Toast.makeText(getApplicationContext(), "Votre mot de passe changera lors de l'enregistrement des modifications", Toast.LENGTH_SHORT).show();
                                 dialog.cancel();
                             }
@@ -310,6 +322,9 @@ public class DetailsAccountActivity extends ActionBarActivity {
     {
         new AsyncTask<Void, Void, Boolean>() {
 
+            String ErreurLoginTask = "Erreur";
+            String AfficherJSON = null;
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -319,7 +334,77 @@ public class DetailsAccountActivity extends ActionBarActivity {
             @Override
             protected Boolean doInBackground(Void... params) {
 
-                return true;
+                HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
+                try {
+                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_MODIFICATION_USER));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
+
+                    // Exemple Clé valeur utiles à notre application
+                    jsonParam.put("email", mUser.getEmail());
+                    jsonParam.put("password", mUser.getPasswordSha1());
+                    if(PasswordModifieSHA1.equals("")){
+                        jsonParam.put("passwordMod", mUser.getPasswordSha1());
+                    }
+                    else {
+                        jsonParam.put("passwordMod", PasswordModifieSHA1);
+                    }
+                    jsonParam.put("prenomMod", mEditTextFirstName.getText().toString());
+                    jsonParam.put("nomMod", mEditTextLastName.getText().toString());
+                    jsonParam.put("photoMod", Base64Image);
+
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
+
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        AfficherJSON = sb.toString();
+
+                        return true;
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
+                    return false; //Erreur URL
+                } catch (java.net.SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                    return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                    return false; //Erreur JSON
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
+                }
             }
 
             @Override
@@ -329,11 +414,30 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 if (success) {
                     //todo save data in user
                     Toast.makeText(getApplication(), "Modifications enregistrés", Toast.LENGTH_SHORT).show();
+
+                    mUser.setFirstname(mEditTextFirstName.getText().toString());
+                    mUser.setLastname(mEditTextLastName.getText().toString());
+
+                    if(!PasswordModifieSansSHA1.equals("")){
+                        mUser.setPassword(PasswordModifieSansSHA1);
+                    }
+
+                    //mUser.setUrlProfilPicture(mUrl_image);
+
                     finish();
                 }
                 else {
                     Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                 }
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(DetailsAccountActivity.this);
+                adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                adb.setMessage(AfficherJSON);
+                adb.show();
             }
         }.execute();
     }

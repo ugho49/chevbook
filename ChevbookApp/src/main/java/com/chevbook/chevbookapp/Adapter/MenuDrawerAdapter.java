@@ -100,4 +100,8 @@ public class MenuDrawerAdapter extends BaseAdapter {
 
         return itemView;
     }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 }

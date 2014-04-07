@@ -2,6 +2,7 @@ package com.chevbook.chevbookapp.Class;
 
 import android.os.Environment;
 
+import com.chevbook.chevbookapp.Adapter.MenuDrawerAdapter;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 
@@ -17,6 +18,7 @@ public class Modele {
     private ObjectContainer db;
     private File appDir;
     private static User currentUser = null;
+    private static MenuDrawerAdapter drawerAdapter;
 
     //Getter & Setter
     public User getCurrentUser() {
@@ -24,6 +26,13 @@ public class Modele {
     }
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public MenuDrawerAdapter getDrawerAdapter() {
+        return drawerAdapter;
+    }
+    public void setDrawerAdapter(MenuDrawerAdapter drawerAdapter) {
+        this.drawerAdapter = drawerAdapter;
     }
 
     //Constructeurs

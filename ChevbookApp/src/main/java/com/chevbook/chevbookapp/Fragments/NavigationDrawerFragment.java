@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.chevbook.chevbookapp.Adapter.MenuDrawerAdapter;
+import com.chevbook.chevbookapp.Class.Modele;
 import com.chevbook.chevbookapp.R;
 
 
@@ -41,6 +42,7 @@ public class NavigationDrawerFragment extends Fragment {
     private String[] mNavigationTitles;
     private TypedArray mIcon;
     private MenuDrawerAdapter mMenuDrawerAdapter;
+    private Modele vModele = new Modele();
 
     public NavigationDrawerFragment() {
         //required empty constructor
@@ -80,6 +82,7 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.fragment_navigation_drawer,
                 container, false);
         mMenuDrawerAdapter = new MenuDrawerAdapter(getActivity(),mNavigationTitles,mIcon);
+        vModele.setDrawerAdapter(mMenuDrawerAdapter);
         mDrawerListView.setAdapter(mMenuDrawerAdapter);
 
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,6 +99,10 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         return mDrawerListView;
+    }
+
+    public MenuDrawerAdapter getMenuDrawerAdapter() {
+        return mMenuDrawerAdapter;
     }
 
     public boolean isDrawerOpen() {

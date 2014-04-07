@@ -112,6 +112,10 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    public NavigationDrawerFragment getNavigationDrawerFragment() {
+        return mNavigationDrawerFragment;
+    }
+
     public void onSectionAttached(int number) {
         //todo
     }

@@ -132,26 +132,31 @@ public class User {
     public void setEmail(String email)
     {
         editor.putString(KEY_EMAIL, email);
+        editor.commit();
     }
 
     public void setPassword(String password)
     {
         editor.putString(KEY_PASSWORD_SHA1, getSha1(password));
+        editor.commit();
     }
 
     public void setFirstname(String firstname)
     {
         editor.putString(KEY_FIRSTNAME, firstname);
+        editor.commit();
     }
 
     public void setLastname(String lastname)
     {
         editor.putString(KEY_LASTNAME, lastname);
+        editor.commit();
     }
 
     public void setUrlProfilPicture(String url)
     {
         editor.putString(KEY_URL_PROFIL_PICTURE, url);
+        editor.commit();
     }
 
     //Methode MD5

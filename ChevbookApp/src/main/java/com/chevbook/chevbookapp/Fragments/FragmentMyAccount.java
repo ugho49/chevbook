@@ -244,6 +244,12 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         private String ErreurLoginTask = "Erreur ";
         private Boolean userExist = true;
 
+        String mFirstname; //prenom
+        String mLastname; //nom
+        String mUrl_image;
+        String mPassword;
+        String mEmail;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -295,17 +301,12 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
 
                     if(user_exist) {
 
-                        String mFirstname = jsonObject.getString("Prenom_Personne"); //prenom
-                        String mLastname = jsonObject.getString("Nom_Personne"); //nom
-                        String mUrl_image = jsonObject.getString("Avatar_Personne");
-                        String mPassword = jsonObject.getString("Mdp_Personne");
-                        String mEmail = jsonObject.getString("Email");
+                        mFirstname = jsonObject.getString("Prenom_Personne"); //prenom
+                        mLastname = jsonObject.getString("Nom_Personne"); //nom
+                        mUrl_image = jsonObject.getString("Avatar_Personne");
+                        mPassword = jsonObject.getString("Mdp_Personne");
+                        mEmail = jsonObject.getString("Email");
                         //int mNbAnnonces = jsonObject.getInt("Nb_annonces_Personne");;
-
-                        vuser.setFirstname(mFirstname);
-                        vuser.setLastname(mLastname);
-                        vuser.setUrlProfilPicture(mUrl_image);
-                        vuser.setEmail(mEmail);
 
                         return true;
                     }
@@ -348,18 +349,27 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
             mPullToRefreshLayout.setRefreshComplete();
 
             if (success) {
-                mProfilePrenomNom.setText(vuser.getFirstName() + " " + vuser.getLastName().toUpperCase());
-                mProfileEmail.setText(vuser.getEmail());
+                mProfilePrenomNom.setText(mFirstname + " " + mLastname.toUpperCase());
+                mProfileEmail.setText(mEmail);
                 mProfileMesAnnonces.setText("0");
 
-                if(vuser.getUrlProfilPicture().length() > 0)
+                if(mUrl_image.length() > 0)
                 {
-                    imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
+                    imageLoader.displayImage(mUrl_image, mProfilePicture);
                 }
                 else
                 {
                     mProfilePicture.setImageResource(R.drawable.ic_profile);
                 }
+
+                vuser.setFirstname(mFirstname);
+                vuser.setLastname(mLastname);
+                vuser.setUrlProfilPicture(mUrl_image);
+                vuser.setEmail(mEmail);
+
+                vmodele.setCurrentUser(vuser);
+                vmodele.getDrawerAdapter().setCurrentUser(vuser);
+                vmodele.getDrawerAdapter().notifyDataSetChanged();
 
             } else {
                 if(!userExist)
