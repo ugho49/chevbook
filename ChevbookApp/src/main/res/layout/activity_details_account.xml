@@ -31,28 +31,49 @@
                     android:textSize="16dp"
                     android:layout_weight="1" />
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:gravity="center_vertical|center_horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:id="@+id/btnChangePicture">
+                    android:layout_marginLeft="8dp">
 
-                    <com.chevbook.chevbookapp.CustomsView.CircularImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:src="@drawable/ic_user_drag_drop"
-                        android:id="@+id/imageViewPictureUser" />
-
-                    <TextView
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/choose_my_picture"
-                        android:textColor="#695b62"
-                        android:id="@+id/textView2" />
-                </LinearLayout>
+                        android:gravity="center_vertical|center_horizontal"
+                        android:id="@+id/btnChangePicture">
+
+                        <com.chevbook.chevbookapp.CustomsView.CircularImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/ic_user_drag_drop"
+                            android:id="@+id/imageViewPictureUser" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="@string/choose_my_picture"
+                            android:textColor="#695b62"
+                            android:id="@+id/textView2" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/buttonDeleteImage"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentTop="false"
+                        android:background="@drawable/button_close_red"
+                        android:textColor="#ffffff"
+                        android:text="x"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:layout_alignParentRight="false"
+                        android:layout_marginLeft="80dp" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 

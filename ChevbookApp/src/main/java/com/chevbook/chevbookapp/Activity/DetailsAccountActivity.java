@@ -39,6 +39,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -61,6 +62,8 @@ public class DetailsAccountActivity extends ActionBarActivity {
     Button mButtonChangePassword;
     @InjectView(R.id.buttonSaveModif)
     Button mButtonSaveModif;
+    @InjectView(R.id.buttonDeleteImage)
+    Button mButtonDeleteImage;
 
     //Custom Dialog
     private EditText mCustomDialogActualPass;
@@ -71,7 +74,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 10;
     private static final int REQUEST_SELECT_PICTURE = 100;
 
-    private String Base64Image = "";
+    private String Base64Image = ""; // "" = ne rien faire, "null" = supprimer de la base, "11ebvsrbs46..." = new picture
 
     private User mUser;
 
@@ -101,6 +104,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
         mBtnChangePicture.setOnClickListener(clickListener);
         mButtonChangePassword.setOnClickListener(clickListener);
         mButtonSaveModif.setOnClickListener(clickListener);
+        mButtonDeleteImage.setOnClickListener(clickListener);
 
         initData();
     }
@@ -136,6 +140,25 @@ public class DetailsAccountActivity extends ActionBarActivity {
                     alertDialogChangePassword();
                     break;
 
+                case R.id.buttonDeleteImage:
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(DetailsAccountActivity.this);
+                    alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Base64Image = "null";
+                            mImageViewPictureUser.setImageResource(R.drawable.ic_user_drag_drop);
+                            mButtonDeleteImage.setVisibility(View.GONE);
+                        }
+                    });
+                    alertDialog.setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.setTitle("Supprimer ?");
+                    alertDialog.setMessage("Vous n'aurez plus de photo de profil sur votre compte chevbook.\nVoulez-vous la supprimer quand même ?");
+                    alertDialog.show();
+                    break;
+
                 case R.id.buttonSaveModif:
                     saveData();
                     break;
@@ -149,9 +172,11 @@ public class DetailsAccountActivity extends ActionBarActivity {
         if(!url_image.equals(""))
         {
             imageLoader.displayImage(url_image, mImageViewPictureUser);
+            mButtonDeleteImage.setVisibility(View.VISIBLE);
         }
         else {
             mImageViewPictureUser.setImageResource(R.drawable.ic_user_drag_drop);
+            mButtonDeleteImage.setVisibility(View.GONE);
         }
 
         mEditTextFirstName.setText(mUser.getFirstName());
@@ -165,6 +190,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 mImageViewPictureUser.setImageBitmap(imageBitmap);
+                mButtonDeleteImage.setVisibility(View.VISIBLE);
                 Base64Image = encodeTobase64(imageBitmap);
             }
             else if (requestCode == REQUEST_SELECT_PICTURE) {
@@ -174,6 +200,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 btmapOptions.inSampleSize = 4;
                 Bitmap imageBitmap = BitmapFactory.decodeFile(selectedPath, btmapOptions);
                 mImageViewPictureUser.setImageBitmap(imageBitmap);
+                mButtonDeleteImage.setVisibility(View.VISIBLE);
                 Base64Image = encodeTobase64(imageBitmap);
             }
         }
@@ -231,7 +258,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
     private void SelectPictureIntent() {
         Intent intent = new Intent(
                 Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(
                 Intent.createChooser(intent, "Select File"),
@@ -324,6 +351,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
             String ErreurLoginTask = "Erreur";
             String AfficherJSON = null;
+            String url_img ="";
 
             @Override
             protected void onPreExecute() {
@@ -380,7 +408,21 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
                         AfficherJSON = sb.toString();
 
-                        return true;
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+
+                        int modifOK = jsonObject.getInt("modifEffectue");
+
+                        if(modifOK == 1){
+                            url_img = jsonObject.getString("0");
+
+                            if(url_img.equals("null"))
+                            {
+                                url_img = "";
+                            }
+                            return true;
+                        } else {
+                            return false;
+                        }
 
                     }
                     else
@@ -391,7 +433,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 catch (MalformedURLException e){
                     ErreurLoginTask = ErreurLoginTask + "URL";
                     return false; //Erreur URL
-                } catch (java.net.SocketTimeoutException e) {
+                } catch (SocketTimeoutException e) {
                     ErreurLoginTask = ErreurLoginTask + "Temps trop long";
                     return false; //Temps trop long
                 } catch (IOException e) {
@@ -422,9 +464,14 @@ public class DetailsAccountActivity extends ActionBarActivity {
                         mUser.setPassword(PasswordModifieSansSHA1);
                     }
 
-                    //mUser.setUrlProfilPicture(mUrl_image);
+                    Base64Image = "";
+                    PasswordModifieSHA1 = "";
+                    PasswordModifieSansSHA1 = "";
 
-                    finish();
+                    mUser.setUrlProfilPicture(url_img);
+
+                    //setResult(2);
+                    //finish();
                 }
                 else {
                     Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -487,5 +534,35 @@ public class DetailsAccountActivity extends ActionBarActivity {
         super.onStop();
 
         EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
+    }
+
+    @Override
+    public void finish() {
+        String nom = mEditTextLastName.getText().toString();
+        String prenom = mEditTextFirstName.getText().toString();
+
+        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.equals("") && PasswordModifieSHA1.equals(""))
+        {
+            set_super_finish();
+        }
+        else {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(DetailsAccountActivity.this);
+            alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    set_super_finish();
+                }
+            });
+            alertDialog.setNegativeButton(getString(R.string.btn_no), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alertDialog.setMessage("Des modifications ne sont pas enregistrés !\nVoulez-vous quitter quand même ?");
+            alertDialog.show();
+        }
+    }
+
+    private void set_super_finish(){
+        super.finish();
     }
 }

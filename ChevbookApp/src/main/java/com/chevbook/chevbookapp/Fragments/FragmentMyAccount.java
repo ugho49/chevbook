@@ -64,6 +64,8 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
     private MenuItem menuRefresh;
     private MenuItem menuEdit;
 
+    public static final int CODE_RETOUR = 0;
+
     private ActionBarActivity actionBarActivity;
     private ActionBar actionBar;
     private static ImageLoader imageLoader;
@@ -183,7 +185,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
 
     public void EditProfil() {
         Intent intentDetailAccount = new Intent(getActivity(), DetailsAccountActivity.class);
-        startActivity(intentDetailAccount);
+        startActivityForResult(intentDetailAccount, CODE_RETOUR);
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -214,6 +216,16 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Vérifie que le résultat est OK
+        if(resultCode == 2) {
+            //Toast.makeText(getActivity(), "Modification = recharger page", Toast.LENGTH_SHORT).show();
+            LoadUserTask mLoadUserTask = new LoadUserTask();
+            mLoadUserTask.execute((Void) null);
+        }
     }
 
     public void ShowProgressBar(boolean b) {
