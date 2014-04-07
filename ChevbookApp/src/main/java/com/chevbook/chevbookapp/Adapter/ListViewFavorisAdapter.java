@@ -4,17 +4,31 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Class.Annonce;
+import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -26,6 +40,7 @@ public class ListViewFavorisAdapter extends BaseAdapter {
     private List<Annonce> list;
     private final Context _c;
     private final Activity activity;
+    private User mUser;
 
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -33,6 +48,7 @@ public class ListViewFavorisAdapter extends BaseAdapter {
 
         this.activity = activity;
         this._c = context;
+        this.mUser = new User(context);
         this.list = null;
     }
 
@@ -40,6 +56,7 @@ public class ListViewFavorisAdapter extends BaseAdapter {
 
         this.activity = activity;
         this._c = context;
+        this.mUser = new User(context);
         this.list = listFavoris;
 
     }
@@ -136,13 +153,113 @@ public class ListViewFavorisAdapter extends BaseAdapter {
         return v;
     }
 
-    private void deleteFavoris(int pos)
+    private void deleteFavoris(final int pos)
     {
-        list.remove(pos);
-        this.notifyDataSetChanged();
+        new AsyncTask<Void, Void, Boolean>() {
+
+            String ErreurLoginTask = "Erreur";
+            String AfficherJSON = null;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
+                try {
+                    URL url = new URL(activity.getResources().getString(R.string.URL_SERVEUR) + activity.getResources().getString(R.string.URL_SERVEUR_SET_FAVORIS));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
+
+                    // Exemple Clé valeur utiles à notre application
+                    jsonParam.put("email", mUser.getEmail());
+                    jsonParam.put("password", mUser.getPasswordSha1());
+                    jsonParam.put("id_annonce", list.get(pos).getId_annonce());
+                    jsonParam.put("get_set",0);
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
+
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        //AfficherJSON = sb.toString();
+
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+
+                        Boolean fav = jsonObject.getBoolean("modifReussi");
+
+                        if(fav){
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
+                    return false; //Erreur URL
+                } catch (SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                    return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                    return false; //Erreur JSON
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
+                }
+            }
+
+            @Override
+            protected void onPostExecute(final Boolean success) {
+
+                if (success)
+                {
+                    list.remove(pos);
+                    notifyDataChang();
+                }
+                else {
+                    Toast.makeText(_c, "Erreur de suppression du favoris", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }.execute();
     }
 
     public void setList(List<Annonce> list) {
         this.list = list;
+    }
+
+    public void notifyDataChang() {
+        this.notifyDataSetChanged();
     }
 }

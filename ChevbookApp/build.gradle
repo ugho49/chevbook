@@ -8,8 +8,9 @@ android {
         minSdkVersion 11
         targetSdkVersion 19
         versionCode 1
-        versionName "1.0.11b"
+        versionName "1.0.18b"
     }
+
     buildTypes {
         release {
             runProguard true

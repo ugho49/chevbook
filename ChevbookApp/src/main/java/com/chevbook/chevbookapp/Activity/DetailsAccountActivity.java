@@ -470,21 +470,21 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
                     mUser.setUrlProfilPicture(url_img);
 
-                    //setResult(2);
-                    //finish();
+                    setResult(2);
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                 }
 
-                AlertDialog.Builder adb = new AlertDialog.Builder(DetailsAccountActivity.this);
+                /*AlertDialog.Builder adb = new AlertDialog.Builder(DetailsAccountActivity.this);
                 adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
                 adb.setMessage(AfficherJSON);
-                adb.show();
+                adb.show();*/
             }
         }.execute();
     }

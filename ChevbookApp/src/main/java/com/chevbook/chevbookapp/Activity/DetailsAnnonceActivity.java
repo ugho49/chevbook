@@ -26,6 +26,17 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -330,6 +341,9 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
     {
         new AsyncTask<Void, Void, Boolean>() {
 
+            String ErreurLoginTask = "Erreur";
+            String AfficherJSON = null;
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -339,15 +353,81 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
+                HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
                 try {
-                    // Simulate network access.
-                    Thread.sleep(500);
+                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_SET_FAVORIS));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
 
-                    return true;
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
 
-                } catch (InterruptedException e) {
+                    // Exemple Clé valeur utiles à notre application
+                    jsonParam.put("email", mUser.getEmail());
+                    jsonParam.put("password", mUser.getPasswordSha1());
+                    jsonParam.put("id_annonce", mAnnonce.getId_annonce());
+                    if(is_my_favoris)
+                    {
+                        jsonParam.put("get_set",0);
+                    }
+                    else {
+                        jsonParam.put("get_set",1);
+                    }
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
 
-                    return false;
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        //AfficherJSON = sb.toString();
+
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+
+                        Boolean fav = jsonObject.getBoolean("modifReussi");
+
+                        if(fav){
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
+                    return false; //Erreur URL
+                } catch (SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                    return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                    return false; //Erreur JSON
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
                 }
             }
 
@@ -381,6 +461,9 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
     {
         new AsyncTask<Void, Void, Boolean>() {
 
+            String ErreurLoginTask = "Erreur";
+            String AfficherJSON = null;
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -390,16 +473,74 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
             @Override
             protected Boolean doInBackground(Void... params) {
+                HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
                 try {
-                    // Simulate network access.
-                    Thread.sleep(100);
+                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_IS_FAVORIS));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
 
-                    //return true; // true = is_favoris
-                    return false; // false = is_not_favoris
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
 
-                } catch (InterruptedException e) {
+                    // Exemple Clé valeur utiles à notre application
+                    jsonParam.put("email", mUser.getEmail());
+                    jsonParam.put("password", mUser.getPasswordSha1());
+                    jsonParam.put("id_annonce", mAnnonce.getId_annonce());
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
 
-                    return false;
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        //AfficherJSON = sb.toString();
+
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+
+                        Boolean fav = jsonObject.getBoolean("est_Favoris");
+
+                        if(fav){
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
+                    return false; //Erreur URL
+                } catch (SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                    return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                    return false; //Erreur JSON
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
                 }
             }
 
@@ -411,10 +552,12 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
                 if (success)
                 {
+                    //Toast.makeText(getApplication(), "OK", Toast.LENGTH_SHORT).show();
                     setMenuFavorisFullstar(true);
                     is_my_favoris = true;
                 }
                 else {
+                    //Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                     setMenuFavorisFullstar(false);
                     is_my_favoris = false;
                 }
