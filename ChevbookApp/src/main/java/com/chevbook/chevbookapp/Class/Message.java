@@ -9,18 +9,18 @@ import java.util.Date;
 public class Message implements Serializable {
 
     //Variables
-    private int id_annonce_destinataire;
-    private String email_emetteur;
     private Date date_create_message;
 
-    private String objet_message;
+    private String titre_annonce; //titre annonce
     private String contenu_message;
 
+    private String email_emetteur;
     private String NomPrenom_emetteur;
-    private String url_image_emetteur;
+    private String url_image_emetteur; //avatar
 
+    private int id_annonce_destinataire;
     private String NomPrenom_destinataire;
-    private String url_image_destinataire;
+    private String url_image_destinataire; //avatar
 
     private Boolean est_lu;
 
@@ -29,11 +29,11 @@ public class Message implements Serializable {
         //empty constructor
     }
 
-    public Message(int id_annonce_destinataire, String email_emetteur, Date date_create_message, String objet_message, String contenu_message, String nomPrenom_emetteur, String url_image_emetteur, String nomPrenom_destinataire, String url_image_destinataire) {
+    public Message(int id_annonce_destinataire, String email_emetteur, Date date_create_message, String titre_annonce, String contenu_message, String nomPrenom_emetteur, String url_image_emetteur, String nomPrenom_destinataire, String url_image_destinataire) {
         this.id_annonce_destinataire = id_annonce_destinataire;
         this.email_emetteur = email_emetteur;
         this.date_create_message = date_create_message;
-        this.objet_message = objet_message;
+        this.titre_annonce = titre_annonce;
         this.contenu_message = contenu_message;
         NomPrenom_emetteur = nomPrenom_emetteur;
         this.url_image_emetteur = url_image_emetteur;
@@ -67,12 +67,12 @@ public class Message implements Serializable {
         this.email_emetteur = email_emetteur;
     }
 
-    public String getObjet_message() {
-        return objet_message;
+    public String getTitre_annonce() {
+        return titre_annonce;
     }
 
-    public void setObjet_message(String objet_message) {
-        this.objet_message = objet_message;
+    public void setTitre_annonce(String titre_annonce) {
+        this.titre_annonce = titre_annonce;
     }
 
     public String getContenu_message() {

@@ -328,7 +328,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     public String encodeTobase64(Bitmap image)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        image.compress(Bitmap.CompressFormat.PNG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
         //return "";

@@ -85,12 +85,9 @@ public class ListViewMessageSentAdapter extends BaseAdapter {
 
         //todo
 
-        String url_image = "https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-prn2/t1/1546110_10202187125312508_9323923_n.jpg";
-        imageLoader.displayImage(url_image, holder.picture);
-
         /*imageLoader.displayImage(list.get(position).getUrl_image_emetteur(), holder.picture);
 
-        holder.title.setText(list.get(position).getObjet_message());
+        //holder.title.setText(list.get(position).getObjet_message());
         holder.message.setText(list.get(position).getContenu_message());
         holder.userName.setText(list.get(position).getNomPrenom_emetteur());
 

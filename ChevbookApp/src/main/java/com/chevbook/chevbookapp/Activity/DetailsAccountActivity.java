@@ -2,6 +2,7 @@ package com.chevbook.chevbookapp.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -73,6 +74,8 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 10;
     private static final int REQUEST_SELECT_PICTURE = 100;
+
+    private ProgressDialog progress;
 
     private String Base64Image = ""; // "" = ne rien faire, "null" = supprimer de la base, "11ebvsrbs46..." = new picture
 
@@ -278,7 +281,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
     public String encodeTobase64(Bitmap image)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        image.compress(Bitmap.CompressFormat.PNG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
@@ -356,7 +359,11 @@ public class DetailsAccountActivity extends ActionBarActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                progress = new ProgressDialog(DetailsAccountActivity.this);
+                progress.setMessage("Modifications en cours ...");
+                progress.setCancelable(false);
+                progress.show();
             }
 
             @Override
@@ -451,7 +458,10 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
             @Override
             protected void onPostExecute(Boolean success) {
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+                if (progress.isShowing()) {
+                    progress.dismiss();
+                }
 
                 if (success) {
                     //todo save data in user
