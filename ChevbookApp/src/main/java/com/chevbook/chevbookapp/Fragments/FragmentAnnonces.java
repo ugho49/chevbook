@@ -386,6 +386,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                                 double prix_annonce = jsonObject.getDouble("Prix_Annonce");
                                 String description_annonce = jsonObject.getString("Description_Annonce");
                                 String email_user_annonce = jsonObject.getString("E_mail_Personne_Annonce");
+                                String pseudo_user_annonce = jsonObject.getString("Prenom_Personne") + " " + jsonObject.getString("Nom_Personne").substring(0,1).toUpperCase();
+                                String avatar_user_annonce = jsonObject.getString("Avatar_Personne");
                                 int number_room_annonce = jsonObject.getInt("Nb_Pieces_Annonce");
                                 int surface_annonce = jsonObject.getInt("Surface_Annonce");
                                 String adresse_annonce = jsonObject.getString("Adresse_Annonce");
@@ -393,6 +395,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                                 String sous_categorie_annonce = jsonObject.getString("Libelle_Sous_Categorie");
                                 String type_location_annonce = jsonObject.getString("Libelle_Type_Location");
                                 String quartier_annonce = jsonObject.getString("Libelle_Quartier");
+
 
                                 int b = Integer.parseInt(jsonObject.get("Est_Meuble").toString());
 
@@ -415,6 +418,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                                         prix_annonce,
                                         description_annonce,
                                         email_user_annonce,
+                                        pseudo_user_annonce,
+                                        avatar_user_annonce,
                                         number_room_annonce,
                                         surface_annonce,
                                         adresse_annonce,

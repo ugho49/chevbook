@@ -231,6 +231,8 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                                 double prix_annonce = jsonObject.getDouble("Prix_Annonce");
                                 String description_annonce = jsonObject.getString("Description_Annonce");
                                 String email_user_annonce = jsonObject.getString("E_mail_Personne_Annonce");
+                                String pseudo_user_annonce = jsonObject.getString("Prenom_Personne") + " " + jsonObject.getString("Nom_Personne").substring(0,1).toUpperCase();
+                                String avatar_user_annonce = jsonObject.getString("Avatar_Personne");
                                 int number_room_annonce = jsonObject.getInt("Nb_Pieces_Annonce");
                                 int surface_annonce = jsonObject.getInt("Surface_Annonce");
                                 String adresse_annonce = jsonObject.getString("Adresse_Annonce");
@@ -260,6 +262,8 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                                         prix_annonce,
                                         description_annonce,
                                         email_user_annonce,
+                                        pseudo_user_annonce,
+                                        avatar_user_annonce,
                                         number_room_annonce,
                                         surface_annonce,
                                         adresse_annonce,

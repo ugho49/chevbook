@@ -179,7 +179,7 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
         mTextViewDetailAppartementEstMeuble.setText(est_meuble);
 
-        mTextViewDetailAppartementUser.setText(mAnnonce.getEmail_user_annonce());
+        mTextViewDetailAppartementUser.setText(mAnnonce.getPseudo_user_annonce());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
         String DateAndTime = sdf.format(mAnnonce.getDate_create_annonce());

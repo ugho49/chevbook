@@ -87,6 +87,8 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
 
         //todo
 
+        holder.ico_new.setVisibility(View.VISIBLE);
+
         /*imageLoader.displayImage(list.get(position).getUrl_image_emetteur(), holder.picture);
 
         //holder.title.setText(list.get(position).getObjet_message());
