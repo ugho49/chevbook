@@ -13,9 +13,95 @@
         android:id="@+id/listViewFavoris"
         android:layout_alignParentLeft="false"
         android:layout_alignParentTop="false"
+        android:layout_marginTop="3dp"
         android:dividerHeight="0dp"
         android:divider="@null"
         tools:listitem="@layout/row_item_favoris"
-        android:paddingBottom="5dp"/>
+        android:paddingBottom="5dp"
+        android:visibility="visible" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/bg_card_dark"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFavorisLoading"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentBottom="false"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentStart="false"
+            android:layout_centerInParent="true">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/list_appartement_status_message"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:fontFamily="sans-serif-light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="@string/loading_in_progress" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFavorisNoResult"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="false"
+            android:layout_marginLeft="32dp"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="32dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Vous n'avez aucun favoris !"
+                android:id="@+id/textView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="90"
+                android:textSize="30dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="=("
+                android:id="@+id/textView2" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rafraîchir"
+                android:id="@+id/buttonNoResultRafraichirFavoris"
+                android:layout_marginTop="15dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

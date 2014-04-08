@@ -11,8 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Activity.DetailsAnnonceActivity;
 import com.chevbook.chevbookapp.Adapter.ListViewFavorisAdapter;
@@ -30,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,6 +52,12 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
 
     @InjectView(R.id.listViewFavoris)
     ListView mListViewFavoris;
+    @InjectView(R.id.linearLayoutFavorisLoading)
+    LinearLayout mLinearLayoutFavorisLoading;
+    @InjectView(R.id.buttonNoResultRafraichirFavoris)
+    Button mButtonNoResultRafraichirFavoris;
+    @InjectView(R.id.linearLayoutFavorisNoResult)
+    LinearLayout mLinearLayoutFavorisNoResult;
 
     private PullToRefreshLayout mPullToRefreshLayout;
     private ActionBarActivity actionBarActivity;
@@ -103,6 +111,17 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
         Adapter = new ListViewFavorisAdapter(getActivity(), getActivity().getBaseContext(), mAnnonces);
         mListViewFavoris.setAdapter(Adapter);
 
+        mButtonNoResultRafraichirFavoris.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAnnonces.clear();
+                mAnnonces = new ArrayList<Annonce>();
+
+                listerMyFavoris();
+            }
+        });
+
+
         if(onResume == false) {
             listerMyFavoris();
         }
@@ -154,6 +173,9 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
                 super.onPreExecute();
 
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                mLinearLayoutFavorisNoResult.setVisibility(View.GONE);
+                mListViewFavoris.setVisibility(View.GONE);
+                mLinearLayoutFavorisLoading.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -274,7 +296,7 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
                 catch (MalformedURLException e){
                     ErreurLoginTask = ErreurLoginTask + "URL";
                     return false; //Erreur URL
-                } catch (java.net.SocketTimeoutException e) {
+                } catch (SocketTimeoutException e) {
                     ErreurLoginTask = ErreurLoginTask + "Temps trop long";
                     return false; //Temps trop long
                 } catch (IOException e) {
@@ -293,6 +315,10 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
             @Override
             protected void onPostExecute(final Boolean result) {
 
+                mListViewFavoris.setVisibility(View.VISIBLE);
+                mLinearLayoutFavorisLoading.setVisibility(View.GONE);
+                mLinearLayoutFavorisNoResult.setVisibility(View.GONE);
+
                 if (result)
                 {
                     //Toast.makeText(getActivity(), "reussite", Toast.LENGTH_SHORT).show();
@@ -300,7 +326,9 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
                     Adapter.notifyDataSetChanged();
                 }
                 else {
-                    Toast.makeText(getActivity(), "erreur", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "erreur", Toast.LENGTH_SHORT).show();
+                    mListViewFavoris.setVisibility(View.GONE);
+                    mLinearLayoutFavorisNoResult.setVisibility(View.VISIBLE);
                 }
 
                 /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -312,9 +340,9 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
                 adb.setMessage(AfficherJSON);
                 adb.show();*/
 
-                // Notify PullToRefreshLayout that the refresh has finished
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 mPullToRefreshLayout.setRefreshComplete();
+
             }
         }.execute();
     }

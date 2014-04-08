@@ -14,8 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Activity.DeposerModifierAnnonceActivity;
 import com.chevbook.chevbookapp.Activity.DetailsAnnonceActivity;
@@ -34,6 +35,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,6 +54,12 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
 
     @InjectView(R.id.listViewMyAnnounces)
     ListView mListViewMyAnnounces;
+    @InjectView(R.id.linearLayoutMyAnnoncesLoading)
+    LinearLayout mLinearLayoutMyAnnoncesLoading;
+    @InjectView(R.id.buttonNoResultRafraichirMyAnnonces)
+    Button mButtonNoResultRafraichirMyAnnonces;
+    @InjectView(R.id.linearLayoutMyAnnoncesNoResult)
+    LinearLayout mLinearLayoutMyAnnoncesNoResult;
 
     private PullToRefreshLayout mPullToRefreshLayout;
 
@@ -118,6 +126,16 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
             onResume = false;
         }
 
+        mButtonNoResultRafraichirMyAnnonces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAnnonces.clear();
+                mAnnonces = new ArrayList<Annonce>();
+
+                listerMyAnnonces();
+            }
+        });
+
         return rootView;
     }
 
@@ -170,6 +188,9 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                 super.onPreExecute();
 
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                mLinearLayoutMyAnnoncesNoResult.setVisibility(View.GONE);
+                mListViewMyAnnounces.setVisibility(View.GONE);
+                mLinearLayoutMyAnnoncesLoading.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -290,7 +311,7 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                 catch (MalformedURLException e){
                     ErreurLoginTask = ErreurLoginTask + "URL";
                     return false; //Erreur URL
-                } catch (java.net.SocketTimeoutException e) {
+                } catch (SocketTimeoutException e) {
                     ErreurLoginTask = ErreurLoginTask + "Temps trop long";
                     return false; //Temps trop long
                 } catch (IOException e) {
@@ -309,6 +330,10 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
             @Override
             protected void onPostExecute(final Boolean result) {
 
+                mListViewMyAnnounces.setVisibility(View.VISIBLE);
+                mLinearLayoutMyAnnoncesLoading.setVisibility(View.GONE);
+                mLinearLayoutMyAnnoncesNoResult.setVisibility(View.GONE);
+
                 if (result)
                 {
                     //Toast.makeText(getActivity(), "reussite", Toast.LENGTH_SHORT).show();
@@ -316,8 +341,9 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                     Adapter.notifyDataSetChanged();
                 }
                 else {
-                    Toast.makeText(getActivity(), "erreur", Toast.LENGTH_SHORT).show();
-
+                    //Toast.makeText(getActivity(), "erreur", Toast.LENGTH_SHORT).show();
+                    mListViewMyAnnounces.setVisibility(View.GONE);
+                    mLinearLayoutMyAnnoncesNoResult.setVisibility(View.VISIBLE);
                 }
 
                 /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
