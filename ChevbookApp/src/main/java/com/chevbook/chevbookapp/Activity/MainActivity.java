@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Class.Modele;
 import com.chevbook.chevbookapp.Class.User;
@@ -24,6 +25,7 @@ public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     int nbClick = 0;
+    private static int cptFinish = 0;
 
     final String[] fragments = {
             "com.chevbook.chevbookapp.Fragments.FragmentMyAccount",
@@ -90,6 +92,8 @@ public class MainActivity extends ActionBarActivity
             adb.show();
         }
         else{
+            cptFinish = 0;
+            
             if(nbClick == 0)
             {
                 fragmentManager.beginTransaction()
@@ -167,4 +171,17 @@ public class MainActivity extends ActionBarActivity
 
         EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
+
+
+    @Override
+    public void finish() {
+        if(cptFinish < 1){
+            Toast.makeText(getApplicationContext(), "Appuyer encore une fois pour quitter", Toast.LENGTH_SHORT).show();
+            cptFinish++;
+        }
+        else {
+            super.finish();
+        }
+    }
+
 }

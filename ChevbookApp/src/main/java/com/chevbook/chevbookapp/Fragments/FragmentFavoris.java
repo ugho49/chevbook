@@ -58,6 +58,8 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
     private Boolean onResume = false;
     private User mUser;
 
+    public static final int CODE_RETOUR = 0;
+
     private ArrayList<Annonce> mAnnonces = new ArrayList<Annonce>();
 
     public FragmentFavoris() {
@@ -93,7 +95,7 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
                 Intent intentDetailAppartement = new Intent(getActivity(), DetailsAnnonceActivity.class);
                 intentDetailAppartement.putExtra("annonce", mAnnonces.get(position));
                 intentDetailAppartement.putExtra("is_favoris", true);
-                startActivity(intentDetailAppartement);
+                startActivityForResult(intentDetailAppartement, CODE_RETOUR);
             }
 
         });
@@ -125,6 +127,18 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
         mAnnonces = new ArrayList<Annonce>();
 
         listerMyFavoris();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Vérifie que le résultat est OK
+        if(resultCode == 2) {
+            mAnnonces.clear();
+            mAnnonces = new ArrayList<Annonce>();
+
+            listerMyFavoris();
+            //Toast.makeText(getActivity(), "recharger", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void listerMyFavoris()

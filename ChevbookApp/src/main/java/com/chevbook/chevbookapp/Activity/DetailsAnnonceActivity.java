@@ -375,10 +375,10 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
                     jsonParam.put("id_annonce", mAnnonce.getId_annonce());
                     if(is_my_favoris)
                     {
-                        jsonParam.put("get_set",0);
+                        jsonParam.put("get_set",0); //delete favoris
                     }
                     else {
-                        jsonParam.put("get_set",1);
+                        jsonParam.put("get_set",1); //add favoris
                     }
                     out.write(jsonParam.toString());
                     out.flush();
@@ -564,5 +564,13 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
             }
         }.execute();
+    }
+
+    @Override
+    public void finish() {
+        if(!is_my_favoris){
+            setResult(2);
+        }
+        super.finish();
     }
 }
