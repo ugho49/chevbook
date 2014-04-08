@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity
         }
         else{
             cptFinish = 0;
-            
+
             if(nbClick == 0)
             {
                 fragmentManager.beginTransaction()
