@@ -9,13 +9,17 @@
     <!--<string name="URL_SERVEUR_LIST_ANNONCES">index.php?action=list</string>-->
     <string name="URL_SERVEUR_LIST_ANNONCES">annonces.php?action=list</string>
     <string name="URL_SERVEUR_LIST_SPINNER">android/spinner.php?action=list</string>
-    <!--<string name="URL_SERVEUR_IDENTIFICATION">compte.php?action=login</string>-->
-    <string name="URL_SERVEUR_IDENTIFICATION">index.php?action=login</string>
+    <string name="URL_SERVEUR_IDENTIFICATION">compte.php?action=login</string>
     <string name="URL_SERVEUR_MODIFICATION_USER">compte.php?action=modif</string>
+    <string name="URL_SERVEUR_CREATE_ANNONCES">compte.php?action=depose</string>
+    <string name="URL_SERVEUR_UPDATE_ANNONCES">compte.php?action=annonces</string>
     <string name="URL_SERVEUR_LIST_MY_ANNONCES">compte.php?action=annonces</string>
     <string name="URL_SERVEUR_DELETE_ANNONCE">compte.php?action=retirer</string>
     <string name="URL_SERVEUR_LIST_MY_FAVORIS">compte.php?action=favoris</string>
     <string name="URL_SERVEUR_IS_FAVORIS">compte.php?action=is_Favoris</string>
     <string name="URL_SERVEUR_SET_FAVORIS">compte.php?action=set_favoris</string>
+    <string name="URL_SERVEUR_ECRIRE_MESSAGE">compte.php?action=ecrire</string>
+    <string name="URL_SERVEUR_MESSAGES_ENVOYEES">compte.php?action=lireEnvoye</string>
+    <string name="URL_SERVEUR_MESSAGES_RECU">compte.php?action=lireRecu</string>
 
 </resources>
