@@ -407,7 +407,7 @@
                         <EditText
                             android:layout_width="80dp"
                             android:layout_height="wrap_content"
-                            android:inputType="number"
+                            android:inputType="number|numberDecimal"
                             android:ems="10"
                             android:id="@+id/editTextDeposerModifierAnnonceLoyer"
                             android:textAppearance="?android:attr/textAppearanceSmall"
