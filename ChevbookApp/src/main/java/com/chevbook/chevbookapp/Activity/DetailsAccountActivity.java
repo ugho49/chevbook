@@ -74,6 +74,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 10;
     private static final int REQUEST_SELECT_PICTURE = 100;
+    private static final int REQUEST_CROP_PICTURE = 1000;
 
     private ProgressDialog progress;
 
