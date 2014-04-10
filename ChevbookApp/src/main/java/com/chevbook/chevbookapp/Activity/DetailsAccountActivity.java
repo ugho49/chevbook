@@ -21,6 +21,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Class.User;
@@ -65,6 +66,8 @@ public class DetailsAccountActivity extends ActionBarActivity {
     Button mButtonSaveModif;
     @InjectView(R.id.buttonDeleteImage)
     Button mButtonDeleteImage;
+    @InjectView(R.id.progressBarLoadImage)
+    ProgressBar mProgressBarLoadImage;
 
     //Custom Dialog
     private EditText mCustomDialogActualPass;

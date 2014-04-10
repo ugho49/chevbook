@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Vous pouvez ajouter jusqu'à 5 photos à votre annonce ! (Cliquer sur un rectangle pour en ajouter une)"
+                android:text="Vous pouvez ajouter jusqu'à 5 photos à votre annonce ! (Cliquer sur un rectangle pour en ajouter une) *Minimum une photo"
                 android:id="@+id/textView"
                 android:layout_marginTop="15dp"
                 android:fontFamily="sans-serif-light"
@@ -56,47 +56,151 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                    <ImageView
-                        android:layout_width="230dp"
-                        android:layout_height="160dp"
-                        android:src="@drawable/ic_image"
-                        android:id="@+id/imageViewDeposerModifierAnnonceImage1"
-                        android:background="@drawable/dashed_border"
-                        android:visibility="visible"
-                        android:layout_marginLeft="8dp" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp">
 
-                    <ImageView
-                        android:layout_width="230dp"
-                        android:layout_height="160dp"
-                        android:src="@drawable/ic_image"
-                        android:id="@+id/imageViewDeposerModifierAnnonceImage2"
-                        android:background="@drawable/dashed_border"
-                        android:layout_marginLeft="5dp" />
+                        <ImageView
+                            android:layout_width="230dp"
+                            android:layout_height="160dp"
+                            android:src="@drawable/ic_image"
+                            android:id="@+id/imageViewDeposerModifierAnnonceImage1"
+                            android:background="@drawable/dashed_border"
+                            android:visibility="visible"/>
 
-                    <ImageView
-                        android:layout_width="230dp"
-                        android:layout_height="160dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/dashed_border"
+                        <Button
+                            android:id="@+id/buttonDeleteImage1"
+                            android:layout_width="33dp"
+                            android:layout_height="33dp"
+                            android:layout_alignParentTop="false"
+                            android:background="@drawable/button_close_red"
+                            android:textColor="#ffffff"
+                            android:text="X"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:layout_alignParentRight="false"
+                            android:paddingTop="2dp"
+                            android:layout_marginLeft="210dp"
+                            android:layout_marginRight="5dp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp">
+
+                        <ImageView
+                            android:layout_width="230dp"
+                            android:layout_height="160dp"
+                            android:src="@drawable/ic_image"
+                            android:id="@+id/imageViewDeposerModifierAnnonceImage2"
+                            android:background="@drawable/dashed_border"
+                            android:visibility="visible"/>
+
+                        <Button
+                            android:id="@+id/buttonDeleteImage2"
+                            android:layout_width="33dp"
+                            android:layout_height="33dp"
+                            android:layout_alignParentTop="false"
+                            android:background="@drawable/button_close_red"
+                            android:textColor="#ffffff"
+                            android:text="X"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:layout_alignParentRight="false"
+                            android:paddingTop="2dp"
+                            android:layout_marginLeft="210dp"
+                            android:layout_marginRight="5dp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp">
+
+                        <ImageView
+                            android:layout_width="230dp"
+                            android:layout_height="160dp"
+                            android:src="@drawable/ic_image"
+                            android:id="@+id/imageViewDeposerModifierAnnonceImage3"
+                            android:background="@drawable/dashed_border"
+                            android:visibility="visible"/>
+
+                        <Button
+                            android:id="@+id/buttonDeleteImage3"
+                            android:layout_width="33dp"
+                            android:layout_height="33dp"
+                            android:layout_alignParentTop="false"
+                            android:background="@drawable/button_close_red"
+                            android:textColor="#ffffff"
+                            android:text="X"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:layout_alignParentRight="false"
+                            android:paddingTop="2dp"
+                            android:layout_marginLeft="210dp"
+                            android:layout_marginRight="5dp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp">
+
+                        <ImageView
+                            android:layout_width="230dp"
+                            android:layout_height="160dp"
+                            android:src="@drawable/ic_image"
+                            android:id="@+id/imageViewDeposerModifierAnnonceImage4"
+                            android:background="@drawable/dashed_border"
+                            android:visibility="visible"/>
+
+                        <Button
+                            android:id="@+id/buttonDeleteImage4"
+                            android:layout_width="33dp"
+                            android:layout_height="33dp"
+                            android:layout_alignParentTop="false"
+                            android:background="@drawable/button_close_red"
+                            android:textColor="#ffffff"
+                            android:text="X"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:layout_alignParentRight="false"
+                            android:paddingTop="2dp"
+                            android:layout_marginLeft="210dp"
+                            android:layout_marginRight="5dp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:id="@+id/imageViewDeposerModifierAnnonceImage3" />
+                        android:layout_marginRight="8dp">
 
-                    <ImageView
-                        android:layout_width="230dp"
-                        android:layout_height="160dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/dashed_border"
-                        android:layout_marginLeft="5dp"
-                        android:id="@+id/imageViewDeposerModifierAnnonceImage4" />
+                        <ImageView
+                            android:layout_width="230dp"
+                            android:layout_height="160dp"
+                            android:src="@drawable/ic_image"
+                            android:id="@+id/imageViewDeposerModifierAnnonceImage5"
+                            android:background="@drawable/dashed_border"
+                            android:visibility="visible"/>
 
-                    <ImageView
-                        android:layout_width="230dp"
-                        android:layout_height="160dp"
-                        android:src="@drawable/ic_image"
-                        android:background="@drawable/dashed_border"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="8dp"
-                        android:id="@+id/imageViewDeposerModifierAnnonceImage5" />
+                        <Button
+                            android:id="@+id/buttonDeleteImage5"
+                            android:layout_width="33dp"
+                            android:layout_height="33dp"
+                            android:layout_alignParentTop="false"
+                            android:background="@drawable/button_close_red"
+                            android:textColor="#ffffff"
+                            android:text="X"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:layout_alignParentRight="false"
+                            android:paddingTop="2dp"
+                            android:layout_marginLeft="210dp"
+                            android:layout_marginRight="5dp"/>
+                    </RelativeLayout>
 
                 </LinearLayout>
             </HorizontalScrollView>

@@ -68,6 +68,16 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     ImageView mImageViewDeposerModifierAnnonceImage4;
     @InjectView(R.id.imageViewDeposerModifierAnnonceImage5)
     ImageView mImageViewDeposerModifierAnnonceImage5;
+    @InjectView(R.id.buttonDeleteImage1)
+    Button mButtonDeleteImage1;
+    @InjectView(R.id.buttonDeleteImage2)
+    Button mButtonDeleteImage2;
+    @InjectView(R.id.buttonDeleteImage3)
+    Button mButtonDeleteImage3;
+    @InjectView(R.id.buttonDeleteImage4)
+    Button mButtonDeleteImage4;
+    @InjectView(R.id.buttonDeleteImage5)
+    Button mButtonDeleteImage5;
     @InjectView(R.id.editTextDeposerModifierAnnonceAdresse)
     EditText mEditTextDeposerModifierAnnonceAdresse;
     @InjectView(R.id.editTextDeposerModifierAnnonceCP)
@@ -100,7 +110,6 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
     private static final int CONST_CREATE = 0;
     private static final int CONST_MODIFIER = 1;
-
     private int CONSTANTE_EN_PARAM;
 
     private static String [] SpinnerListQuartier;
@@ -171,6 +180,13 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         mImageViewDeposerModifierAnnonceImage3.setOnClickListener(clickListener);
         mImageViewDeposerModifierAnnonceImage4.setOnClickListener(clickListener);
         mImageViewDeposerModifierAnnonceImage5.setOnClickListener(clickListener);
+
+        mButtonDeleteImage1.setOnClickListener(clickListener);
+        mButtonDeleteImage2.setOnClickListener(clickListener);
+        mButtonDeleteImage3.setOnClickListener(clickListener);
+        mButtonDeleteImage4.setOnClickListener(clickListener);
+        mButtonDeleteImage5.setOnClickListener(clickListener);
+
         mButtonDeposerModifierAnnonceValider.setOnClickListener(clickListener);
     }
 
@@ -207,6 +223,26 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                     showDialogForPicture();
                     break;
 
+                case R.id.buttonDeleteImage1:
+                    deleteImage(1);
+                    break;
+
+                case R.id.buttonDeleteImage2:
+                    deleteImage(2);
+                    break;
+
+                case R.id.buttonDeleteImage3:
+                    deleteImage(3);
+                    break;
+
+                case R.id.buttonDeleteImage4:
+                    deleteImage(4);
+                    break;
+
+                case R.id.buttonDeleteImage5:
+                    deleteImage(5);
+                    break;
+
                 case R.id.buttonDeposerModifierAnnonceValider:
                     if(CONSTANTE_EN_PARAM == CONST_MODIFIER)
                     {
@@ -214,24 +250,10 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                         UpdateAnnonceTask();
                     }
                     else if(CONSTANTE_EN_PARAM == CONST_CREATE){
-
                         if(verifDepotAnnonce())
                         {
                             CreateAnnonceTask();
                         }
-                        else {
-                            //Toast.makeText(getApplicationContext(), "Des éléments manque dans le formula", Toast.LENGTH_SHORT).show();
-                            AlertDialog.Builder adb = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
-                            adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
-                            adb.setTitle("Erreur");
-                            adb.setMessage("Des éléments manquent dans le formulaire ou sont mal remplis.\n\nIl est OBLIGATOIRE de mettre une photo minimum pour déposer l'annonce.");
-                            adb.show();
-                        }
-
                     }
                     break;
             }
@@ -240,7 +262,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
     private boolean verifDepotAnnonce()
     {
-        Boolean vretour = false;
+        Boolean vretour = true;
+        View focusView = null;
 
         int cpt = 0;
         for(int i=0; i<=4; i++){
@@ -249,20 +272,121 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             }
         }
 
-        if(cpt > 0
-                && !mTextViewDeposerModifierAnnonceTitre.getText().toString().equals("")
-                && !mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals("")
-                && !mEditTextDeposerModifierAnnonceCP.getText().toString().equals("")
-                && !mEditTextDeposerModifierAnnonceVille.getText().toString().equals("")
-                && !mEditTextDeposerModifierAnnonceDescription.getText().toString().equals("")
-                && !mEditTextDeposerModifierAnnonceNbPieces.getText().toString().equals("")
-                && !mEditTextDeposerModifierAnnonceSurface.getText().toString().equals("")
-                && !mEditTextDeposerModifierAnnonceLoyer.getText().toString().equals("")){
+        // Reset errors.
+        mTextViewDeposerModifierAnnonceTitre.setError(null);
+        mEditTextDeposerModifierAnnonceAdresse.setError(null);
+        mEditTextDeposerModifierAnnonceCP.setError(null);
+        mEditTextDeposerModifierAnnonceVille.setError(null);
+        mEditTextDeposerModifierAnnonceDescription.setError(null);
+        mEditTextDeposerModifierAnnonceNbPieces.setError(null);
+        mEditTextDeposerModifierAnnonceSurface.setError(null);
+        mEditTextDeposerModifierAnnonceLoyer.setError(null);
 
-            return true;
+        if(cpt <= 0){
+            Toast.makeText(getApplicationContext(), "Il est OBLIGATOIRE de mettre une photo minimum pour déposer l'annonce.", Toast.LENGTH_SHORT).show();
+            vretour = false;
+        }
+
+        if(mEditTextDeposerModifierAnnonceLoyer.getText().toString().equals("")){
+            mEditTextDeposerModifierAnnonceLoyer.setError("Champs requis");
+            focusView = mEditTextDeposerModifierAnnonceLoyer;
+            vretour = false;
+        }
+
+        if(mEditTextDeposerModifierAnnonceSurface.getText().toString().equals("")){
+            mEditTextDeposerModifierAnnonceSurface.setError("Champs requis");
+            focusView = mEditTextDeposerModifierAnnonceSurface;
+            vretour = false;
+        }
+
+        if(mEditTextDeposerModifierAnnonceNbPieces.getText().toString().equals("")){
+            mEditTextDeposerModifierAnnonceNbPieces.setError("Champs requis");
+            focusView = mEditTextDeposerModifierAnnonceNbPieces;
+            vretour = false;
+        }
+
+        if(mEditTextDeposerModifierAnnonceDescription.getText().toString().equals("")){
+            mEditTextDeposerModifierAnnonceDescription.setError("Champs requis");
+            focusView = mEditTextDeposerModifierAnnonceDescription;
+            vretour = false;
+        }
+
+        if(mEditTextDeposerModifierAnnonceVille.getText().toString().equals("")){
+            mEditTextDeposerModifierAnnonceVille.setError("Champs requis");
+            focusView = mEditTextDeposerModifierAnnonceVille;
+            vretour = false;
+        }
+
+        if(mEditTextDeposerModifierAnnonceCP.getText().toString().equals("")){
+            mEditTextDeposerModifierAnnonceCP.setError("Champs requis");
+            focusView = mEditTextDeposerModifierAnnonceCP;
+            vretour = false;
+        }
+
+        if(mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals("")){
+            mEditTextDeposerModifierAnnonceAdresse.setError("Champs requis");
+            focusView = mEditTextDeposerModifierAnnonceAdresse;
+            vretour = false;
+        }
+
+        if(mTextViewDeposerModifierAnnonceTitre.getText().toString().equals("")){
+            mTextViewDeposerModifierAnnonceTitre.setError("Champs requis");
+            focusView = mTextViewDeposerModifierAnnonceTitre;
+            vretour = false;
+        }
+
+        if(!vretour){
+            if (focusView != null) {
+                focusView.requestFocus();
+            }
         }
 
         return vretour;
+    }
+
+    private void deleteImage(final int pos){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
+        alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Base64Image[pos - 1] = "";
+
+                switch(pos)
+                {
+                    case 1:
+                        mImageViewDeposerModifierAnnonceImage1.setImageResource(R.drawable.ic_image);
+                        mButtonDeleteImage1.setVisibility(View.GONE);
+                        break;
+
+                    case 2:
+                        mImageViewDeposerModifierAnnonceImage2.setImageResource(R.drawable.ic_image);
+                        mButtonDeleteImage2.setVisibility(View.GONE);
+                        break;
+
+                    case 3:
+                        mImageViewDeposerModifierAnnonceImage3.setImageResource(R.drawable.ic_image);
+                        mButtonDeleteImage3.setVisibility(View.GONE);
+                        break;
+
+                    case 4:
+                        mImageViewDeposerModifierAnnonceImage4.setImageResource(R.drawable.ic_image);
+                        mButtonDeleteImage4.setVisibility(View.GONE);
+                        break;
+
+                    case 5:
+                        mImageViewDeposerModifierAnnonceImage5.setImageResource(R.drawable.ic_image);
+                        mButtonDeleteImage5.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+        alertDialog.setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.setTitle("Supprimer ?");
+        alertDialog.setMessage("Voulez-vous supprimer cette photo ?");
+        alertDialog.show();
     }
 
     @Override
@@ -296,7 +420,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 Uri selectedImageUri = data.getData();
                 String selectedPath = getPath(selectedImageUri, DeposerModifierAnnonceActivity.this);
                 BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
-                btmapOptions.inSampleSize = 4;
+                btmapOptions.inSampleSize = 3;
                 Bitmap imageBitmap = BitmapFactory.decodeFile(selectedPath, btmapOptions);
                 setBitmapAndEncodeInBase64(imageBitmap, ImageSelected);
             }
@@ -320,35 +444,70 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         adb.show();
     }
 
-    private void setBitmapAndEncodeInBase64(Bitmap bm, int number)
+    private void setBitmapAndEncodeInBase64(final Bitmap bm, final int number)
     {
-        switch(number)
-        {
-            case 1:
-                mImageViewDeposerModifierAnnonceImage1.setImageBitmap(bm);
-                Base64Image[0] = encodeTobase64(bm);
-                break;
+        new AsyncTask<Void, Void, Boolean>() {
 
-            case 2:
-                mImageViewDeposerModifierAnnonceImage2.setImageBitmap(bm);
-                Base64Image[1] = encodeTobase64(bm);
-                break;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
 
-            case 3:
-                mImageViewDeposerModifierAnnonceImage3.setImageBitmap(bm);
-                Base64Image[2] = encodeTobase64(bm);
-                break;
+                progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
+                progress.setMessage("Upload de la photo ...");
+                progress.setCancelable(false);
+                progress.show();
+            }
 
-            case 4:
-                mImageViewDeposerModifierAnnonceImage4.setImageBitmap(bm);
-                Base64Image[3] = encodeTobase64(bm);
-                break;
+            @Override
+            protected Boolean doInBackground(Void... params) {
 
-            case 5:
-                mImageViewDeposerModifierAnnonceImage5.setImageBitmap(bm);
-                Base64Image[4] = encodeTobase64(bm);
-                break;
-        }
+                Base64Image[number - 1] = encodeTobase64(bm);
+
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+
+                if (progress.isShowing()) {
+                    progress.dismiss();
+                }
+
+                if (success) {
+                    switch(number)
+                    {
+                        case 1:
+                            mImageViewDeposerModifierAnnonceImage1.setImageBitmap(bm);
+                            mButtonDeleteImage1.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 2:
+                            mImageViewDeposerModifierAnnonceImage2.setImageBitmap(bm);
+                            mButtonDeleteImage2.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 3:
+                            mImageViewDeposerModifierAnnonceImage3.setImageBitmap(bm);
+                            mButtonDeleteImage3.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 4:
+                            mImageViewDeposerModifierAnnonceImage4.setImageBitmap(bm);
+                            mButtonDeleteImage4.setVisibility(View.VISIBLE);
+                            break;
+
+                        case 5:
+                            mImageViewDeposerModifierAnnonceImage5.setImageBitmap(bm);
+                            mButtonDeleteImage5.setVisibility(View.VISIBLE);
+                            break;
+                    }
+                }
+                else {
+                    Toast.makeText(getApplication(), "Erreur de l'upload de l'image", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
+
     }
 
     private void TakePictureIntent() {
@@ -483,7 +642,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 catch (MalformedURLException e){
                     ErreurLoginTask = ErreurLoginTask + "URL";
                     return false; //Erreur URL
-                } catch (java.net.SocketTimeoutException e) {
+                } catch (SocketTimeoutException e) {
                     ErreurLoginTask = ErreurLoginTask + "Temps trop long";
                     return false; //Temps trop long
                 } catch (IOException e) {
@@ -571,10 +730,18 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             imageViews.add(3, mImageViewDeposerModifierAnnonceImage4);
             imageViews.add(4, mImageViewDeposerModifierAnnonceImage5);
 
+            ArrayList<Button> buttons = new ArrayList<Button>();
+            buttons.add(0, mButtonDeleteImage1);
+            buttons.add(1, mButtonDeleteImage2);
+            buttons.add(2, mButtonDeleteImage3);
+            buttons.add(3, mButtonDeleteImage4);
+            buttons.add(4, mButtonDeleteImage5);
+
             for(int i=0; i<=4 && i<photos_annonce.size(); i++)
             {
                 if(!photos_annonce.get(i).equals("")){
                     imageLoader.displayImage(photos_annonce.get(i), imageViews.get(i));
+                    buttons.get(i).setVisibility(View.VISIBLE);
                 }
             }
         }
