@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -48,6 +50,12 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
 
     @InjectView(R.id.listViewMessageReceived)
     ListView mListViewMessageReceived;
+    @InjectView(R.id.linearLayoutMessagesReceivedLoading)
+    LinearLayout mLinearLayoutMessagesReceivedLoading;
+    @InjectView(R.id.buttonNoResultRafraichirMessagesReceived)
+    Button mButtonNoResultRafraichirMessagesReceived;
+    @InjectView(R.id.linearLayoutMessagesReceivedNoResult)
+    LinearLayout mLinearLayoutMessagesReceivedNoResult;
 
     private CustomDialogMessage dialogMessage;
     private ListViewMessageReceivedAdapter Adapter;
@@ -100,6 +108,16 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
 
         });
 
+        mButtonNoResultRafraichirMessagesReceived.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMessages.clear();
+                mMessages = new ArrayList<Message>();
+
+                listerMessagesReceived();
+            }
+        });
+
         if(onResume == false) {
             listerMessagesReceived();
         }
@@ -137,6 +155,9 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
                 super.onPreExecute();
 
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                mLinearLayoutMessagesReceivedNoResult.setVisibility(View.GONE);
+                mListViewMessageReceived.setVisibility(View.GONE);
+                mLinearLayoutMessagesReceivedLoading.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -206,7 +227,9 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
             @Override
             protected void onPostExecute(final Boolean result) {
 
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+                mListViewMessageReceived.setVisibility(View.VISIBLE);
+                mLinearLayoutMessagesReceivedLoading.setVisibility(View.GONE);
+                mLinearLayoutMessagesReceivedNoResult.setVisibility(View.GONE);
 
                 if (result)
                 {
@@ -215,6 +238,9 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
                 }
                 else {
                     Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
+
+                    mListViewMessageReceived.setVisibility(View.GONE);
+                    mLinearLayoutMessagesReceivedNoResult.setVisibility(View.VISIBLE);
                 }
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -226,6 +252,7 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
                 adb.setMessage(AfficherJSON);
                 adb.show();
 
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 mPullToRefreshLayout.setRefreshComplete();
 
             }

@@ -12,6 +12,7 @@ import com.chevbook.chevbookapp.Class.Message;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -85,13 +86,9 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
 
-        //todo
+        imageLoader.displayImage(list.get(position).getUrl_image_emetteur(), holder.picture);
 
-        holder.ico_new.setVisibility(View.VISIBLE);
-
-        /*imageLoader.displayImage(list.get(position).getUrl_image_emetteur(), holder.picture);
-
-        //holder.title.setText(list.get(position).getObjet_message());
+        holder.title.setText(list.get(position).getTitre_annonce());
         holder.message.setText(list.get(position).getContenu_message());
         holder.userName.setText(list.get(position).getNomPrenom_emetteur());
 
@@ -106,7 +103,7 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
         }
         else {
             holder.ico_new.setVisibility(View.VISIBLE);
-        }*/
+        }
 
         return v;
     }

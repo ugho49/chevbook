@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -48,6 +50,12 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
 
     @InjectView(R.id.listViewMessageSent)
     ListView mListViewMessageSent;
+    @InjectView(R.id.linearLayoutMessagesSentLoading)
+    LinearLayout mLinearLayoutMessagesSentLoading;
+    @InjectView(R.id.buttonNoResultRafraichirMessagesSent)
+    Button mButtonNoResultRafraichirMessagesSent;
+    @InjectView(R.id.linearLayoutMessagesSentNoResult)
+    LinearLayout mLinearLayoutMessagesSentNoResult;
 
     private ListViewMessageSentAdapter Adapter;
     private CustomDialogMessage dialogMessage;
@@ -100,6 +108,16 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
 
         });
 
+        mButtonNoResultRafraichirMessagesSent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMessages.clear();
+                mMessages = new ArrayList<Message>();
+
+                listerMessagesSent();
+            }
+        });
+
         if(onResume == false) {
             listerMessagesSent();
         }
@@ -137,6 +155,9 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
                 super.onPreExecute();
 
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                mLinearLayoutMessagesSentNoResult.setVisibility(View.GONE);
+                mListViewMessageSent.setVisibility(View.GONE);
+                mLinearLayoutMessagesSentLoading.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -206,7 +227,9 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
             @Override
             protected void onPostExecute(final Boolean result) {
 
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+                mListViewMessageSent.setVisibility(View.VISIBLE);
+                mLinearLayoutMessagesSentLoading.setVisibility(View.GONE);
+                mLinearLayoutMessagesSentNoResult.setVisibility(View.GONE);
 
                 if (result)
                 {
@@ -215,6 +238,9 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
                 }
                 else {
                     Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
+
+                    mListViewMessageSent.setVisibility(View.GONE);
+                    mLinearLayoutMessagesSentNoResult.setVisibility(View.VISIBLE);
                 }
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -226,6 +252,7 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
                 adb.setMessage(AfficherJSON);
                 adb.show();
 
+                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 mPullToRefreshLayout.setRefreshComplete();
 
             }

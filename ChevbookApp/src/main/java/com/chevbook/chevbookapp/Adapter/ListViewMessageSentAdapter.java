@@ -12,6 +12,7 @@ import com.chevbook.chevbookapp.Class.Message;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -83,18 +84,16 @@ public class ListViewMessageSentAdapter extends BaseAdapter {
             holder = (ViewHolder) v.getTag();
         }
 
-        //todo
+        imageLoader.displayImage(list.get(position).getUrl_image_destinataire(), holder.picture);
 
-        /*imageLoader.displayImage(list.get(position).getUrl_image_emetteur(), holder.picture);
-
-        //holder.title.setText(list.get(position).getObjet_message());
+        holder.title.setText(list.get(position).getTitre_annonce());
         holder.message.setText(list.get(position).getContenu_message());
-        holder.userName.setText(list.get(position).getNomPrenom_emetteur());
+        holder.userName.setText(list.get(position).getNomPrenom_destinataire());
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
         String DateAndTime = sdf.format(list.get(position).getDate_create_message());
 
-        holder.date.setText(DateAndTime);*/
+        holder.date.setText(DateAndTime);
 
         return v;
     }
