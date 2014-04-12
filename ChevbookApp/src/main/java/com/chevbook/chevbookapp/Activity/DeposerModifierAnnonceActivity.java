@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -143,7 +144,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        getSupportActionBar().setTitle(mNavigationTitles[2]);
+        getSupportActionBar().setTitle(mNavigationTitles[1]);
         actionBarActivity = (ActionBarActivity) this;
 
         try {
@@ -453,7 +454,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 super.onPreExecute();
 
                 progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
-                progress.setMessage("Upload de la photo ...");
+                progress.setMessage("Compression de la photo ...");
                 progress.setCancelable(false);
                 progress.show();
             }
@@ -503,7 +504,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                     }
                 }
                 else {
-                    Toast.makeText(getApplication(), "Erreur de l'upload de l'image", Toast.LENGTH_SHORT).show();
+                    Base64Image[number - 1] = "";
+                    Toast.makeText(getApplication(), "Erreur de compression de la photo", Toast.LENGTH_SHORT).show();
                 }
             }
         }.execute();
@@ -540,7 +542,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     public String encodeTobase64(Bitmap image)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
         //return "";
@@ -838,6 +840,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 progress.setCancelable(false);
                 progress.show();
 
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
 
             @Override
@@ -953,6 +956,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             protected void onPostExecute(Boolean success) {
 
                 //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                
                 if (progress.isShowing()) {
                     progress.dismiss();
                 }

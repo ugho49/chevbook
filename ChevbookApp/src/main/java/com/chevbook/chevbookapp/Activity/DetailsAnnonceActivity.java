@@ -106,7 +106,7 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String[] mNavigationTitles = getResources().getStringArray(R.array.navigation_array);
-        getSupportActionBar().setTitle(mNavigationTitles[2]);
+        getSupportActionBar().setTitle(mNavigationTitles[1]);
         actionBarActivity = (ActionBarActivity) this;
 
         mAnnonce = (Annonce)getIntent().getSerializableExtra("annonce");
