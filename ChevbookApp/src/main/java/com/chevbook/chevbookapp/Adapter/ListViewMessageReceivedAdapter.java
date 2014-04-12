@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ListViewMessageReceivedAdapter extends BaseAdapter {
 
-    private final List<Message> list;
+    private List<Message> list;
     private final Context _c;
 
     private final ImageLoader imageLoader = ImageLoader.getInstance();
@@ -49,8 +49,8 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        //return list.size();
-        return 4;
+        return list.size();
+        //return 4;
     }
 
     @Override
@@ -109,5 +109,9 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
         }*/
 
         return v;
+    }
+
+    public void setList(List<Message> list) {
+        this.list = list;
     }
 }

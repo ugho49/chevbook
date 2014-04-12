@@ -39,7 +39,6 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -141,11 +140,10 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
         }
 
         dialogMap = new CustomDialogMap(DetailsAnnonceActivity.this, mAnnonce.getAdresse_annonce());
-        dialogMessage = new CustomDialogMessage(DetailsAnnonceActivity.this);
-
         dialogMap.createDialog();
-        dialogMessage.createDialog();
 
+        dialogMessage = new CustomDialogMessage(DetailsAnnonceActivity.this);
+        dialogMessage.createDialog();
 
         mButtonDetailAppartementLookOnMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -222,17 +220,8 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.menu_detail_appartements_new_message:
-                //Toast.makeText(getApplicationContext(), "Envoi d'un message", Toast.LENGTH_SHORT).show();
-                //showCustomDialogMessage();
 
-                dialogMessage.setUserName("Ugho49");
-
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm");
-                String currentDateAndTime = sdf.format(new Date());
-
-                dialogMessage.setDateMessage(currentDateAndTime);
-                dialogMessage.setImageUserMessage("https://fbcdn-sphotos-e-a.akamaihd.net/hphotos-ak-prn2/t1/1546110_10202187125312508_9323923_n.jpg");
-
+                dialogMessage.instantiateDialogForSendMessage(this.mAnnonce);
                 dialogMessage.showDialog();
 
                 break;

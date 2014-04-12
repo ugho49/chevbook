@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ListViewMessageSentAdapter extends BaseAdapter {
 
-    private final List<Message> list;
+    private List<Message> list;
     private final Context _c;
 
     private final ImageLoader imageLoader = ImageLoader.getInstance();
@@ -48,8 +48,8 @@ public class ListViewMessageSentAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         // TODO Auto-generated method stub
-        //return list.size();
-        return 7;
+        return list.size();
+        //return 7;
     }
 
     @Override
@@ -97,5 +97,9 @@ public class ListViewMessageSentAdapter extends BaseAdapter {
         holder.date.setText(DateAndTime);*/
 
         return v;
+    }
+
+    public void setList(List<Message> list) {
+        this.list = list;
     }
 }

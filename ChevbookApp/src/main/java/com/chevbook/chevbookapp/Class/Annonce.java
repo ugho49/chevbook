@@ -125,6 +125,9 @@ public class Annonce implements Serializable {
         return pseudo_user_annonce;
     }
 
+    public String getAvatar_user_annonce() {
+        return avatar_user_annonce;
+    }
 
     //Setters
     public void setTitre_annonce(String titre_annonce) {
@@ -177,6 +180,10 @@ public class Annonce implements Serializable {
 
     public void setPseudo_user_annonce(String pseudo_user_annonce) {
         this.pseudo_user_annonce = pseudo_user_annonce;
+    }
+
+    public void setAvatar_user_annonce(String avatar_user_annonce) {
+        this.avatar_user_annonce = avatar_user_annonce;
     }
 
     public void set_isMeuble(boolean isMeuble) {
