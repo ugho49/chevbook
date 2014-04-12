@@ -26,6 +26,7 @@ public class MainActivity extends ActionBarActivity
 
     int nbClick = 0;
     private static int cptFinish = 0;
+    private static Boolean onPause = false;
 
     final String[] fragments = {
             "com.chevbook.chevbookapp.Fragments.FragmentMyAccount",
@@ -79,7 +80,8 @@ public class MainActivity extends ActionBarActivity
                     startActivity(myIntent);
                     //vmodele.UserLogOut(getApplicationContext());
                     mUser.logoutUser();
-                    finish();
+                    //finish();
+                    set_super_finish();
                 }
             });
             adb.setNegativeButton(getString(R.string.btn_cancel),new DialogInterface.OnClickListener() {
@@ -172,16 +174,36 @@ public class MainActivity extends ActionBarActivity
         EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        onPause = true;
+        cptFinish = 0;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        onPause = false;
+    }
 
     @Override
     public void finish() {
-        if(cptFinish < 1){
-            Toast.makeText(getApplicationContext(), "Appuyer encore une fois pour quitter", Toast.LENGTH_SHORT).show();
-            cptFinish++;
+        if(onPause){
+            super.finish();
         }
         else {
-            super.finish();
+            if (cptFinish < 1) {
+                Toast.makeText(getApplicationContext(), "Appuyer encore une fois pour quitter", Toast.LENGTH_SHORT).show();
+                cptFinish++;
+            } else {
+                super.finish();
+            }
         }
     }
 
+    protected void set_super_finish(){
+        super.finish();
+    }
 }

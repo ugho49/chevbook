@@ -976,4 +976,50 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             }
         }.execute();
     }
+
+    @Override
+    public void finish() {
+        if(CONSTANTE_EN_PARAM == CONST_CREATE) {
+            int cpt = 0;
+            for(int i=0; i<=4; i++){
+                if(!Base64Image[i].equals("")){
+                    cpt++;
+                }
+            }
+
+            if(cpt > 0
+                    || !mEditTextDeposerModifierAnnonceLoyer.getText().toString().equals("")
+                    || !mEditTextDeposerModifierAnnonceSurface.getText().toString().equals("")
+                    || !mEditTextDeposerModifierAnnonceNbPieces.getText().toString().equals("")
+                    || !mEditTextDeposerModifierAnnonceDescription.getText().toString().equals("")
+                    || !mEditTextDeposerModifierAnnonceVille.getText().toString().equals("")
+                    || !mEditTextDeposerModifierAnnonceCP.getText().toString().equals("")
+                    || !mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals("")
+                    || !mTextViewDeposerModifierAnnonceTitre.getText().toString().equals("")) {
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
+                alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        set_super_finish();
+                    }
+                });
+                alertDialog.setNegativeButton(getString(R.string.btn_no), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                alertDialog.setMessage("Un création d'annonce est en cours !\nVoulez-vous quitter quand même ?");
+                alertDialog.show();
+            }
+            else {
+                super.finish();
+            }
+        } else {
+            super.finish();
+        }
+    }
+
+    protected void set_super_finish(){
+        super.finish();
+    }
 }

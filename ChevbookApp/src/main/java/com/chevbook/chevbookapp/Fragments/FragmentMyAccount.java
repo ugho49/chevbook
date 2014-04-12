@@ -143,6 +143,8 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                             //vmodele.UserLogOut(getApplicationContext());
                             vuser.logoutUser();
                             getActivity().finish();
+                            //Activity main = (MainActivity)getActivity();
+
                         }
                     });
                     adb.setNegativeButton(getString(R.string.btn_cancel),new DialogInterface.OnClickListener() {
