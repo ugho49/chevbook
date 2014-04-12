@@ -227,7 +227,8 @@
                     android:id="@+id/editTextDeposerModifierAnnonceAdresse"
                     android:layout_marginTop="3dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:hint="Adresse de l'appartement" />
+                    android:hint="Adresse de l'appartement"
+                    android:inputType="text" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -241,7 +242,9 @@
                         android:id="@+id/editTextDeposerModifierAnnonceCP"
                         android:layout_weight="0.4"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:hint="CP" />
+                        android:hint="CP"
+                        android:inputType="number"
+                        android:maxLength="5" />
 
                     <EditText
                         android:layout_width="wrap_content"
@@ -249,7 +252,8 @@
                         android:id="@+id/editTextDeposerModifierAnnonceVille"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:layout_weight="1"
-                        android:hint="Ville" />
+                        android:hint="Ville"
+                        android:inputType="text" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -272,15 +276,14 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
                     android:ems="10"
                     android:id="@+id/editTextDeposerModifierAnnonceDescription"
                     android:layout_marginTop="3dp"
                     android:minHeight="80dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:hint="Description"
-                    android:maxLines="20"
-                    android:maxLength="250" />
+                    android:maxLines="30"
+                    android:inputType="textMultiLine|textLongMessage" />
 
             </LinearLayout>
 

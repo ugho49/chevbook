@@ -322,6 +322,10 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             mEditTextDeposerModifierAnnonceCP.setError("Champs requis");
             focusView = mEditTextDeposerModifierAnnonceCP;
             vretour = false;
+        } else if (mEditTextDeposerModifierAnnonceCP.getText().length() < 5){
+            mEditTextDeposerModifierAnnonceCP.setError("Erreur de saisie");
+            focusView = mEditTextDeposerModifierAnnonceCP;
+            vretour = false;
         }
 
         if(mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals("")){
@@ -957,7 +961,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
                 //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                
+
                 if (progress.isShowing()) {
                     progress.dismiss();
                 }
