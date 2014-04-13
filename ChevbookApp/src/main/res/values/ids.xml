@@ -24,6 +24,7 @@
     <!-- User -->
     <string name="URL_SERVEUR_IDENTIFICATION">compte.php?action=login</string>
     <string name="URL_SERVEUR_MODIFICATION_USER">compte.php?action=modif</string>
+    <string name="URL_SERVEUR_FORGOT_PASSWORD_USER">index.php?action=recupCompte</string>
 
     <!-- Messages -->
     <string name="URL_SERVEUR_ECRIRE_MESSAGE">compte.php?action=ecrire</string>

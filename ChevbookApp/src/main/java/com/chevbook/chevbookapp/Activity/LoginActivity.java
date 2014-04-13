@@ -45,23 +45,7 @@ import java.util.Formatter;
 
 
 public class LoginActivity extends ActionBarActivity {
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello",
-            "bar@example.com:world"
-    };
 
-    /**
-     * The default email to populate the email field with.
-     */
-    public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
     // Values for email and password at the time of the login attempt.
@@ -90,16 +74,6 @@ public class LoginActivity extends ActionBarActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_login);
 
-        /*vmodele = new Modele();
-        if(vmodele.UserExist(this.getApplicationContext()))
-        {
-            vmodele.getCurrentUser().InstantiateByPrefs(this.getApplicationContext());
-
-            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(myIntent);
-            finish();
-        }*/
 
         vmodele = new Modele();
         mUser = new User(getApplicationContext());

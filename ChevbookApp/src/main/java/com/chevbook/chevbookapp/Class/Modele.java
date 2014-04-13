@@ -69,23 +69,5 @@ public class Modele {
         }
     }
 
-    /*public void UserLogOut(Context c)
-    {
-        this.getCurrentUser().Delete(c);
-    }
-
-    public boolean UserExist(Context c)
-    {
-        //return true if User is connected
-        boolean vretour = false;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-
-        if(prefs.getString("pref_user_email", "") != "" && prefs.getString("pref_user_password", "") != "")
-        {
-            vretour = true;
-        }
-
-        return vretour;
-    }*/
 
 }

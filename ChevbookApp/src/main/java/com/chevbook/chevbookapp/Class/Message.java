@@ -29,17 +29,32 @@ public class Message implements Serializable {
         //empty constructor
     }
 
-    public Message(int id_annonce_destinataire, String email_emetteur, Date date_create_message, String titre_annonce, String contenu_message, String nomPrenom_emetteur, String url_image_emetteur, String nomPrenom_destinataire, String url_image_destinataire) {
+    public Message(int id_annonce_destinataire, String email_emetteur, Date date_create_message, String titre_annonce, String contenu_message, String nomPrenom_emetteur, String url_image_emetteur, String nomPrenom_destinataire, String url_image_destinataire, Boolean est_lu) {
         this.id_annonce_destinataire = id_annonce_destinataire;
         this.email_emetteur = email_emetteur;
         this.date_create_message = date_create_message;
         this.titre_annonce = titre_annonce;
         this.contenu_message = contenu_message;
-        NomPrenom_emetteur = nomPrenom_emetteur;
+        this.NomPrenom_emetteur = nomPrenom_emetteur;
         this.url_image_emetteur = url_image_emetteur;
-        NomPrenom_destinataire = nomPrenom_destinataire;
+        this.NomPrenom_destinataire = nomPrenom_destinataire;
         this.url_image_destinataire = url_image_destinataire;
+        this.est_lu = est_lu;
     }
+
+    public void InstantiateByMessage(Message m) {
+        this.id_annonce_destinataire = m.getId_annonce_destinataire();
+        this.email_emetteur = m.getEmail_emetteur();
+        this.date_create_message = m.getDate_create_message();
+        this.titre_annonce = m.getTitre_annonce();
+        this.contenu_message = m.getContenu_message();
+        this.NomPrenom_emetteur = m.getNomPrenom_emetteur();
+        this.url_image_emetteur = m.getUrl_image_emetteur();
+        this.NomPrenom_destinataire = m.getNomPrenom_destinataire();
+        this.url_image_destinataire = m.getUrl_image_destinataire();
+        this.est_lu = m.getEst_lu();
+    }
+
 
 
     //Getters & Setters

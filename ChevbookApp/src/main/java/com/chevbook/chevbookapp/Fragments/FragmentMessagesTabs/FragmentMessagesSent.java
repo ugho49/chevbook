@@ -1,7 +1,5 @@
 package com.chevbook.chevbookapp.Fragments.FragmentMessagesTabs;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Adapter.ListViewMessageSentAdapter;
 import com.chevbook.chevbookapp.Class.Message;
@@ -21,6 +18,7 @@ import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.CustomDialog.CustomDialogMessage;
 import com.chevbook.chevbookapp.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -96,14 +94,13 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
                 .listener(this)
                 .setup(mPullToRefreshLayout);
 
-        dialogMessage = new CustomDialogMessage(getActivity());
-        dialogMessage.createDialog();
-
         mListViewMessageSent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                /*dialogMessage.instantiateDialogForLookMessage(mMessages.get(position),false);
-                dialogMessage.showDialog();*/
+                dialogMessage = new CustomDialogMessage(getActivity());
+                dialogMessage.createDialog();
+                dialogMessage.instantiateDialogForLookMessage(mMessages.get(position),false);
+                dialogMessage.showDialog();
             }
 
         });
@@ -198,7 +195,47 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
 
                         AfficherJSON = sb.toString();
 
-                        return true;
+                        JSONArray jsonArray = new JSONArray(sb.toString());
+
+                        if(jsonArray.length()>0){
+                            for(int j = 0; j < jsonArray.length(); j++){
+
+                                JSONObject jsonObject = jsonArray.getJSONObject(j);
+
+                                int id_annonce_destinataire = jsonObject.getInt("Id_Annonce_Destinataire");
+                                String email_emetteur = mUser.getEmail();
+                                Date date_create_message = ConvertToDate(jsonObject.get("Date").toString());
+                                String titre_annonce = jsonObject.getString("Titre_Annonce");
+                                String contenu_message = jsonObject.getString("Message");
+                                String nomPrenom_emetteur = mUser.getFirstName() + " " + mUser.getLastName().substring(0,1).toUpperCase();
+                                String url_image_emetteur = mUser.getUrlProfilPicture();
+                                String nomPrenom_destinataire = jsonObject.getString("Prenom_Personne") + " " + jsonObject.getString("Nom_Personne").substring(0,1).toUpperCase();
+                                String url_image_destinataire = jsonObject.getString("Avatar_Personne");
+                                Boolean est_lu = false;
+
+                                if(jsonObject.getInt("Message_Lu") == 0){
+                                    est_lu = false;
+                                }
+                                else {
+                                    est_lu = true;
+                                }
+
+                                mMessages.add(new Message(id_annonce_destinataire,
+                                        email_emetteur,
+                                        date_create_message,
+                                        titre_annonce,
+                                        contenu_message,
+                                        nomPrenom_emetteur,
+                                        url_image_emetteur,
+                                        nomPrenom_destinataire,
+                                        url_image_destinataire,
+                                        est_lu));
+                            }
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
                     }
                     else
                     {
@@ -237,20 +274,20 @@ public class FragmentMessagesSent extends Fragment implements OnRefreshListener 
                     Adapter.notifyDataSetChanged();
                 }
                 else {
-                    Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
 
                     mListViewMessageSent.setVisibility(View.GONE);
                     mLinearLayoutMessagesSentNoResult.setVisibility(View.VISIBLE);
                 }
 
-                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
                 adb.setMessage(AfficherJSON);
-                adb.show();
+                adb.show();*/
 
                 actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 mPullToRefreshLayout.setRefreshComplete();
