@@ -196,9 +196,10 @@ public class DetailsAccountActivity extends ActionBarActivity {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                mImageViewPictureUser.setImageBitmap(imageBitmap);
+                /*mImageViewPictureUser.setImageBitmap(imageBitmap);
                 mButtonDeleteImage.setVisibility(View.VISIBLE);
-                Base64Image = encodeTobase64(imageBitmap);
+                Base64Image = encodeTobase64(imageBitmap);*/
+                setBitmapAndEncodeInBase64(imageBitmap);
             }
             else if (requestCode == REQUEST_SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
@@ -206,9 +207,10 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
                 btmapOptions.inSampleSize = 4;
                 Bitmap imageBitmap = BitmapFactory.decodeFile(selectedPath, btmapOptions);
-                mImageViewPictureUser.setImageBitmap(imageBitmap);
+                /*mImageViewPictureUser.setImageBitmap(imageBitmap);
                 mButtonDeleteImage.setVisibility(View.VISIBLE);
-                Base64Image = encodeTobase64(imageBitmap);
+                Base64Image = encodeTobase64(imageBitmap);*/
+                setBitmapAndEncodeInBase64(imageBitmap);
             }
         }
     }
@@ -285,9 +287,52 @@ public class DetailsAccountActivity extends ActionBarActivity {
     public String encodeTobase64(Bitmap image)
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    private void setBitmapAndEncodeInBase64(final Bitmap bm)
+    {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                progress = new ProgressDialog(DetailsAccountActivity.this);
+                progress.setMessage("Compression de la photo ...");
+                progress.setCancelable(false);
+                progress.show();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+
+                Base64Image = encodeTobase64(bm);
+
+                return true;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+
+                if (progress.isShowing()) {
+                    progress.dismiss();
+                }
+
+                if (success) {
+                    mImageViewPictureUser.setImageBitmap(bm);
+                    mButtonDeleteImage.setVisibility(View.VISIBLE);
+                    //Base64Image = encodeTobase64(imageBitmap);
+                }
+                else {
+                    Base64Image = "";
+                    Toast.makeText(getApplication(), "Erreur de compression de la photo", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
+
     }
 
     private void alertDialogChangePassword() {
