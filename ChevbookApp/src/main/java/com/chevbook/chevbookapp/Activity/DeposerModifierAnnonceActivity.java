@@ -113,6 +113,8 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     private static final int CONST_MODIFIER = 1;
     private int CONSTANTE_EN_PARAM;
 
+    private Boolean actionDeposerModifier = false;
+
     private static String [] SpinnerListQuartier;
     private static String [] SpinnerListCategorie;
     private static String [] SpinnerListSousCategorie;
@@ -801,6 +803,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                actionDeposerModifier = true;
             }
 
             @Override
@@ -818,9 +821,11 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             protected void onPostExecute(Boolean success) {
 
                 if (success) {
+                    actionDeposerModifier = true;
                     //todo
                 }
                 else {
+                    actionDeposerModifier = false;
                     Toast.makeText(getApplication(), "Erreur", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -838,6 +843,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                actionDeposerModifier = true;
                 //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
                 progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
                 progress.setMessage("Création de l'annonce en cours ...\n\nL'upload des photos sur le serveur peut prendre un petit peu de temps ! (Prenez un café ^^)");
@@ -967,10 +973,12 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 }
 
                 if (success) {
+                    actionDeposerModifier = true;
                     Toast.makeText(context, "Votre annonce est créé avec SUCCES", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else {
+                    actionDeposerModifier = false;
                     Toast.makeText(context, "Echec de la création de l'annonce", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -979,42 +987,48 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
     @Override
     public void finish() {
-        if(CONSTANTE_EN_PARAM == CONST_CREATE) {
-            int cpt = 0;
-            for(int i=0; i<=4; i++){
-                if(!Base64Image[i].equals("")){
-                    cpt++;
+        if(!actionDeposerModifier) {
+            if (CONSTANTE_EN_PARAM == CONST_CREATE) {
+                int cpt = 0;
+                for (int i = 0; i <= 4; i++) {
+                    if (!Base64Image[i].equals("")) {
+                        cpt++;
+                    }
                 }
-            }
 
-            if(cpt > 0
-                    || !mEditTextDeposerModifierAnnonceLoyer.getText().toString().equals("")
-                    || !mEditTextDeposerModifierAnnonceSurface.getText().toString().equals("")
-                    || !mEditTextDeposerModifierAnnonceNbPieces.getText().toString().equals("")
-                    || !mEditTextDeposerModifierAnnonceDescription.getText().toString().equals("")
-                    || !mEditTextDeposerModifierAnnonceVille.getText().toString().equals("")
-                    || !mEditTextDeposerModifierAnnonceCP.getText().toString().equals("")
-                    || !mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals("")
-                    || !mTextViewDeposerModifierAnnonceTitre.getText().toString().equals("")) {
+                if (cpt > 0
+                        || !mEditTextDeposerModifierAnnonceLoyer.getText().toString().equals("")
+                        || !mEditTextDeposerModifierAnnonceSurface.getText().toString().equals("")
+                        || !mEditTextDeposerModifierAnnonceNbPieces.getText().toString().equals("")
+                        || !mEditTextDeposerModifierAnnonceDescription.getText().toString().equals("")
+                        || !mEditTextDeposerModifierAnnonceVille.getText().toString().equals("")
+                        || !mEditTextDeposerModifierAnnonceCP.getText().toString().equals("")
+                        || !mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals("")
+                        || !mTextViewDeposerModifierAnnonceTitre.getText().toString().equals("")) {
 
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
-                alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        set_super_finish();
-                    }
-                });
-                alertDialog.setNegativeButton(getString(R.string.btn_no), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                alertDialog.setMessage("Un création d'annonce est en cours !\nVoulez-vous quitter quand même ?");
-                alertDialog.show();
-            }
-            else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
+                    alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            set_super_finish();
+                        }
+                    });
+                    alertDialog.setNegativeButton(getString(R.string.btn_no), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.setMessage("Un création d'annonce est en cours !\nVoulez-vous quitter quand même ?");
+                    alertDialog.show();
+                } else {
+                    super.finish();
+                }
+            } else if (CONSTANTE_EN_PARAM == CONST_MODIFIER) {
+                super.finish();
+            } else {
                 super.finish();
             }
-        } else {
+        }
+        else {
             super.finish();
         }
     }

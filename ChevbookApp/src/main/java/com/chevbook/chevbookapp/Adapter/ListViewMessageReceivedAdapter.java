@@ -111,4 +111,9 @@ public class ListViewMessageReceivedAdapter extends BaseAdapter {
     public void setList(List<Message> list) {
         this.list = list;
     }
+
+    public List<Message> getList() {
+        return list;
+    }
+
 }

@@ -28,6 +28,7 @@
 
     <!-- Messages -->
     <string name="URL_SERVEUR_ECRIRE_MESSAGE">compte.php?action=ecrire</string>
+    <string name="URL_SERVEUR_LIRE_MESSAGE">compte.php?action=lireMessage</string>
     <string name="URL_SERVEUR_MESSAGES_ENVOYEES">compte.php?action=lireEnvoye</string>
     <string name="URL_SERVEUR_MESSAGES_RECU">compte.php?action=lireRecu</string>
 
