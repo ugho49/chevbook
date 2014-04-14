@@ -547,11 +547,17 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
     public String encodeTobase64(Bitmap image)
     {
+        String base64 = "";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
-        //return "";
+        if(CONSTANTE_EN_PARAM == CONST_CREATE){
+            base64 = Base64.encodeToString(b, Base64.DEFAULT);
+        }
+        else if(CONSTANTE_EN_PARAM == CONST_MODIFIER){
+            base64 = "BASE64: " + Base64.encodeToString(b, Base64.DEFAULT);
+        }
+        return base64;
     }
 
     public void LoadingSpinnerTask()
@@ -745,11 +751,15 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             buttons.add(3, mButtonDeleteImage4);
             buttons.add(4, mButtonDeleteImage5);
 
+            int cpt = 0;
+
             for(int i=0; i<=4 && i<photos_annonce.size(); i++)
             {
                 if(!photos_annonce.get(i).equals("")){
                     imageLoader.displayImage(photos_annonce.get(i), imageViews.get(i));
                     buttons.get(i).setVisibility(View.VISIBLE);
+                    Base64Image[cpt] = "URL: " + photos_annonce.get(i);
+                    cpt++;
                 }
             }
         }
