@@ -810,33 +810,154 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     {
         new AsyncTask<Void, Void, Boolean>() {
 
+            String ErreurLoginTask = "Erreur";
+            String AfficherJSON = null;
+            Context context = getApplicationContext();
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 actionDeposerModifier = true;
+                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+                progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
+                progress.setMessage("Modification de l'annonce en cours ...");
+                progress.setCancelable(false);
+                progress.show();
+
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             }
 
             @Override
             protected Boolean doInBackground(Void... params) {
+                HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
                 try {
-                    Thread.sleep(300);
-                    return true;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return false;
+                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_UPDATE_ANNONCES));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
+                    JSONArray jsonArrayImages = new JSONArray();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String date = sdf.format(new Date());
+                    int est_meuble = 0;
+
+                    if(mCheckBoxDeposerModifierAnnonceEstMeuble.isChecked())
+                    {
+                        est_meuble = 1;
+                    }
+                    else {
+                        est_meuble = 0;
+                    }
+
+                    for(int i=0; i<=4; i++){
+                        if (!Base64Image[i].equals("")){
+                            jsonArrayImages.put(Base64Image[i]);
+                        }
+                    }
+
+
+                    // Exemple Clé valeur utiles à notre application
+                    jsonParam.put("email", mUser.getEmail());
+                    jsonParam.put("password", mUser.getPasswordSha1());
+
+                    jsonParam.put("IdAnnonce", mAnnonce.getId_annonce());
+                    jsonParam.put("date", date);
+                    jsonParam.put("titre", mTextViewDeposerModifierAnnonceTitre.getText().toString());
+                    jsonParam.put("prix", mEditTextDeposerModifierAnnonceLoyer.getText().toString());
+                    jsonParam.put("description", mEditTextDeposerModifierAnnonceDescription.getText().toString());
+                    jsonParam.put("nbPiece", mEditTextDeposerModifierAnnonceNbPieces.getText().toString());
+                    jsonParam.put("adresse", mEditTextDeposerModifierAnnonceAdresse.getText().toString() + ", " + mEditTextDeposerModifierAnnonceCP.getText().toString() + " " + mEditTextDeposerModifierAnnonceVille.getText().toString());
+                    jsonParam.put("surface", mEditTextDeposerModifierAnnonceSurface.getText().toString());
+                    jsonParam.put("estMeuble", est_meuble);
+
+                    jsonParam.put("type", mSpinnerDeposerModifierAnnonceType.getSelectedItem().toString());
+                    jsonParam.put("quartier", mSpinnerDeposerModifierAnnonceQuartier.getSelectedItem().toString());
+                    jsonParam.put("sousCategorie", mSpinnerDeposerModifierAnnonceSousCategorie.getSelectedItem().toString());
+                    jsonParam.put("categorie", mSpinnerDeposerModifierAnnonceCategorie.getSelectedItem().toString());
+
+                    jsonParam.put("listeImage", jsonArrayImages);
+
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
+
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        AfficherJSON = sb.toString();
+
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+
+                        boolean ModifOK = jsonObject.getBoolean("modificationReussie");
+
+                        if(ModifOK){
+                            return true;
+                        } else {
+                            return false;
+                        }
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
+                    return false; //Erreur URL
+                } catch (SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                    return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                    return false; //Erreur JSON
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
                 }
             }
 
             @Override
             protected void onPostExecute(Boolean success) {
 
+                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+                if (progress.isShowing()) {
+                    progress.dismiss();
+                }
+
+                //Toast.makeText(context, AfficherJSON, Toast.LENGTH_SHORT).show();
+
                 if (success) {
                     actionDeposerModifier = true;
-                    //todo
+                    Toast.makeText(context, "Votre annonce est modifié !", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 else {
                     actionDeposerModifier = false;
-                    Toast.makeText(getApplication(), "Erreur", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Echec de la modification de l'annonce", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, AfficherJSON, Toast.LENGTH_SHORT).show();
                 }
             }
         }.execute();

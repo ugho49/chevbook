@@ -333,6 +333,7 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
                     // Exemple Clé valeur utiles à notre application
                     jsonParam.put("email", mUser.getEmail());
                     jsonParam.put("password", mUser.getPasswordSha1());
+                    jsonParam.put("EmailEmetteur", m.getEmail_emetteur());
                     jsonParam.put("Id_Annonce", m.getId_annonce_destinataire());
 
                     SimpleDateFormat simpleDate =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

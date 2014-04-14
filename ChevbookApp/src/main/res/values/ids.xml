@@ -11,7 +11,7 @@
     <string name="URL_SERVEUR_LIST_MY_ANNONCES">compte.php?action=annonces</string>
     <string name="URL_SERVEUR_CREATE_ANNONCES">compte.php?action=depose</string>
     <string name="URL_SERVEUR_DELETE_ANNONCE">compte.php?action=retirer</string>
-    <!--<string name="URL_SERVEUR_UPDATE_ANNONCES">compte.php?action=annonces</string>-->
+    <string name="URL_SERVEUR_UPDATE_ANNONCES">compte.php?action=modifAnnonce</string>
 
     <!-- Favoris -->
     <string name="URL_SERVEUR_LIST_MY_FAVORIS">compte.php?action=favoris</string>
