@@ -30,7 +30,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical|center_horizontal"
                 android:inputType="text"
-                android:maxLength="50" />
+                android:maxLength="40" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -228,7 +228,8 @@
                     android:layout_marginTop="3dp"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:hint="Adresse de l'appartement"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:maxLength="60" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -253,7 +254,8 @@
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:layout_weight="1"
                         android:hint="Ville"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:maxLength="25" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -519,7 +521,7 @@
                             android:id="@+id/editTextDeposerModifierAnnonceLoyer"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:maxLines="1"
-                            android:maxLength="5" />
+                            android:maxLength="10" />
 
                         <TextView
                             android:layout_width="wrap_content"
