@@ -38,6 +38,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -148,7 +149,27 @@ public class LoginActivity extends ActionBarActivity {
         mForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), getString(R.string.action_forgot_password), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), getString(R.string.action_forgot_password), Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(mEmailView.getText()) && !mEmailView.getText().toString().contains("@")){
+                    Toast.makeText(getApplicationContext(), "Veuillez remplir le champs d'email !!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    AlertDialog.Builder adb = new AlertDialog.Builder(LoginActivity.this);
+                    adb.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Toast.makeText(getApplicationContext(), getString(R.string.create_account), Toast.LENGTH_SHORT).show();
+                            forgotPassword();
+                        }
+                    });
+                    adb.setNegativeButton(getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    adb.setTitle("Mot de passe oublié");
+                    adb.setMessage("Voulez-vous qu'un nouveau mot de passe vous soit envoyé par mail ?");
+                    adb.show();
+                }
             }
         });
     }
@@ -460,5 +481,113 @@ public class LoginActivity extends ActionBarActivity {
         String result = formatter.toString();
         formatter.close();
         return result;
+    }
+
+    public void forgotPassword()
+    {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            String AfficherJSON = null;
+            String ErreurLoginTask = "Erreur ";
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+
+                HttpURLConnection urlConnection = null;
+                StringBuilder sb = new StringBuilder();
+
+                try {
+                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_FORGOT_PASSWORD_USER));
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
+                    // Exemple Clé valeur utiles à notre application
+                    jsonParam.put("email", mEmailView.getText().toString());
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
+
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        AfficherJSON = sb.toString();
+
+                        JSONArray jsonArray = new JSONArray(sb.toString());
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                        boolean recupOK = jsonObject.getBoolean("recupSuccess");
+
+                        if (recupOK){
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (MalformedURLException e){
+                    ErreurLoginTask = ErreurLoginTask + "URL";
+                    return false; //Erreur URL
+                } catch (SocketTimeoutException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
+                    return false; //Temps trop long
+                } catch (IOException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
+                    return false; //Pas de connexion internet
+                } catch (JSONException e) {
+                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
+                    return false; //Erreur JSON
+                } finally {
+                    if (urlConnection != null){
+                        urlConnection.disconnect();
+                    }
+                }
+            }
+
+            @Override
+            protected void onPostExecute(final Boolean result) {
+
+                if (result)
+                {
+                    Toast.makeText(getApplicationContext(), "Votre nouveau mot de passe viens de vous être envoyé par mail.\nPensez à vérifier dans vos spam !!!", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Adresse email invalide", Toast.LENGTH_SHORT).show();
+                }
+
+                /*AlertDialog.Builder adb = new AlertDialog.Builder(LoginActivity.this);
+                adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                adb.setMessage(AfficherJSON);
+                adb.show();*/
+            }
+        }.execute();
     }
 }
