@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,8 +25,10 @@ import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Class.Modele;
 import com.chevbook.chevbookapp.Class.User;
+import com.chevbook.chevbookapp.GCM.GcmUtils;
 import com.chevbook.chevbookapp.R;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +70,9 @@ public class LoginActivity extends ActionBarActivity {
     private Modele vmodele;
     private User mUser;
 
+    private GcmUtils mGcmUtils = new GcmUtils();
+    GoogleCloudMessaging gcm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +92,13 @@ public class LoginActivity extends ActionBarActivity {
             finish();
 
             vmodele.setCurrentUser(mUser);
+        }
+
+        if (mGcmUtils.checkPlayServices(LoginActivity.this)) {
+            gcm = GoogleCloudMessaging.getInstance(LoginActivity.this);
+        }
+        else {
+            Log.i("GCM", "No valid Google Play Services APK found.");
         }
 
         // Set up the login form.
@@ -338,6 +351,8 @@ public class LoginActivity extends ActionBarActivity {
         private String mLastname = ""; //nom
         private String mUrl_image = "";
 
+        private String regid = "";
+
         private String ErreurLoginTask = "Erreur ";
 
         @Override
@@ -387,6 +402,21 @@ public class LoginActivity extends ActionBarActivity {
                         mLastname = jsonObject.getString("Nom_Personne"); //nom
                         mUrl_image = jsonObject.getString("Avatar_Personne");
 
+                        try {
+                            if (gcm == null) {
+                                gcm = GoogleCloudMessaging.getInstance(LoginActivity.this);
+                            }
+                            regid = gcm.register(getResources().getString(R.string.GOOGLE_PROJECT_ID));
+
+                            envoyerPhoneId(regid);
+
+                        } catch (IOException ex) {
+                            Log.i("GCM", ex.getMessage());
+                            // If there is an error, don't just keep trying to register.
+                            // Require the user to click a button again, or perform
+                            // exponential back-off.
+                        }
+
                         return true;
                     }
                     else {
@@ -426,6 +456,7 @@ public class LoginActivity extends ActionBarActivity {
             showProgress(false);
 
             if (success) {
+                //Toast.makeText(getApplicationContext(), regid, Toast.LENGTH_SHORT).show();
 
                 mUser.loginUser(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
                 vmodele.setCurrentUser(mUser);
@@ -447,6 +478,47 @@ public class LoginActivity extends ActionBarActivity {
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+    }
+
+    private void envoyerPhoneId(String id){
+        if(!id.equals("")){
+
+            HttpURLConnection urlConnection = null;
+
+            try {
+                URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_SEND_PHONE_ID));
+                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.setConnectTimeout(5000);
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                // Création objet jsonn clé valeur
+                JSONObject jsonParam = new JSONObject();
+                // Exemple Clé valeur utiles à notre application
+                jsonParam.put("email", mEmail);
+                jsonParam.put("password", getSha1(mPassword));
+                jsonParam.put("phoneId", id);
+                out.write(jsonParam.toString());
+                out.flush();
+                out.close();
+            }
+            catch (MalformedURLException e){
+                //todo
+            } catch (java.net.SocketTimeoutException e) {
+                //todo
+            } catch (IOException e) {
+                //todo
+            } catch (JSONException e) {
+                //todo
+            } finally {
+                if (urlConnection != null){
+                    urlConnection.disconnect();
+                }
+            }
         }
     }
 
