@@ -93,7 +93,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="- Butterknife"
                         android:id="@+id/textView13" />
                 </TableRow>
@@ -102,12 +102,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/tableRow7"
-                    android:layout_marginTop="3dp" >
+                    android:layout_marginTop="5dp" >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="- GoogleAnalytics"
                         android:id="@+id/textView14" />
                 </TableRow>
@@ -116,12 +116,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/tableRow8"
-                    android:layout_marginTop="3dp" >
+                    android:layout_marginTop="5dp" >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="- Gson"
                         android:id="@+id/textView15" />
                 </TableRow>
@@ -130,12 +130,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/tableRow9"
-                    android:layout_marginTop="3dp" >
+                    android:layout_marginTop="5dp" >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="- ActionBar-PullToRefresh"
                         android:id="@+id/textView16" />
                 </TableRow>
@@ -144,12 +144,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/tableRow10"
-                    android:layout_marginTop="3dp" >
+                    android:layout_marginTop="5dp" >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="- PagerSlidingTabStrip"
                         android:id="@+id/textView17" />
                 </TableRow>
@@ -158,12 +158,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/tableRow11"
-                    android:layout_marginTop="3dp" >
+                    android:layout_marginTop="5dp" >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="- Universal-Image-Loader"
                         android:id="@+id/textView18" />
                 </TableRow>
@@ -172,12 +172,12 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:id="@+id/tableRow12"
-                    android:layout_marginTop="3dp" >
+                    android:layout_marginTop="5dp" >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="- Android-View-Pager-Indicator"
                         android:id="@+id/textView19" />
                 </TableRow>
