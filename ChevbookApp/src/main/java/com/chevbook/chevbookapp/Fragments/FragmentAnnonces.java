@@ -72,6 +72,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     @InjectView(R.id.buttonNoResultRafraichirAnnonce)
     Button mButtonNoResultRafraichirAnnonce;
 
+    public static final int CODE_RETOUR = 0;
 
     private int AnnonceMax = 0;
     private int AnnonceChargees = 0;
@@ -160,6 +161,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                 Intent intentDetailAppartement = new Intent(getActivity(), DetailsAnnonceActivity.class);
                 intentDetailAppartement.putExtra("annonce", mAnnonces.get(position));
                 startActivity(intentDetailAppartement);
+                //startActivityForResult(intentDetailAppartement, CODE_RETOUR);
             }
 
         });
@@ -216,7 +218,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                 //Toast.makeText(getActivity(), getString(R.string.action_new_announce), Toast.LENGTH_SHORT).show();
                 Intent intentDetailAppartement = new Intent(getActivity(), DeposerModifierAnnonceActivity.class);
                 intentDetailAppartement.putExtra("CONST", CONST_CREATE);
-                startActivity(intentDetailAppartement);
+                //startActivity(intentDetailAppartement);
+                startActivityForResult(intentDetailAppartement, CODE_RETOUR);
 
                 return true;
         }
@@ -295,6 +298,27 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
             int a = AnnonceChargees;
             AnnonceChargees = 0;
             listerAnnonces(0, a);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode == 20) { //create annonce
+            mAnnonces.clear();
+            mAnnonces = new ArrayList<Annonce>();
+            flag_loading = false;
+
+            if(AnnonceChargees == 0)
+            {
+                listerAnnonces(AnnonceDebut, AnnonceFin);
+            }
+            else {
+
+                int a = AnnonceChargees;
+                AnnonceChargees = 0;
+                listerAnnonces(0, a);
+            }
         }
     }
 

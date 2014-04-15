@@ -249,8 +249,11 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 case R.id.buttonDeposerModifierAnnonceValider:
                     if(CONSTANTE_EN_PARAM == CONST_MODIFIER)
                     {
-                        Toast.makeText(getApplicationContext(), "Modifier annonce", Toast.LENGTH_SHORT).show();
-                        UpdateAnnonceTask();
+                        if(verifDepotAnnonce())
+                        {
+                            //Toast.makeText(getApplicationContext(), "Modifier annonce", Toast.LENGTH_SHORT).show();
+                            UpdateAnnonceTask();
+                        }
                     }
                     else if(CONSTANTE_EN_PARAM == CONST_CREATE){
                         if(verifDepotAnnonce())
@@ -314,20 +317,22 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             vretour = false;
         }
 
-        if(mEditTextDeposerModifierAnnonceVille.getText().toString().equals("")){
-            mEditTextDeposerModifierAnnonceVille.setError("Champs requis");
-            focusView = mEditTextDeposerModifierAnnonceVille;
-            vretour = false;
-        }
+        if(CONSTANTE_EN_PARAM == CONST_CREATE){
+            if(mEditTextDeposerModifierAnnonceVille.getText().toString().equals("")){
+                mEditTextDeposerModifierAnnonceVille.setError("Champs requis");
+                focusView = mEditTextDeposerModifierAnnonceVille;
+                vretour = false;
+            }
 
-        if(mEditTextDeposerModifierAnnonceCP.getText().toString().equals("")){
-            mEditTextDeposerModifierAnnonceCP.setError("Champs requis");
-            focusView = mEditTextDeposerModifierAnnonceCP;
-            vretour = false;
-        } else if (mEditTextDeposerModifierAnnonceCP.getText().length() < 5){
-            mEditTextDeposerModifierAnnonceCP.setError("Erreur de saisie");
-            focusView = mEditTextDeposerModifierAnnonceCP;
-            vretour = false;
+            if(mEditTextDeposerModifierAnnonceCP.getText().toString().equals("")){
+                mEditTextDeposerModifierAnnonceCP.setError("Champs requis");
+                focusView = mEditTextDeposerModifierAnnonceCP;
+                vretour = false;
+            } else if (mEditTextDeposerModifierAnnonceCP.getText().length() < 5){
+                mEditTextDeposerModifierAnnonceCP.setError("Erreur de saisie");
+                focusView = mEditTextDeposerModifierAnnonceCP;
+                vretour = false;
+            }
         }
 
         if(mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals("")){
@@ -874,7 +879,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                     jsonParam.put("prix", mEditTextDeposerModifierAnnonceLoyer.getText().toString());
                     jsonParam.put("description", mEditTextDeposerModifierAnnonceDescription.getText().toString());
                     jsonParam.put("nbPiece", mEditTextDeposerModifierAnnonceNbPieces.getText().toString());
-                    jsonParam.put("adresse", mEditTextDeposerModifierAnnonceAdresse.getText().toString() + ", " + mEditTextDeposerModifierAnnonceCP.getText().toString() + " " + mEditTextDeposerModifierAnnonceVille.getText().toString());
+                    jsonParam.put("adresse", mEditTextDeposerModifierAnnonceAdresse.getText().toString());
                     jsonParam.put("surface", mEditTextDeposerModifierAnnonceSurface.getText().toString());
                     jsonParam.put("estMeuble", est_meuble);
 
@@ -952,6 +957,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 if (success) {
                     actionDeposerModifier = true;
                     Toast.makeText(context, "Votre annonce est modifié !", Toast.LENGTH_SHORT).show();
+                    setResult(40);
                     finish();
                 }
                 else {
@@ -1106,6 +1112,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 if (success) {
                     actionDeposerModifier = true;
                     Toast.makeText(context, "Votre annonce est créé avec SUCCES", Toast.LENGTH_SHORT).show();
+                    setResult(20);
                     finish();
                 }
                 else {
@@ -1148,13 +1155,50 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                             dialog.cancel();
                         }
                     });
-                    alertDialog.setMessage("Un création d'annonce est en cours !\nVoulez-vous quitter quand même ?");
+                    alertDialog.setMessage("Une création d'annonce est en cours !\nVoulez-vous quitter quand même ?");
                     alertDialog.show();
                 } else {
                     super.finish();
                 }
             } else if (CONSTANTE_EN_PARAM == CONST_MODIFIER) {
-                super.finish();
+                int cpt = 0;
+                int cpt1 = 0;
+                for (int i = 0; i <= 4; i++) {
+                    if (!Base64Image[i].equals("")) {
+                        cpt++;
+                    }
+                }
+
+                for (String S : mAnnonce.getUrl_images_annonces()) {
+                    if (!S.equals("")) {
+                        cpt1++;
+                    }
+                }
+
+                if (cpt != cpt1
+                        || Double.parseDouble(mEditTextDeposerModifierAnnonceLoyer.getText().toString()) != mAnnonce.getPrix_annonce()
+                        || Integer.parseInt(mEditTextDeposerModifierAnnonceSurface.getText().toString()) != mAnnonce.getSurface_annonce()
+                        || Integer.parseInt(mEditTextDeposerModifierAnnonceNbPieces.getText().toString()) != mAnnonce.getNumber_room_annonce()
+                        || !mEditTextDeposerModifierAnnonceDescription.getText().toString().equals(mAnnonce.getDescription_annonce())
+                        || !mEditTextDeposerModifierAnnonceAdresse.getText().toString().equals(mAnnonce.getAdresse_annonce())
+                        || !mTextViewDeposerModifierAnnonceTitre.getText().toString().equals(mAnnonce.getTitre_annonce())) {
+
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
+                    alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            set_super_finish();
+                        }
+                    });
+                    alertDialog.setNegativeButton(getString(R.string.btn_no), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.setMessage("Une modification est en cours !\nVoulez-vous quitter quand même ?");
+                    alertDialog.show();
+                } else {
+                    super.finish();
+                }
             } else {
                 super.finish();
             }

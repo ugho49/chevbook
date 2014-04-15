@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.chevbook.chevbookapp.Activity.DeposerModifierAnnonceActivity;
 import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.Class.User;
+import com.chevbook.chevbookapp.Fragments.FragmentMyAnnonces;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -43,6 +45,9 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
     private final Context _c;
     private final Activity activity;
     private User mUser;
+    private Fragment fragmentMyAnnonce;
+
+    public static final int CODE_RETOUR = 0;
 
     private static final int CONST_CREATE = 0;
     private static final int CONST_MODIFIER = 1;
@@ -57,10 +62,11 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
         this.list = null;
     }
 
-    public ListViewMyAnnoncesAdapter(Activity activity, Context context, List<Annonce> listMyAnnonces) {
+    public ListViewMyAnnoncesAdapter(Activity activity, Context context, List<Annonce> listMyAnnonces, Fragment fragment) {
 
         this.activity = activity;
         this._c = context;
+        this.fragmentMyAnnonce = (FragmentMyAnnonces)fragment;
         this.mUser = new User(context);
         this.list = listMyAnnonces;
     }
@@ -123,7 +129,8 @@ public class ListViewMyAnnoncesAdapter extends BaseAdapter {
                 Intent intentDetailAppartement = new Intent(activity, DeposerModifierAnnonceActivity.class);
                 intentDetailAppartement.putExtra("CONST", CONST_MODIFIER);
                 intentDetailAppartement.putExtra("annonce", list.get(position));
-                activity.startActivity(intentDetailAppartement);
+                //activity.startActivity(intentDetailAppartement);
+                fragmentMyAnnonce.startActivityForResult(intentDetailAppartement, CODE_RETOUR);
             }
         });
 

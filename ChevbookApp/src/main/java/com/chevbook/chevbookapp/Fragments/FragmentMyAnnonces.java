@@ -65,6 +65,8 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
 
     private ListViewMyAnnoncesAdapter Adapter;
 
+    public static final int CODE_RETOUR = 0;
+
     private static final int CONST_CREATE = 0;
     private static final int CONST_MODIFIER = 1;
     private Boolean onResume = false;
@@ -112,11 +114,12 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                 Intent intentDetailAppartement = new Intent(getActivity(), DetailsAnnonceActivity.class);
                 intentDetailAppartement.putExtra("annonce", mAnnonces.get(position));
                 startActivity(intentDetailAppartement);
+                //startActivityForResult(intentDetailAppartement, CODE_RETOUR);
             }
 
         });
 
-        Adapter = new ListViewMyAnnoncesAdapter(getActivity(), getActivity().getBaseContext(), mAnnonces);
+        Adapter = new ListViewMyAnnoncesAdapter(getActivity(), getActivity().getBaseContext(), mAnnonces, this);
         mListViewMyAnnounces.setAdapter(Adapter);
 
         if(onResume == false) {
@@ -159,11 +162,32 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
                 //Toast.makeText(getActivity(), getString(R.string.action_new_announce), Toast.LENGTH_SHORT).show();
                 Intent intentDetailAppartement = new Intent(getActivity(), DeposerModifierAnnonceActivity.class);
                 intentDetailAppartement.putExtra("CONST", CONST_CREATE);
-                startActivity(intentDetailAppartement);
+                //startActivity(intentDetailAppartement);
+                startActivityForResult(intentDetailAppartement, CODE_RETOUR);
 
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode == 20) { //create annonce
+            mAnnonces.clear();
+            mAnnonces = new ArrayList<Annonce>();
+
+            listerMyAnnonces();
+            //Toast.makeText(getActivity(), "recharger", Toast.LENGTH_SHORT).show();
+        }
+
+        if(resultCode == 40) { //update annonce
+            mAnnonces.clear();
+            mAnnonces = new ArrayList<Annonce>();
+
+            listerMyAnnonces();
+            //Toast.makeText(getActivity(), "recharger", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
