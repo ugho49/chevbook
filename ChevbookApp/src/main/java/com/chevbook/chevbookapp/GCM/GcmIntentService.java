@@ -5,8 +5,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -21,6 +25,8 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
+
+    private SharedPreferences preferences;
 
     public GcmIntentService() {
         super("GcmIntentService");
@@ -74,6 +80,9 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(String msg) {
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -86,7 +95,17 @@ public class GcmIntentService extends IntentService {
                         .setContentTitle("GCM Notification")
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(msg))
+                        .setLights(Color.GRAY, 3000, 3000) //int argb, int onMs, int offMs
                         .setContentText(msg);
+
+        if(preferences.getBoolean("pref_notification_vibrate", false)) { //vibreur que si accepté dans les prefs
+            mBuilder.setVibrate(new long[] { 1000, 1000});
+        }
+
+        if(preferences.getBoolean("pref_notification_ringtone_on_or_off", false)) { //son que si accepté dans les prefs
+            String strRingtonePreference = preferences.getString("pref_notification_ringtone", "DEFAULT_SOUND");
+            mBuilder.setSound(Uri.parse(strRingtonePreference));
+        }
 
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

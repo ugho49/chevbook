@@ -7,10 +7,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.preference.RingtonePreference;
 
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -19,6 +21,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class FragmentSettings extends PreferenceFragment{
 
     private SharedPreferences prefs;
+    private SharedPreferences.Editor prefs_editor;
+
     private SharedPreferences prefsUser;
     private PreferenceScreen screen;
 
@@ -26,6 +30,11 @@ public class FragmentSettings extends PreferenceFragment{
     private Preference user_email;
     private Preference clean_cache;
     private Preference version_app;
+
+    private CheckBoxPreference checkBoxPreferenceNotification;
+    private CheckBoxPreference checkBoxPreferenceVibrate;
+    private CheckBoxPreference checkBoxPreferenceSound;
+    private RingtonePreference ringtonePreferenceSound;
 
     private static ImageLoader imageLoader;
 
@@ -47,6 +56,7 @@ public class FragmentSettings extends PreferenceFragment{
         addPreferencesFromResource(R.xml.preferences);
         imageLoader = ImageLoader.getInstance();
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        prefs_editor = prefs.edit();
         prefsUser = getActivity().getApplicationContext().getSharedPreferences(PREFS_USER, PRIVATE_MODE);
 
         screen = getPreferenceScreen();
@@ -55,6 +65,11 @@ public class FragmentSettings extends PreferenceFragment{
         user_email = (Preference) findPreference("pref_user_email");
         clean_cache = (Preference) findPreference("pref_more_clean_cache");
         version_app = (Preference) findPreference("pref_more_version_app");
+
+        checkBoxPreferenceNotification = (CheckBoxPreference) findPreference("pref_notification_on_or_off");
+        checkBoxPreferenceVibrate = (CheckBoxPreference) findPreference("pref_notification_vibrate");
+        checkBoxPreferenceSound = (CheckBoxPreference) findPreference("pref_notification_ringtone_on_or_off");
+        ringtonePreferenceSound = (RingtonePreference) findPreference("pref_notification_ringtone");
 
         user_name.setSummary(prefsUser.getString(KEY_FIRSTNAME, "") + " " + prefsUser.getString(KEY_LASTNAME, ""));
         user_email.setSummary(prefsUser.getString(KEY_EMAIL, ""));
@@ -72,7 +87,6 @@ public class FragmentSettings extends PreferenceFragment{
         }
 
         clean_cache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
-
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
@@ -93,35 +107,99 @@ public class FragmentSettings extends PreferenceFragment{
 
                 return false;
             }
-
         });
+
+        checkBoxPreferenceNotification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if(prefs.getBoolean("pref_notification_on_or_off", false)){
+                    prefs_editor.putBoolean("pref_notification_on_or_off", false);
+                }else {
+                    prefs_editor.putBoolean("pref_notification_on_or_off", true);
+                }
+
+                prefs_editor.commit();
+
+                initCheckbox();
+
+                return true;
+            }
+        });
+
+        checkBoxPreferenceVibrate.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if(prefs.getBoolean("pref_notification_vibrate", false)){
+                    prefs_editor.putBoolean("pref_notification_vibrate", false);
+                }else {
+                    prefs_editor.putBoolean("pref_notification_vibrate", true);
+                }
+
+                prefs_editor.commit();
+
+                initCheckbox();
+
+                return true;
+            }
+        });
+
+        checkBoxPreferenceSound.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if(prefs.getBoolean("pref_notification_ringtone_on_or_off", false)){
+                    prefs_editor.putBoolean("pref_notification_ringtone_on_or_off", false);
+                }else {
+                    prefs_editor.putBoolean("pref_notification_ringtone_on_or_off", true);
+                }
+
+                prefs_editor.commit();
+
+                initCheckbox();
+
+                return true;
+            }
+        });
+
+        initCheckbox();
     }
 
-    //@SuppressWarnings("deprecation")
-    /*private void onCreatePreferenceActivity() {
-        addPreferencesFromResource(R.xml.preferences);
-        screen = getPreferenceScreen();
+    private void initCheckbox(){
 
-        Preference user_name = (Preference) findPreference("pref_user_name");
-        Preference user_email = (Preference) findPreference("pref_user_email");
+        //set checked or not
+        if(prefs.getBoolean("pref_notification_on_or_off", false)){ //si notif est à true
+            checkBoxPreferenceNotification.setChecked(true);
+        } else {
+            checkBoxPreferenceNotification.setChecked(false);
+        }
 
-        /*Preference user_firstname = (Preference) findPreference("pref_user_firstname");
-        Preference user_lastname = (Preference) findPreference("pref_user_lastname");
-        Preference user_url_image = (Preference) findPreference("pref_user_url_image");
-        Preference user_password = (Preference) findPreference("pref_user_password");*/
+        if(prefs.getBoolean("pref_notification_vibrate", false)){ //si vibrate est à true
+            checkBoxPreferenceVibrate.setChecked(true);
+        } else {
+            checkBoxPreferenceVibrate.setChecked(false);
+        }
 
-        /*Preference more_assistance = (Preference) findPreference("pref_more_assistance");
-        Preference more_privacy = (Preference) findPreference("pref_more_privacy");
-        Preference more_conditions = (Preference) findPreference("pref_more_conditions");
+        if(prefs.getBoolean("pref_notification_ringtone_on_or_off", false)){ //si ringtone est à true
+            checkBoxPreferenceSound.setChecked(true);
+        } else {
+            checkBoxPreferenceSound.setChecked(false);
+        }
 
-        user_name.setSummary(prefsUser.getString(KEY_FIRSTNAME, "") + " " + prefsUser.getString(KEY_LASTNAME, ""));
-        user_email.setSummary(prefsUser.getString(KEY_EMAIL, ""));*/
-        /*screen.removePreference(user_url_image);
-        screen.removePreference(user_password);
-        screen.removePreference(user_firstname);
-        screen.removePreference(user_lastname);
+        //set enabled or not
+        if(checkBoxPreferenceNotification.isChecked()){
 
-    }*/
+            checkBoxPreferenceVibrate.setEnabled(true);
+            checkBoxPreferenceSound.setEnabled(true);
 
-
+            if(checkBoxPreferenceSound.isChecked()){
+                ringtonePreferenceSound.setEnabled(true);
+            }else {
+                ringtonePreferenceSound.setEnabled(false);
+            }
+        }
+        else {
+            checkBoxPreferenceVibrate.setEnabled(false);
+            checkBoxPreferenceSound.setEnabled(false);
+            ringtonePreferenceSound.setEnabled(false);
+        }
+    }
 }

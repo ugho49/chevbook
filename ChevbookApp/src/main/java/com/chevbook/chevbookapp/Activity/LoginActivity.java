@@ -484,6 +484,7 @@ public class LoginActivity extends ActionBarActivity {
     private void envoyerPhoneId(String id){
         if(!id.equals("")){
 
+            //Boolean testOK = false;
             HttpURLConnection urlConnection = null;
 
             try {
@@ -505,6 +506,7 @@ public class LoginActivity extends ActionBarActivity {
                 out.write(jsonParam.toString());
                 out.flush();
                 out.close();
+                //testOK = true;
             }
             catch (MalformedURLException e){
                 //todo
@@ -519,6 +521,8 @@ public class LoginActivity extends ActionBarActivity {
                     urlConnection.disconnect();
                 }
             }
+
+            //testOK = testOK;
         }
     }
 

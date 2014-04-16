@@ -53,12 +53,23 @@
 
         <CheckBoxPreference
             android:key="pref_notification_on_or_off"
+            android:checked="true"
+            android:defaultValue="true"
             android:title="@string/title_notification_on_or_off">
         </CheckBoxPreference>
 
         <CheckBoxPreference
             android:key="pref_notification_vibrate"
+            android:checked="true"
+            android:defaultValue="true"
             android:title="@string/title_notification_vibrate">
+        </CheckBoxPreference>
+
+        <CheckBoxPreference
+            android:key="pref_notification_ringtone_on_or_off"
+            android:checked="true"
+            android:defaultValue="true"
+            android:title="Notification avec du son">
         </CheckBoxPreference>
 
         <RingtonePreference
