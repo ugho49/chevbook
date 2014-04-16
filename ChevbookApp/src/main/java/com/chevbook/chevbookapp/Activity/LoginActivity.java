@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -84,8 +85,7 @@ public class LoginActivity extends ActionBarActivity {
 
         vmodele = new Modele();
         mUser = new User(getApplicationContext());
-        if (mUser.isLoggedIn())
-        {
+        if (mUser.isLoggedIn()) {
             Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(myIntent);
@@ -96,8 +96,7 @@ public class LoginActivity extends ActionBarActivity {
 
         if (mGcmUtils.checkPlayServices(LoginActivity.this)) {
             gcm = GoogleCloudMessaging.getInstance(LoginActivity.this);
-        }
-        else {
+        } else {
             Log.i("GCM", "No valid Google Play Services APK found.");
         }
 
@@ -124,8 +123,8 @@ public class LoginActivity extends ActionBarActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mLoginStatusView = findViewById(R.id.login_status);
-        mLoginButton = (Button)findViewById(R.id.sign_in_button);
-        mCreateAccountButton = (Button)findViewById(R.id.create_account);
+        mLoginButton = (Button) findViewById(R.id.sign_in_button);
+        mCreateAccountButton = (Button) findViewById(R.id.create_account);
         mForgotPassword = (TextView) findViewById(R.id.login_forgot_password);
         mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
@@ -163,10 +162,9 @@ public class LoginActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(getApplicationContext(), getString(R.string.action_forgot_password), Toast.LENGTH_SHORT).show();
-                if(TextUtils.isEmpty(mEmailView.getText()) && !mEmailView.getText().toString().contains("@")){
+                if (TextUtils.isEmpty(mEmailView.getText()) && !mEmailView.getText().toString().contains("@")) {
                     Toast.makeText(getApplicationContext(), "Veuillez remplir le champs d'email !!", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     AlertDialog.Builder adb = new AlertDialog.Builder(LoginActivity.this);
                     adb.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -356,6 +354,15 @@ public class LoginActivity extends ActionBarActivity {
         private String ErreurLoginTask = "Erreur ";
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //hide keyboard :
+            hideSoftKeyboard();
+
+        }
+
+        @Override
         protected Boolean doInBackground(Void... params) {
 
             HttpURLConnection urlConnection = null;
@@ -363,7 +370,7 @@ public class LoginActivity extends ActionBarActivity {
 
             try {
                 URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_IDENTIFICATION));
-                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setRequestMethod("POST");
@@ -382,8 +389,7 @@ public class LoginActivity extends ActionBarActivity {
 
                 // récupération du serveur
                 int HttpResult = urlConnection.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK)
-                {
+                if (HttpResult == HttpURLConnection.HTTP_OK) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
                     String line = null;
                     while ((line = br.readLine()) != null) {
@@ -396,7 +402,7 @@ public class LoginActivity extends ActionBarActivity {
 
                     boolean user_exist = jsonObject.getBoolean("connectSuccess");
 
-                    if(user_exist) {
+                    if (user_exist) {
 
                         mFirstname = jsonObject.getString("Prenom_Personne"); //prenom
                         mLastname = jsonObject.getString("Nom_Personne"); //nom
@@ -418,19 +424,15 @@ public class LoginActivity extends ActionBarActivity {
                         }
 
                         return true;
-                    }
-                    else {
+                    } else {
                         //Utilisateur existe pas
                         ErreurLoginTask = ErreurLoginTask + "de mot de passe ou d'email";
                         return false;
                     }
-                }
-                else
-                {
+                } else {
                     return false;
                 }
-            }
-            catch (MalformedURLException e){
+            } catch (MalformedURLException e) {
                 ErreurLoginTask = ErreurLoginTask + "URL";
                 return false; //Erreur URL
             } catch (java.net.SocketTimeoutException e) {
@@ -443,7 +445,7 @@ public class LoginActivity extends ActionBarActivity {
                 ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
                 return false; //Erreur JSON
             } finally {
-                if (urlConnection != null){
+                if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
             }
@@ -471,6 +473,9 @@ public class LoginActivity extends ActionBarActivity {
                 //mPasswordView.requestFocus();
 
                 Toast.makeText(getApplicationContext(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
+
+                //show keyboard :
+                //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             }
         }
 
@@ -481,15 +486,16 @@ public class LoginActivity extends ActionBarActivity {
         }
     }
 
-    private void envoyerPhoneId(String id){
-        if(!id.equals("")){
+    private void envoyerPhoneId(String id) {
+        if (!id.equals("")) {
 
             //Boolean testOK = false;
             HttpURLConnection urlConnection = null;
+            StringBuilder sb = new StringBuilder();
 
             try {
                 URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_SEND_PHONE_ID));
-                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.setRequestProperty("Accept", "application/json");
                 urlConnection.setRequestMethod("POST");
@@ -506,9 +512,21 @@ public class LoginActivity extends ActionBarActivity {
                 out.write(jsonParam.toString());
                 out.flush();
                 out.close();
-                //testOK = true;
-            }
-            catch (MalformedURLException e){
+
+                int HttpResult = urlConnection.getResponseCode();
+                if (HttpResult == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    br.close();
+
+                    String result = sb.toString();
+                } else {
+                    //return false;
+                }
+            } catch (MalformedURLException e) {
                 //todo
             } catch (java.net.SocketTimeoutException e) {
                 //todo
@@ -517,41 +535,32 @@ public class LoginActivity extends ActionBarActivity {
             } catch (JSONException e) {
                 //todo
             } finally {
-                if (urlConnection != null){
+                if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
             }
 
-            //testOK = testOK;
         }
     }
 
-    private static String getSha1(String password)
-    {
+    private static String getSha1(String password) {
         String sha1 = "";
-        try
-        {
+        try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
             crypt.update(password.getBytes("UTF-8"));
             sha1 = byteToHex(crypt.digest());
-        }
-        catch(NoSuchAlgorithmException e)
-        {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-        }
-        catch(UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return sha1;
     }
 
-    private static String byteToHex(final byte[] hash)
-    {
+    private static String byteToHex(final byte[] hash) {
         Formatter formatter = new Formatter();
-        for (byte b : hash)
-        {
+        for (byte b : hash) {
             formatter.format("%02x", b);
         }
         String result = formatter.toString();
@@ -559,8 +568,7 @@ public class LoginActivity extends ActionBarActivity {
         return result;
     }
 
-    public void forgotPassword()
-    {
+    public void forgotPassword() {
         new AsyncTask<Void, Void, Boolean>() {
 
             String AfficherJSON = null;
@@ -579,7 +587,7 @@ public class LoginActivity extends ActionBarActivity {
 
                 try {
                     URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_FORGOT_PASSWORD_USER));
-                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setRequestProperty("Content-Type", "application/json");
                     urlConnection.setRequestProperty("Accept", "application/json");
                     urlConnection.setRequestMethod("POST");
@@ -597,8 +605,7 @@ public class LoginActivity extends ActionBarActivity {
 
                     // récupération du serveur
                     int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK)
-                    {
+                    if (HttpResult == HttpURLConnection.HTTP_OK) {
                         BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
                         String line = null;
                         while ((line = br.readLine()) != null) {
@@ -613,19 +620,15 @@ public class LoginActivity extends ActionBarActivity {
 
                         boolean recupOK = jsonObject.getBoolean("recupSuccess");
 
-                        if (recupOK){
+                        if (recupOK) {
                             return true;
-                        }
-                        else {
+                        } else {
                             return false;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         return false;
                     }
-                }
-                catch (MalformedURLException e){
+                } catch (MalformedURLException e) {
                     ErreurLoginTask = ErreurLoginTask + "URL";
                     return false; //Erreur URL
                 } catch (SocketTimeoutException e) {
@@ -638,7 +641,7 @@ public class LoginActivity extends ActionBarActivity {
                     ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
                     return false; //Erreur JSON
                 } finally {
-                    if (urlConnection != null){
+                    if (urlConnection != null) {
                         urlConnection.disconnect();
                     }
                 }
@@ -647,11 +650,9 @@ public class LoginActivity extends ActionBarActivity {
             @Override
             protected void onPostExecute(final Boolean result) {
 
-                if (result)
-                {
+                if (result) {
                     Toast.makeText(getApplicationContext(), "Votre nouveau mot de passe viens de vous être envoyé par mail.\nPensez à vérifier dans vos spam !!!", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Adresse email invalide", Toast.LENGTH_SHORT).show();
                 }
 
@@ -665,5 +666,23 @@ public class LoginActivity extends ActionBarActivity {
                 adb.show();*/
             }
         }.execute();
+    }
+
+    /**
+     * Hides the soft keyboard
+     */
+    public void hideSoftKeyboard() {
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    /**
+     * Shows the soft keyboard
+     */
+    public void showSoftKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        view.requestFocus();
     }
 }
