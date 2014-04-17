@@ -203,7 +203,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    protected void set_super_finish(){
+    public void set_super_finish(){
         super.finish();
     }
 }

@@ -90,7 +90,7 @@
         <Preference
             android:key="pref_more_version_app"
             android:title="Version"
-            android:selectable="false"/>
+            android:selectable="true"/>
 
     </PreferenceCategory>
 

@@ -38,6 +38,8 @@ public class FragmentSettings extends PreferenceFragment{
 
     private static ImageLoader imageLoader;
 
+    private int CptEasterEggs = 0;
+
     // All Shared Preferences
     private static final String KEY_EMAIL = "emailUserChevbook";
     private static final String KEY_PASSWORD_MD5 = "passwordMD5UserChevbook";
@@ -105,6 +107,26 @@ public class FragmentSettings extends PreferenceFragment{
                 adb.setMessage("Voulez-vous vider le cache de l'application Chevbook ?");
                 adb.show();
 
+                return false;
+            }
+        });
+
+        version_app.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener(){
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                /*CptEasterEggs++;
+                if(CptEasterEggs == 5){
+                    AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                    adb.setMessage("Vous avez découvert un easter eggs !");
+                    adb.show();
+
+                    //getActivity().finish();
+
+                    PowerManager manager = (PowerManager) getActivity().getSystemService(Context.POWER_SERVICE);
+                    PowerManager.WakeLock wl = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Your Tag");
+                    wl.acquire();
+                    wl.release();
+                }*/
                 return false;
             }
         });

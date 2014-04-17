@@ -9,14 +9,16 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.chevbook.chevbookapp.Activity.MainActivity;
 import com.chevbook.chevbookapp.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Ugho on 15/04/2014.
@@ -24,7 +26,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
-    NotificationCompat.Builder builder;
 
     private SharedPreferences preferences;
 
@@ -41,65 +42,57 @@ public class GcmIntentService extends IntentService {
         String messageType = gcm.getMessageType(intent);
 
         if (!extras.isEmpty()) {  // has effect of unparcelling Bundle
-            /*
-             * Filter messages based on message type. Since it is likely that GCM
-             * will be extended in the future with new message types, just ignore
-             * any message types you're not interested in, or that you don't
-             * recognize.
-             */
-            if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
-            } else if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " +
-                        extras.toString());
+
+            if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
+                //sendNotification("Send error: " + extras.toString());
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+                //sendNotification("Deleted messages on server: " + extras.toString());
                 // If it's a regular GCM message, do some work.
-            } else if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                // This loop represents the service doing some work.
-                for (int i=0; i<5; i++) {
-                    Log.i("gcm", "Working... " + (i+1)
-                            + "/5 @ " + SystemClock.elapsedRealtime());
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                    }
-                }
-                Log.i("gcm", "Completed work @ " + SystemClock.elapsedRealtime());
-                // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
-                Log.i("gcm", "Received: " + extras.toString());
+            } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
+
+                sendNotification(extras.toString());
+                //Log.i("gcm", "Received: " + extras.toString());
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
         GcmBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    // Put the message into a notification and post it.
-    // This is just one simple example of what you might choose to do with
-    // a GCM message.
-    private void sendNotification(String msg) {
+    private void sendNotification(String sb) {
+
+        String title = ""; //Une annonce à été déposé
+        String msg = "";
+
+        try {
+            JSONArray bundle = new JSONArray(sb.substring(6));
+            JSONObject content = bundle.getJSONObject(0);
+            title = content.getString("title");
+            msg = content.getString("message");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.logo_android_chevbook)
-                        .setContentTitle("GCM Notification")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setLights(Color.GRAY, 3000, 3000) //int argb, int onMs, int offMs
-                        .setContentText(msg);
+                        .setSmallIcon(R.drawable.small_logo)
+                        .setContentTitle(title)
+                        .setAutoCancel(true)
+                        .setStyle(new NotificationCompat.InboxStyle().addLine(msg))
+                        .setLights(Color.GRAY, 3000, 3000); //int argb, int onMs, int offMs
+                        //.setContentText(msg);
 
         if(preferences.getBoolean("pref_notification_vibrate", false)) { //vibreur que si accepté dans les prefs
-            mBuilder.setVibrate(new long[] { 1000, 1000});
+            mBuilder.setVibrate(new long[] {1000, 1000, 1000});
         }
 
         if(preferences.getBoolean("pref_notification_ringtone_on_or_off", false)) { //son que si accepté dans les prefs
@@ -107,7 +100,10 @@ public class GcmIntentService extends IntentService {
             mBuilder.setSound(Uri.parse(strRingtonePreference));
         }
 
+
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+
     }
 }
