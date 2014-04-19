@@ -28,7 +28,8 @@ import java.util.Date;
 /**
  * Created by Ugho on 19/04/2014.
  */
-public class API extends AsyncTask<String, Void, Boolean> {
+
+public abstract class API extends AsyncTask<String, Void, Boolean> {
 
     //Variables
     protected WeakReference<Activity> mActivity = null;
@@ -69,8 +70,20 @@ public class API extends AsyncTask<String, Void, Boolean> {
     }
 
     //Méthodes
+    protected Date ConvertToDate(String dateString){
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return format.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new Date();
+        }
+    }
+
     private boolean prepareAsyncTask(){
         Boolean mReturn = true;
+        mUrl = resources.getString(R.string.URL_SERVEUR);
 
         if(!prepareJsonParam())
             mReturn = false;
@@ -82,7 +95,7 @@ public class API extends AsyncTask<String, Void, Boolean> {
         return mReturn;
     }
 
-    private Boolean AddParamUser(){
+    protected Boolean AddParamUser(){
         try {
             jsonParam.put("email", mUser.getEmail());
             jsonParam.put("password", mUser.getPasswordSha1());
@@ -93,24 +106,8 @@ public class API extends AsyncTask<String, Void, Boolean> {
         }
     }
 
-    private boolean prepareJsonParam(){
-        jsonParam = new JSONObject();
-        mUrl = resources.getString(R.string.URL_SERVEUR);
-
-        try {
-            if(action.equals("lister_annonce")){
-                mUrl += resources.getString(R.string.URL_SERVEUR_LIST_ANNONCES);
-
-                jsonParam.put("debut", Integer.parseInt(mParams[1]));
-                jsonParam.put("fin", Integer.parseInt(mParams[2]));
-            }
-
-            return true;
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-            return false;
-        }
+    protected boolean prepareJsonParam(){ //override methode
+        return true;
     }
 
     private boolean prepareURLConnection(){
@@ -149,6 +146,10 @@ public class API extends AsyncTask<String, Void, Boolean> {
         }
     }
 
+    protected boolean interpreterResult(String mResult){ //override methode
+        return true;
+    }
+
     @Override
     protected Boolean doInBackground (String... params) {
 
@@ -160,7 +161,8 @@ public class API extends AsyncTask<String, Void, Boolean> {
         }
 
         try {
-            prepareAsyncTask();
+            if(!prepareAsyncTask())
+                return false;
 
             // récupération du serveur
             int HttpResult = urlConnection.getResponseCode();
@@ -193,21 +195,6 @@ public class API extends AsyncTask<String, Void, Boolean> {
             if (urlConnection != null){
                 urlConnection.disconnect();
             }
-        }
-    }
-
-    protected boolean interpreterResult(String mResult){
-        return true;
-    }
-
-    protected Date ConvertToDate(String dateString){
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            return format.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new Date();
         }
     }
 }

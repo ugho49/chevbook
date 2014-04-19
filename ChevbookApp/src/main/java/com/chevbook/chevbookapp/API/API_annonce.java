@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 
 import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.Fragments.FragmentAnnonces;
+import com.chevbook.chevbookapp.Fragments.FragmentFavoris;
+import com.chevbook.chevbookapp.Fragments.FragmentMyAnnonces;
+import com.chevbook.chevbookapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,15 +16,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 /**
  * Created by Ugho on 19/04/2014.
  */
+
 public class API_annonce extends API {
 
     private ArrayList<Annonce> mAnnonces = new ArrayList<Annonce>();
     private int AnnonceMax = 0;
     private int annonceChargeesInThisTask = 0;
+    private boolean Sucess_CreateUptadeDelete = false;
 
     public API_annonce(Activity activity) {
         super(activity);
@@ -32,6 +36,33 @@ public class API_annonce extends API {
     }
 
     @Override
+    protected boolean prepareJsonParam(){
+        try {
+            if(action.equals("lister_annonce")){
+                mUrl += resources.getString(R.string.URL_SERVEUR_LIST_ANNONCES);
+                jsonParam.put("debut", Integer.parseInt(mParams[1]));
+                jsonParam.put("fin", Integer.parseInt(mParams[2]));
+            }
+
+            if(action.equals("lister_mes_annonce")){
+                mUrl += resources.getString(R.string.URL_SERVEUR_LIST_MY_ANNONCES);
+                AddParamUser();
+            }
+
+            if(action.equals("lister_mes_favoris")){
+                mUrl += resources.getString(R.string.URL_SERVEUR_LIST_MY_FAVORIS);
+                AddParamUser();
+            }
+
+            return true;
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
     protected void onPostExecute (Boolean result) {
 
         if(action.equals("lister_annonce")){
@@ -39,17 +70,38 @@ public class API_annonce extends API {
             ((FragmentAnnonces)mFragment).resultListerAnnonce(result, mAnnonces, Integer.parseInt(mParams[1]), annonceChargeesInThisTask);
         }
 
+        if(action.equals("lister_mes_annonce")){
+            ((FragmentMyAnnonces)mFragment).resultListerMyAnnonce(result, mAnnonces);
+        }
+
+        if(action.equals("lister_mes_favoris")){
+            ((FragmentFavoris)mFragment).resultListerMyFavoris(result, mAnnonces);
+        }
     }
 
     @Override
     protected boolean interpreterResult(String mResult){
+        if(action.equals("lister_annonce") || action.equals("lister_mes_annonce") || action.equals("lister_mes_favoris")){
+            return interpreterResultList(mResult);
+        }
+        else {
+            return true;
+        }
+    }
 
+    private boolean interpreterResultList(String mResult){
         try {
+
             JSONArray jsonArray = new JSONArray(sb.toString());
+            JSONArray listAnnonces = null;
 
-            AnnonceMax = jsonArray.getJSONArray(0).getJSONObject(0).getInt("Nb");
-
-            JSONArray listAnnonces = jsonArray.getJSONArray(1); //contient des JSON objets
+            if(action.equals("lister_annonce")) {
+                AnnonceMax = jsonArray.getJSONArray(0).getJSONObject(0).getInt("Nb");
+                listAnnonces = jsonArray.getJSONArray(1); //contient des JSON objets
+            }
+            else {
+                listAnnonces = jsonArray; //contient des JSON objets
+            }
 
             annonceChargeesInThisTask = listAnnonces.length();
 
