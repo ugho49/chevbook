@@ -20,9 +20,19 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Ugho on 21/02/14.
@@ -102,25 +112,93 @@ public class CustomDialogMap {
         Geocoder fwdGeocoder;
         List<Address> locations;
 
+        Double lon = new Double(0);
+        Double lat = new Double(0);
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
             position = null;
-            fwdGeocoder = new Geocoder(mActivity.getApplicationContext(), Locale.FRANCE);
-            locations = null;
+            //fwdGeocoder = new Geocoder(mActivity.getApplicationContext(), Locale.FRANCE);
+            fwdGeocoder = new Geocoder(mActivity.getApplicationContext());
+            locations = new ArrayList<Address>();
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
                 locations = fwdGeocoder.getFromLocationName(adresse, 10);
-                return true;
+
+                if (locations.size() > 0)
+                {
+                    position = new LatLng(locations.get(0).getLatitude(),locations.get(0).getLongitude());
+                    return true;
+                }
+                else {
+                    String vad = URLEncoder.encode(adresse, "UTF-8");
+                    String vurl = "http://maps.google.com/maps/api/geocode/json?address=" + vad + "&sensor=true";
+
+                    HttpURLConnection urlConnection = null;
+                    StringBuilder sb = new StringBuilder();
+
+                    URL url = new URL(vurl);
+                    urlConnection = (HttpURLConnection)url.openConnection();
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setConnectTimeout(5000);
+                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+
+                    // Création objet jsonn clé valeur
+                    JSONObject jsonParam = new JSONObject();
+                    // Exemple Clé valeur utiles à notre application
+                    /*jsonParam.put("debut", debut);
+                    jsonParam.put("fin", fin);*/
+                    out.write(jsonParam.toString());
+                    out.flush();
+                    out.close();
+
+                    // récupération du serveur
+                    int HttpResult = urlConnection.getResponseCode();
+                    if (HttpResult == HttpURLConnection.HTTP_OK)
+                    {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+                        String line = null;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        br.close();
+
+                        JSONObject jsonObject = new JSONObject(sb.toString());
+
+                        lon = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
+                                .getJSONObject("geometry").getJSONObject("location")
+                                .getDouble("lng");
+
+                        lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0)
+                                .getJSONObject("geometry").getJSONObject("location")
+                                .getDouble("lat");
+
+                        if(lon != 0 && lat != 0){
+                            position = new LatLng(lat,lon);
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
             catch (IOException e) {
-                // Pbs geocoder adresse
+                return false;
+            } catch (JSONException e) {
                 return false;
             }
         }
@@ -129,38 +207,24 @@ public class CustomDialogMap {
         protected void onPostExecute(final Boolean success) {
 
             if (success) {
-                if ((locations == null) || (locations.isEmpty()))
-                {
-                    // Adresse client inconnue
-                    Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.map_error_found_adress), Toast.LENGTH_SHORT).show();
-                    Log.d("chevbook_CD_MAP", "not adress fount");
-                }
-                else
-                {
-                    // Réussite du geofencing
-                    position = new LatLng(locations.get(0).getLatitude(),locations.get(0).getLongitude());
-
-                    /*LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-                    googleMap.addMarker(new MarkerOptions().position(position).title(mActivity.getResources().getString(R.string.appartements)).snippet(adresse).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    builder.include(position);
-
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), mActivity.getResources().getDisplayMetrics().widthPixels, mActivity.getResources().getDisplayMetrics().heightPixels, 200));*/
-
+                if(position != null){
                     googleMap.addMarker(new MarkerOptions()
-                                                .position(position)
-                                                .title("")
-                                                .snippet(adresse)
-                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    
+                            .position(position)
+                            //.title("")
+                            //.snippet(adresse)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
 
                     CameraPosition cameraPosition = new CameraPosition
-                                                            .Builder()
-                                                            .target(position)
-                                                            .zoom(13)
-                                                            .build();
+                            .Builder()
+                            .target(position)
+                            .zoom(13)
+                            .build();
 
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
+                else {
+                    Toast.makeText(mActivity.getApplicationContext(), mActivity.getResources().getString(R.string.map_error_found_adress), Toast.LENGTH_SHORT).show();
                 }
             }
             else

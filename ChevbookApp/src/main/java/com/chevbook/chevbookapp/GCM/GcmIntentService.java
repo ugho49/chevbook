@@ -88,7 +88,7 @@ public class GcmIntentService extends IntentService {
                         .setContentTitle(title)
                         .setAutoCancel(true)
                         .setStyle(new NotificationCompat.InboxStyle().addLine(msg))
-                        .setLights(Color.GRAY, 3000, 3000); //int argb, int onMs, int offMs
+                        .setLights(Color.MAGENTA, 3000, 3000); //int argb, int onMs, int offMs
                         //.setContentText(msg);
 
         if(preferences.getBoolean("pref_notification_vibrate", false)) { //vibreur que si accepté dans les prefs
