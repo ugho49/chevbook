@@ -3,7 +3,6 @@ package com.chevbook.chevbookapp.Fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -26,6 +25,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.API.API_annonce;
 import com.chevbook.chevbookapp.Activity.DeposerModifierAnnonceActivity;
 import com.chevbook.chevbookapp.Activity.DetailsAnnonceActivity;
 import com.chevbook.chevbookapp.Adapter.ListViewAnnonceAdapter;
@@ -33,21 +33,7 @@ import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.Class.Modele;
 import com.chevbook.chevbookapp.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -178,6 +164,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
             onResume = false;
         }
 
+        //Toast.makeText(getActivity(), ((Object) this).getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
+
         return root;
     }
 
@@ -252,6 +240,10 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         }
     }
 
+    public void setAnnonceMax(int annonceMax) {
+        AnnonceMax = annonceMax;
+    }
+
     private void custom_dialog_more_detail() {
         View custom_view_change_password = mInflater.inflate(R.layout.custom_dialog_search_annonce_more_detail, null);
 
@@ -322,7 +314,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         }
     }
 
-    public void listerAnnonces(final int debut, final int fin)
+    /*public void listerAnnonces(final int debut, final int fin)
     {
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -512,14 +504,10 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
 
                     if(nbAnnoncesNonChargeesRestantes >= 10)
                     {
-                        /*AnnonceDebut = AnnonceDebut + 10;
-                        AnnonceFin = AnnonceFin + 10;*/
                         AnnonceDebut = AnnonceFin + 1;
                         AnnonceFin = 10;
                     }
                     else {
-                        /*AnnonceDebut = AnnonceDebut + nbAnnoncesNonChargeesRestantes;
-                        AnnonceFin = AnnonceFin + nbAnnoncesNonChargeesRestantes;*/
                         AnnonceDebut = AnnonceFin + 1;
                         AnnonceFin = nbAnnoncesNonChargeesRestantes;
                     }
@@ -527,15 +515,6 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                 }
                 else {
                     //Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
-
-                    /*AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-                    adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    adb.setMessage(AfficherJSON);
-                    adb.show();*/
 
                     mListViewSearch.setVisibility(View.GONE);
                     mLinearLayoutSearchAppartementNoResult.setVisibility(View.VISIBLE);
@@ -559,5 +538,63 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
             e.printStackTrace();
             return new Date();
         }
+    }*/
+
+    public void listerAnnonces(int debut, int fin)
+    {
+        actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+        mLinearLayoutSearchAppartementNoResult.setVisibility(View.GONE);
+
+        if(AnnonceChargees == 0)
+        {
+            mListViewSearch.setVisibility(View.GONE);
+            mLinearLayoutSearchAppartementLoading.setVisibility(View.VISIBLE);
+        }
+
+        String[] mesparams = {"lister_annonce", Integer.toString(debut), Integer.toString(fin)};
+        new API_annonce(FragmentAnnonces.this).execute(mesparams);
+    }
+
+    public void resultListerAnnonce(Boolean result, ArrayList<Annonce> list, int debut, int annonceChargeesInThisTask){
+
+        mListViewSearch.setVisibility(View.VISIBLE);
+        mLinearLayoutSearchAppartementLoading.setVisibility(View.GONE);
+        mLinearLayoutSearchAppartementNoResult.setVisibility(View.GONE);
+
+        if (result)
+        {
+            for(Annonce a : list){
+                mAnnonces.add(a);
+            }
+
+            Adapter.setList(mAnnonces);
+            Adapter.notifyDataSetChanged();
+
+            if(debut != 0) {
+                mListViewSearch.smoothScrollToPosition(AnnonceChargees);
+            }
+
+            AnnonceChargees = AnnonceChargees + annonceChargeesInThisTask;
+            int nbAnnoncesNonChargeesRestantes = AnnonceMax - AnnonceChargees;
+
+            if(nbAnnoncesNonChargeesRestantes >= 10)
+            {
+                AnnonceDebut = AnnonceFin + 1;
+                AnnonceFin = 10;
+            }
+            else {
+                AnnonceDebut = AnnonceFin + 1;
+                AnnonceFin = nbAnnoncesNonChargeesRestantes;
+            }
+        }
+        else {
+
+            mListViewSearch.setVisibility(View.GONE);
+            mLinearLayoutSearchAppartementNoResult.setVisibility(View.VISIBLE);
+        }
+
+        actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+        mPullToRefreshLayout.setRefreshComplete();
+        flag_loading = false;
     }
 }
