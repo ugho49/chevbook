@@ -113,6 +113,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     private static final int CONST_MODIFIER = 1;
     private int CONSTANTE_EN_PARAM;
 
+    private Boolean clickDepotModif = false;
     private Boolean actionDeposerModifier = false;
 
     private static String [] SpinnerListQuartier;
@@ -247,18 +248,30 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                     break;
 
                 case R.id.buttonDeposerModifierAnnonceValider:
-                    if(CONSTANTE_EN_PARAM == CONST_MODIFIER)
-                    {
-                        if(verifDepotAnnonce())
-                        {
-                            //Toast.makeText(getApplicationContext(), "Modifier annonce", Toast.LENGTH_SHORT).show();
-                            UpdateAnnonceTask();
+                    if(!clickDepotModif) {
+                        clickDepotModif = true;
+                        if (CONSTANTE_EN_PARAM == CONST_MODIFIER) {
+                            if (verifDepotAnnonce()) {
+                                //Toast.makeText(getApplicationContext(), "Modifier annonce", Toast.LENGTH_SHORT).show();
+                                UpdateAnnonceTask();
+                            }
+                            else {
+                                clickDepotModif = false;
+                            }
+                        } else if (CONSTANTE_EN_PARAM == CONST_CREATE) {
+                            if (verifDepotAnnonce()) {
+                                CreateAnnonceTask();
+                            }
+                            else {
+                                clickDepotModif = false;
+                            }
                         }
                     }
-                    else if(CONSTANTE_EN_PARAM == CONST_CREATE){
-                        if(verifDepotAnnonce())
-                        {
-                            CreateAnnonceTask();
+                    else {
+                        if (CONSTANTE_EN_PARAM == CONST_MODIFIER) {
+                            Toast.makeText(getApplicationContext(), "La modification est en cours", Toast.LENGTH_SHORT).show();
+                        } else if (CONSTANTE_EN_PARAM == CONST_CREATE) {
+                            Toast.makeText(getApplicationContext(), "La création est en cours", Toast.LENGTH_SHORT).show();
                         }
                     }
                     break;
@@ -289,7 +302,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         mEditTextDeposerModifierAnnonceLoyer.setError(null);
 
         if(cpt <= 0){
-            Toast.makeText(getApplicationContext(), "Il est OBLIGATOIRE de mettre une photo minimum pour déposer l'annonce.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Il est OBLIGATOIRE de mettre une photo minimum !", Toast.LENGTH_SHORT).show();
             vretour = false;
         }
 
@@ -556,12 +569,13 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
-        if(CONSTANTE_EN_PARAM == CONST_CREATE){
+        /*if(CONSTANTE_EN_PARAM == CONST_CREATE){
             base64 = Base64.encodeToString(b, Base64.DEFAULT);
         }
         else if(CONSTANTE_EN_PARAM == CONST_MODIFIER){
             base64 = "BASE64: " + Base64.encodeToString(b, Base64.DEFAULT);
-        }
+        }*/
+        base64 = "BASE64: " + Base64.encodeToString(b, Base64.DEFAULT);
         return base64;
     }
 
@@ -947,6 +961,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
                 //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                clickDepotModif = false;
 
                 if (progress.isShowing()) {
                     progress.dismiss();
@@ -1104,6 +1119,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
 
                 //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                clickDepotModif = false;
 
                 if (progress.isShowing()) {
                     progress.dismiss();

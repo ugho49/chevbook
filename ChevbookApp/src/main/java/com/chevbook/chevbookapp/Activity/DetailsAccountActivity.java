@@ -151,7 +151,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(DetailsAccountActivity.this);
                     alertDialog.setPositiveButton(getString(R.string.btn_yes), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Base64Image = "null";
+                            Base64Image = "";
                             mImageViewPictureUser.setImageResource(R.drawable.ic_user_drag_drop);
                             mButtonDeleteImage.setVisibility(View.GONE);
                         }
@@ -178,10 +178,12 @@ public class DetailsAccountActivity extends ActionBarActivity {
         String url_image = mUser.getUrlProfilPicture();
         if(!url_image.equals(""))
         {
+            Base64Image = "URL: " + url_image;
             imageLoader.displayImage(url_image, mImageViewPictureUser);
             mButtonDeleteImage.setVisibility(View.VISIBLE);
         }
         else {
+            Base64Image = "";
             mImageViewPictureUser.setImageResource(R.drawable.ic_user_drag_drop);
             mButtonDeleteImage.setVisibility(View.GONE);
         }
@@ -196,9 +198,6 @@ public class DetailsAccountActivity extends ActionBarActivity {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                /*mImageViewPictureUser.setImageBitmap(imageBitmap);
-                mButtonDeleteImage.setVisibility(View.VISIBLE);
-                Base64Image = encodeTobase64(imageBitmap);*/
                 setBitmapAndEncodeInBase64(imageBitmap);
             }
             else if (requestCode == REQUEST_SELECT_PICTURE) {
@@ -207,9 +206,6 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
                 btmapOptions.inSampleSize = 4;
                 Bitmap imageBitmap = BitmapFactory.decodeFile(selectedPath, btmapOptions);
-                /*mImageViewPictureUser.setImageBitmap(imageBitmap);
-                mButtonDeleteImage.setVisibility(View.VISIBLE);
-                Base64Image = encodeTobase64(imageBitmap);*/
                 setBitmapAndEncodeInBase64(imageBitmap);
             }
         }
@@ -286,10 +282,13 @@ public class DetailsAccountActivity extends ActionBarActivity {
 
     public String encodeTobase64(Bitmap image)
     {
+        String base64 = "";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
+        base64 = "BASE64: " + Base64.encodeToString(b, Base64.DEFAULT);
+        //return Base64.encodeToString(b, Base64.DEFAULT);
+        return base64;
     }
 
     private void setBitmapAndEncodeInBase64(final Bitmap bm)
