@@ -3,6 +3,7 @@ package com.chevbook.chevbookapp.API;
 import android.app.Activity;
 import android.support.v4.app.Fragment;
 
+import com.chevbook.chevbookapp.Activity.DeposerModifierAnnonceActivity;
 import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.Fragments.FragmentAnnonces;
 import com.chevbook.chevbookapp.Fragments.FragmentFavoris;
@@ -54,9 +55,46 @@ public class API_annonce extends API {
                 AddParamUser();
             }
 
+            if(action.equals("creer_annonce")){
+                mUrl += resources.getString(R.string.URL_SERVEUR_CREATE_ANNONCES);
+                AddParamUser();
+                addParamAnnonce();
+            }
+
+            if(action.equals("modifier_annonce")){
+                mUrl += resources.getString(R.string.URL_SERVEUR_UPDATE_ANNONCES);
+                AddParamUser();
+                jsonParam.put("IdAnnonce", mParams[1]);
+                addParamAnnonce();
+            }
+
             return true;
         }
         catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean addParamAnnonce(){
+        try {
+            jsonParam.put("date", mParams[2]);
+            jsonParam.put("titre", mParams[3]);
+            jsonParam.put("prix", mParams[4]);
+            jsonParam.put("description", mParams[5]);
+            jsonParam.put("nbPiece", mParams[6]);
+            jsonParam.put("adresse", mParams[7]);
+            jsonParam.put("surface", mParams[8]);
+            jsonParam.put("estMeuble", mParams[9]);
+
+            jsonParam.put("type", mParams[10]);
+            jsonParam.put("quartier", mParams[11]);
+            jsonParam.put("sousCategorie", mParams[12]);
+            jsonParam.put("categorie", mParams[13]);
+
+            jsonParam.put("listeImage", new JSONArray(mParams[14]));
+            return true;
+        } catch (JSONException e) {
             e.printStackTrace();
             return false;
         }
@@ -77,6 +115,10 @@ public class API_annonce extends API {
         if(action.equals("lister_mes_favoris")){
             ((FragmentFavoris)mFragment).resultListerMyFavoris(result, mAnnonces);
         }
+
+        if (action.equals("creer_annonce") || action.equals("modifier_annonce")){
+            ((DeposerModifierAnnonceActivity)mActivity).resultCreerModifierAnnonce(result);
+        }
     }
 
     @Override
@@ -85,7 +127,34 @@ public class API_annonce extends API {
             return interpreterResultList(mResult);
         }
         else {
-            return true;
+            try {
+                if (action.equals("creer_annonce")) {
+                    JSONObject jsonObject = new JSONObject(mResult);
+                    boolean CreateOK = jsonObject.getBoolean("creationReussie");
+
+                    if (CreateOK) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                if (action.equals("modifier_annonce")){
+                    JSONObject jsonObject = new JSONObject(sb.toString());
+                    boolean ModifOK = jsonObject.getBoolean("modificationReussie");
+
+                    if(ModifOK){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
     }
 

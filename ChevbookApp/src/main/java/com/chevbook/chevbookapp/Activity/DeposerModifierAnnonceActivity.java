@@ -30,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.API.API_annonce;
 import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.R;
@@ -250,7 +251,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 case R.id.buttonDeposerModifierAnnonceValider:
                     if(!clickDepotModif) {
                         clickDepotModif = true;
-                        if (CONSTANTE_EN_PARAM == CONST_MODIFIER) {
+                        /*if (CONSTANTE_EN_PARAM == CONST_MODIFIER) {
                             if (verifDepotAnnonce()) {
                                 //Toast.makeText(getApplicationContext(), "Modifier annonce", Toast.LENGTH_SHORT).show();
                                 UpdateAnnonceTask();
@@ -265,6 +266,12 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                             else {
                                 clickDepotModif = false;
                             }
+                        }*/
+
+                        if(verifDepotAnnonce()){
+                            CreerModifierAnnonceTask();
+                        }else {
+                            clickDepotModif = false;
                         }
                     }
                     else {
@@ -825,318 +832,108 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         mEditTextDeposerModifierAnnonceLoyer.setText(Double.toString(mAnnonce.getPrix_annonce()));
     }
 
-    public void UpdateAnnonceTask()
+    public void CreerModifierAnnonceTask()
     {
-        new AsyncTask<Void, Void, Boolean>() {
+        actionDeposerModifier = true;
+        String[] mesparams;
+        //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+        progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
 
-            String ErreurLoginTask = "Erreur";
-            String AfficherJSON = null;
-            Context context = getApplicationContext();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                actionDeposerModifier = true;
-                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
-                progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
-                progress.setMessage("Modification de l'annonce en cours ...");
-                progress.setCancelable(false);
-                progress.show();
+        int est_meuble = 0;
+        if(mCheckBoxDeposerModifierAnnonceEstMeuble.isChecked()){
+            est_meuble = 1;
+        }else {
+            est_meuble = 0;
+        }
 
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        JSONArray jsonArrayImages = new JSONArray();
+        for(int i=0; i<=4; i++){
+            if (!Base64Image[i].equals("")){
+                jsonArrayImages.put(Base64Image[i]);
             }
+        }
 
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                HttpURLConnection urlConnection = null;
-                StringBuilder sb = new StringBuilder();
+        String action = "";
+        String id_annonce = "";
+        String adresse = "";
 
-                try {
-                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_UPDATE_ANNONCES));
-                    urlConnection = (HttpURLConnection)url.openConnection();
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
-                    urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setConnectTimeout(5000);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+        if (CONSTANTE_EN_PARAM == CONST_MODIFIER) { //modifier annonce
+            progress.setMessage("Modification de l'annonce en cours ...");
 
-                    // Création objet jsonn clé valeur
-                    JSONObject jsonParam = new JSONObject();
-                    JSONArray jsonArrayImages = new JSONArray();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String date = sdf.format(new Date());
-                    int est_meuble = 0;
+            action = "modifier_annonce";
+            id_annonce = Integer.toString(mAnnonce.getId_annonce());
+            adresse = mEditTextDeposerModifierAnnonceAdresse.getText().toString();
+        }
+        else { //créer annonce
+            progress.setMessage("Création de l'annonce en cours ...\n\nL'upload des photos sur le serveur peut prendre un petit peu de temps ! (Prenez un café ^^)");
 
-                    if(mCheckBoxDeposerModifierAnnonceEstMeuble.isChecked())
-                    {
-                        est_meuble = 1;
-                    }
-                    else {
-                        est_meuble = 0;
-                    }
+            action = "creer_annonce";
+            id_annonce = "";
+            adresse = mEditTextDeposerModifierAnnonceAdresse.getText().toString() + ", " + mEditTextDeposerModifierAnnonceCP.getText().toString() + " " + mEditTextDeposerModifierAnnonceVille.getText().toString();
+        }
 
-                    for(int i=0; i<=4; i++){
-                        if (!Base64Image[i].equals("")){
-                            jsonArrayImages.put(Base64Image[i]);
-                        }
-                    }
+        progress.setCancelable(false);
+        progress.show();
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-                    // Exemple Clé valeur utiles à notre application
-                    jsonParam.put("email", mUser.getEmail());
-                    jsonParam.put("password", mUser.getPasswordSha1());
+        mesparams = new String[]{
+                action,
+                id_annonce,
+                date.toString(),
+                mTextViewDeposerModifierAnnonceTitre.getText().toString(),
+                mEditTextDeposerModifierAnnonceLoyer.getText().toString(),
+                mEditTextDeposerModifierAnnonceDescription.getText().toString(),
+                mEditTextDeposerModifierAnnonceNbPieces.getText().toString(),
+                adresse,
+                mEditTextDeposerModifierAnnonceSurface.getText().toString(),
+                Integer.toString(est_meuble),
+                mSpinnerDeposerModifierAnnonceType.getSelectedItem().toString(),
+                mSpinnerDeposerModifierAnnonceQuartier.getSelectedItem().toString(),
+                mSpinnerDeposerModifierAnnonceSousCategorie.getSelectedItem().toString(),
+                mSpinnerDeposerModifierAnnonceCategorie.getSelectedItem().toString(),
+                jsonArrayImages.toString()};
 
-                    jsonParam.put("IdAnnonce", mAnnonce.getId_annonce());
-                    jsonParam.put("date", date);
-                    jsonParam.put("titre", mTextViewDeposerModifierAnnonceTitre.getText().toString());
-                    jsonParam.put("prix", mEditTextDeposerModifierAnnonceLoyer.getText().toString());
-                    jsonParam.put("description", mEditTextDeposerModifierAnnonceDescription.getText().toString());
-                    jsonParam.put("nbPiece", mEditTextDeposerModifierAnnonceNbPieces.getText().toString());
-                    jsonParam.put("adresse", mEditTextDeposerModifierAnnonceAdresse.getText().toString());
-                    jsonParam.put("surface", mEditTextDeposerModifierAnnonceSurface.getText().toString());
-                    jsonParam.put("estMeuble", est_meuble);
-
-                    jsonParam.put("type", mSpinnerDeposerModifierAnnonceType.getSelectedItem().toString());
-                    jsonParam.put("quartier", mSpinnerDeposerModifierAnnonceQuartier.getSelectedItem().toString());
-                    jsonParam.put("sousCategorie", mSpinnerDeposerModifierAnnonceSousCategorie.getSelectedItem().toString());
-                    jsonParam.put("categorie", mSpinnerDeposerModifierAnnonceCategorie.getSelectedItem().toString());
-
-                    jsonParam.put("listeImage", jsonArrayImages);
-
-                    out.write(jsonParam.toString());
-                    out.flush();
-                    out.close();
-
-                    // récupération du serveur
-                    int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK)
-                    {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                        String line = null;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        br.close();
-
-                        AfficherJSON = sb.toString();
-
-                        JSONObject jsonObject = new JSONObject(sb.toString());
-
-                        boolean ModifOK = jsonObject.getBoolean("modificationReussie");
-
-                        if(ModifOK){
-                            return true;
-                        } else {
-                            return false;
-                        }
-
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (MalformedURLException e){
-                    ErreurLoginTask = ErreurLoginTask + "URL";
-                    return false; //Erreur URL
-                } catch (SocketTimeoutException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                    return false; //Temps trop long
-                } catch (IOException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                    return false; //Pas de connexion internet
-                } catch (JSONException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                    return false; //Erreur JSON
-                } finally {
-                    if (urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-
-                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                clickDepotModif = false;
-
-                if (progress.isShowing()) {
-                    progress.dismiss();
-                }
-
-                //Toast.makeText(context, AfficherJSON, Toast.LENGTH_SHORT).show();
-
-                if (success) {
-                    actionDeposerModifier = true;
-                    Toast.makeText(context, "Votre annonce est modifié !", Toast.LENGTH_SHORT).show();
-                    setResult(40);
-                    finish();
-                }
-                else {
-                    actionDeposerModifier = false;
-                    Toast.makeText(context, "Echec de la modification de l'annonce", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(context, AfficherJSON, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }.execute();
+        new API_annonce(DeposerModifierAnnonceActivity.this).execute(mesparams);
     }
 
-    public void CreateAnnonceTask()
-    {
-        new AsyncTask<Void, Void, Boolean>() {
+    public void resultCreerModifierAnnonce(Boolean success){
 
-            String ErreurLoginTask = "Erreur";
-            String AfficherJSON = null;
-            Context context = getApplicationContext();
+        //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        clickDepotModif = false;
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                actionDeposerModifier = true;
-                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
-                progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
-                progress.setMessage("Création de l'annonce en cours ...\n\nL'upload des photos sur le serveur peut prendre un petit peu de temps ! (Prenez un café ^^)");
-                progress.setCancelable(false);
-                progress.show();
+        if (progress.isShowing()) {
+            progress.dismiss();
+        }
 
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (success) {
+            actionDeposerModifier = true;
+
+            if(CONSTANTE_EN_PARAM == CONST_MODIFIER) {
+                Toast.makeText(getApplicationContext(), "Votre annonce est modifié !", Toast.LENGTH_SHORT).show();
+                setResult(40);
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Votre annonce est créé avec SUCCES", Toast.LENGTH_SHORT).show();
+                setResult(20);
             }
 
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                HttpURLConnection urlConnection = null;
-                StringBuilder sb = new StringBuilder();
+            finish();
+        }
+        else {
+            actionDeposerModifier = false;
 
-                try {
-                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_CREATE_ANNONCES));
-                    urlConnection = (HttpURLConnection)url.openConnection();
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
-                    urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setConnectTimeout(5000);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-                    // Création objet jsonn clé valeur
-                    JSONObject jsonParam = new JSONObject();
-                    JSONArray jsonArrayImages = new JSONArray();
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String date = sdf.format(new Date());
-                    int est_meuble = 0;
-
-                    if(mCheckBoxDeposerModifierAnnonceEstMeuble.isChecked())
-                    {
-                        est_meuble = 1;
-                    }
-                    else {
-                        est_meuble = 0;
-                    }
-
-                    for(int i=0; i<=4; i++){
-                        if (!Base64Image[i].equals("")){
-                            jsonArrayImages.put(Base64Image[i]);
-                        }
-                    }
-
-
-                    // Exemple Clé valeur utiles à notre application
-                    jsonParam.put("email", mUser.getEmail());
-                    jsonParam.put("password", mUser.getPasswordSha1());
-
-                    jsonParam.put("date", date);
-                    jsonParam.put("titre", mTextViewDeposerModifierAnnonceTitre.getText().toString());
-                    jsonParam.put("prix", mEditTextDeposerModifierAnnonceLoyer.getText().toString());
-                    jsonParam.put("description", mEditTextDeposerModifierAnnonceDescription.getText().toString());
-                    jsonParam.put("nbPiece", mEditTextDeposerModifierAnnonceNbPieces.getText().toString());
-                    jsonParam.put("adresse", mEditTextDeposerModifierAnnonceAdresse.getText().toString() + ", " + mEditTextDeposerModifierAnnonceCP.getText().toString() + " " + mEditTextDeposerModifierAnnonceVille.getText().toString());
-                    jsonParam.put("surface", mEditTextDeposerModifierAnnonceSurface.getText().toString());
-                    jsonParam.put("estMeuble", est_meuble);
-
-                    jsonParam.put("type", mSpinnerDeposerModifierAnnonceType.getSelectedItem().toString());
-                    jsonParam.put("quartier", mSpinnerDeposerModifierAnnonceQuartier.getSelectedItem().toString());
-                    jsonParam.put("sousCategorie", mSpinnerDeposerModifierAnnonceSousCategorie.getSelectedItem().toString());
-                    jsonParam.put("categorie", mSpinnerDeposerModifierAnnonceCategorie.getSelectedItem().toString());
-
-                    jsonParam.put("listeImage", jsonArrayImages);
-
-                    out.write(jsonParam.toString());
-                    out.flush();
-                    out.close();
-
-                    // récupération du serveur
-                    int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK)
-                    {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                        String line = null;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        br.close();
-
-                        AfficherJSON = sb.toString();
-
-                        JSONObject jsonObject = new JSONObject(sb.toString());
-
-                        boolean CreateOK = jsonObject.getBoolean("creationReussie");
-
-                        if(CreateOK){
-                            return true;
-                        } else {
-                            return false;
-                        }
-
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (MalformedURLException e){
-                    ErreurLoginTask = ErreurLoginTask + "URL";
-                    return false; //Erreur URL
-                } catch (SocketTimeoutException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                    return false; //Temps trop long
-                } catch (IOException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                    return false; //Pas de connexion internet
-                } catch (JSONException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                    return false; //Erreur JSON
-                } finally {
-                    if (urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                }
+            if(CONSTANTE_EN_PARAM == CONST_MODIFIER) {
+                Toast.makeText(getApplicationContext(), "Echec de la modification de l'annonce", Toast.LENGTH_SHORT).show();
             }
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-
-                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                clickDepotModif = false;
-
-                if (progress.isShowing()) {
-                    progress.dismiss();
-                }
-
-                if (success) {
-                    actionDeposerModifier = true;
-                    Toast.makeText(context, "Votre annonce est créé avec SUCCES", Toast.LENGTH_SHORT).show();
-                    setResult(20);
-                    finish();
-                }
-                else {
-                    actionDeposerModifier = false;
-                    Toast.makeText(context, "Echec de la création de l'annonce", Toast.LENGTH_SHORT).show();
-                }
+            else {
+                Toast.makeText(getApplicationContext(), "Echec de la création de l'annonce", Toast.LENGTH_SHORT).show();
             }
-        }.execute();
+        }
     }
 
     @Override

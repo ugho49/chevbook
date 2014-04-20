@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.chevbook.chevbookapp.Activity.DetailsAccountActivity;
 import com.chevbook.chevbookapp.Activity.LoginActivity;
+import com.chevbook.chevbookapp.Activity.MainActivity;
 import com.chevbook.chevbookapp.Class.Modele;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.CustomsView.CircularImageView;
@@ -142,8 +143,8 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                             startActivity(myIntent);
                             //vmodele.UserLogOut(getApplicationContext());
                             vuser.logoutUser();
-                            getActivity().finish();
-                            //Activity main = (MainActivity)getActivity();
+                            //getActivity().finish();
+                            ((MainActivity)getActivity()).set_super_finish();
 
                         }
                     });

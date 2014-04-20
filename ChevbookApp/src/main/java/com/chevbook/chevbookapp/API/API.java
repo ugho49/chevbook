@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -32,7 +31,7 @@ import java.util.Date;
 public abstract class API extends AsyncTask<String, Void, Boolean> {
 
     //Variables
-    protected WeakReference<Activity> mActivity = null;
+    protected Activity mActivity = null;
     protected Fragment mFragment = null;
     protected Resources resources = null;
     protected String mClassActivity = null;
@@ -54,14 +53,14 @@ public abstract class API extends AsyncTask<String, Void, Boolean> {
 
     //Constructor
     public API (Activity activity) {
-        mActivity = new WeakReference<Activity>(activity);
+        mActivity = activity;
         resources = activity.getResources();
         mClassActivity = activity.getClass().toString();
         mUser = new User(activity.getApplicationContext());
     }
 
     public API (Fragment fragment) {
-        mActivity = new WeakReference<Activity>(fragment.getActivity());
+        mActivity = fragment.getActivity();
         mFragment = fragment;
         resources = fragment.getActivity().getResources();
         mClassActivity = fragment.getActivity().getClass().toString();
