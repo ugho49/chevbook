@@ -1,22 +1,19 @@
 package com.chevbook.chevbookapp.Activity;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.API.API_favoris;
+import com.chevbook.chevbookapp.Adapter.ImagePagerAdapter;
 import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.CustomDialog.CustomDialogMap;
@@ -26,19 +23,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -125,7 +110,7 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
         }
 
         if(nbImages > 0) {
-            ImagePagerAdapter adapter = new ImagePagerAdapter(mAnnonce.getUrl_images_annonces());
+            ImagePagerAdapter adapter = new ImagePagerAdapter(this, mAnnonce.getUrl_images_annonces());
             mViewPagerDetailAppartement.setAdapter(adapter);
             mIndicatorViewPagerDetailAppartement.setStrokeColor(Color.WHITE);
             mIndicatorViewPagerDetailAppartement.setViewPager(mViewPagerDetailAppartement);
@@ -255,63 +240,6 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
         menuDeleteFavoris.setVisible(b);
     }
 
-    private class ImagePagerAdapter extends PagerAdapter {
-
-        private ArrayList<String> mImages = new ArrayList<String>();
-
-        //Constructor
-        private ImagePagerAdapter() {
-            //empty constructor
-        }
-
-        private ImagePagerAdapter(ArrayList<String> mImages) {
-            //constructor
-            this.mImages = mImages;
-        }
-
-        @Override
-        public int getCount() {
-            return mImages.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            ImageView imageView = new ImageView(getApplicationContext());
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(7, 0, 7, 0);
-
-            // int padding = context.getResources().getDimensionPixelSize(
-            //       R.dimen.padding_medium);
-            //imageView.setPadding(padding, padding, padding, padding);
-
-            //imageView.setImageResource(mImages[position]);
-
-            imageLoader.displayImage(mImages.get(position), imageView);
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intentImage = new Intent(getApplication(), FullscreenPictureActivity.class);
-                    intentImage.putExtra("position", position);
-                    intentImage.putExtra("ListeURL", mImages);
-                    startActivity(intentImage);
-                }
-            });
-
-            container.addView(imageView, 0);
-            return imageView;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((ImageView) object);
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -328,231 +256,70 @@ public class DetailsAnnonceActivity extends ActionBarActivity {
 
     public void addOrDeleteFavorisTask()
     {
-        new AsyncTask<Void, Void, Boolean>() {
+        actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+        favoris_loading = true;
 
-            String ErreurLoginTask = "Erreur";
-            String AfficherJSON = null;
+        int deleteOrAdd = 0;
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
-                favoris_loading = true;
+        if(is_my_favoris)
+        {
+            deleteOrAdd = 0; //delete favoris
+        }
+        else {
+            deleteOrAdd = 1; //add favoris
+        }
+
+        String[] mesparams = {"mettre_enlever_favoris", Integer.toString(mAnnonce.getId_annonce()), Integer.toString(deleteOrAdd)};
+        new API_favoris(DetailsAnnonceActivity.this).execute(mesparams);
+    }
+
+    public void resultAddOrDeleteFavorisTask(Boolean success)
+    {
+        actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+        favoris_loading = false;
+
+        if (success)
+        {
+            if(is_my_favoris)
+            {
+                setMenuFavorisFullstar(false);
+                is_my_favoris = false;
             }
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                HttpURLConnection urlConnection = null;
-                StringBuilder sb = new StringBuilder();
-
-                try {
-                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_SET_FAVORIS));
-                    urlConnection = (HttpURLConnection)url.openConnection();
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
-                    urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setConnectTimeout(5000);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-                    // Création objet jsonn clé valeur
-                    JSONObject jsonParam = new JSONObject();
-
-                    // Exemple Clé valeur utiles à notre application
-                    jsonParam.put("email", mUser.getEmail());
-                    jsonParam.put("password", mUser.getPasswordSha1());
-                    jsonParam.put("id_annonce", mAnnonce.getId_annonce());
-                    if(is_my_favoris)
-                    {
-                        jsonParam.put("get_set",0); //delete favoris
-                    }
-                    else {
-                        jsonParam.put("get_set",1); //add favoris
-                    }
-                    out.write(jsonParam.toString());
-                    out.flush();
-                    out.close();
-
-                    // récupération du serveur
-                    int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK)
-                    {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                        String line = null;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        br.close();
-
-                        //AfficherJSON = sb.toString();
-
-                        JSONObject jsonObject = new JSONObject(sb.toString());
-
-                        Boolean fav = jsonObject.getBoolean("modifReussi");
-
-                        if(fav){
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (MalformedURLException e){
-                    ErreurLoginTask = ErreurLoginTask + "URL";
-                    return false; //Erreur URL
-                } catch (SocketTimeoutException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                    return false; //Temps trop long
-                } catch (IOException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                    return false; //Pas de connexion internet
-                } catch (JSONException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                    return false; //Erreur JSON
-                } finally {
-                    if (urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                }
+            else {
+                setMenuFavorisFullstar(true);
+                is_my_favoris = true;
             }
-
-            @Override
-            protected void onPostExecute(final Boolean success) {
-
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
-                favoris_loading = false;
-
-                if (success)
-                {
-                    if(is_my_favoris)
-                    {
-                        setMenuFavorisFullstar(false);
-                        is_my_favoris = false;
-                    }
-                    else {
-                        setMenuFavorisFullstar(true);
-                        is_my_favoris = true;
-                    }
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "Erreur pour l'ajout aux favoris", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }.execute();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Erreur pour l'ajout aux favoris", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void IsFavorisTask()
     {
-        new AsyncTask<Void, Void, Boolean>() {
+        actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+        favoris_loading = true;
 
-            String ErreurLoginTask = "Erreur";
-            String AfficherJSON = null;
+        String[] mesparams = {"est_favoris", Integer.toString(mAnnonce.getId_annonce())};
+        new API_favoris(DetailsAnnonceActivity.this).execute(mesparams);
+    }
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
-                favoris_loading = true;
-            }
+    public void resultIsFavorisTask(Boolean success)
+    {
+        actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
+        favoris_loading = false;
 
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                HttpURLConnection urlConnection = null;
-                StringBuilder sb = new StringBuilder();
-
-                try {
-                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_IS_FAVORIS));
-                    urlConnection = (HttpURLConnection)url.openConnection();
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
-                    urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setConnectTimeout(5000);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-                    // Création objet jsonn clé valeur
-                    JSONObject jsonParam = new JSONObject();
-
-                    // Exemple Clé valeur utiles à notre application
-                    jsonParam.put("email", mUser.getEmail());
-                    jsonParam.put("password", mUser.getPasswordSha1());
-                    jsonParam.put("id_annonce", mAnnonce.getId_annonce());
-                    out.write(jsonParam.toString());
-                    out.flush();
-                    out.close();
-
-                    // récupération du serveur
-                    int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK)
-                    {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                        String line = null;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        br.close();
-
-                        //AfficherJSON = sb.toString();
-
-                        JSONObject jsonObject = new JSONObject(sb.toString());
-
-                        Boolean fav = jsonObject.getBoolean("est_Favoris");
-
-                        if(fav){
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (MalformedURLException e){
-                    ErreurLoginTask = ErreurLoginTask + "URL";
-                    return false; //Erreur URL
-                } catch (SocketTimeoutException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                    return false; //Temps trop long
-                } catch (IOException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                    return false; //Pas de connexion internet
-                } catch (JSONException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                    return false; //Erreur JSON
-                } finally {
-                    if (urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                }
-            }
-
-            @Override
-            protected void onPostExecute(final Boolean success) {
-
-                actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
-                favoris_loading = false;
-
-                if (success)
-                {
-                    //Toast.makeText(getApplication(), "OK", Toast.LENGTH_SHORT).show();
-                    setMenuFavorisFullstar(true);
-                    is_my_favoris = true;
-                }
-                else {
-                    //Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
-                    setMenuFavorisFullstar(false);
-                    is_my_favoris = false;
-                }
-
-            }
-        }.execute();
+        if (success)
+        {
+            //Toast.makeText(getApplication(), "OK", Toast.LENGTH_SHORT).show();
+            setMenuFavorisFullstar(true);
+            is_my_favoris = true;
+        }
+        else {
+            //Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+            setMenuFavorisFullstar(false);
+            is_my_favoris = false;
+        }
     }
 
     @Override
