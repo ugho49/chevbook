@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -24,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.API.API_user;
 import com.chevbook.chevbookapp.Class.Modele;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.GCM.GcmUtils;
@@ -31,27 +31,13 @@ import com.chevbook.chevbookapp.R;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
 
 public class LoginActivity extends ActionBarActivity {
-
-    private UserLoginTask mAuthTask = null;
 
     // Values for email and password at the time of the login attempt.
     private String mEmail;
@@ -72,7 +58,7 @@ public class LoginActivity extends ActionBarActivity {
     private User mUser;
 
     private GcmUtils mGcmUtils = new GcmUtils();
-    GoogleCloudMessaging gcm;
+    private GoogleCloudMessaging gcm;
 
 
     @Override
@@ -100,19 +86,13 @@ public class LoginActivity extends ActionBarActivity {
             Log.i("GCM", "No valid Google Play Services APK found.");
         }
 
-        // Set up the login form.
-        //mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
         mEmailView = (EditText) findViewById(R.id.email);
-        //mEmailView.setText(mEmail);
-
         mPasswordView = (EditText) findViewById(R.id.password);
+
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                /*if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }*/
+
                 if (id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
@@ -185,6 +165,9 @@ public class LoginActivity extends ActionBarActivity {
         });
     }
 
+    public GoogleCloudMessaging getGcm() {
+        return gcm;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -197,10 +180,6 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        /*if (id == R.id.create_account) {
-
-        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -219,16 +198,7 @@ public class LoginActivity extends ActionBarActivity {
         EasyTracker.getInstance(this).activityStop(this);  // Stop Google Analytics
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     public void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -259,16 +229,13 @@ public class LoginActivity extends ActionBarActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+
             mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
             showProgress(true);
-            mAuthTask = new UserLoginTask();
-            mAuthTask.execute((Void) null);
+
+            UserLoginTask();
         }
     }
 
@@ -277,9 +244,7 @@ public class LoginActivity extends ActionBarActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -337,209 +302,42 @@ public class LoginActivity extends ActionBarActivity {
         }
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public void UserLoginTask() {
+        hideSoftKeyboard();
 
-        //mEmail
-        //mPassword
-        private String mFirstname = ""; //prenom
-        private String mLastname = ""; //nom
-        private String mUrl_image = "";
+        String[] mesparams = {"identification_user", mEmail, getSha1(mPassword)};
+        new API_user(LoginActivity.this).execute(mesparams);
+    }
 
-        private String regid = "";
+    public void resultUserLoginTask(Boolean success, String mFirstname, String mLastname, String mUrl_image) {
+        showProgress(false);
 
-        private String ErreurLoginTask = "Erreur ";
+        if (success) {
+            //Toast.makeText(getApplicationContext(), regid, Toast.LENGTH_SHORT).show();
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+            mUser.loginUser(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
+            vmodele.setCurrentUser(mUser);
 
-            //hide keyboard :
-            hideSoftKeyboard();
+            Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(myIntent);
+            finish();
 
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            HttpURLConnection urlConnection = null;
-            StringBuilder sb = new StringBuilder();
-
-            try {
-                URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_IDENTIFICATION));
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty("Accept", "application/json");
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoOutput(true);
-                urlConnection.setConnectTimeout(5000);
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-                // Création objet jsonn clé valeur
-                JSONObject jsonParam = new JSONObject();
-                // Exemple Clé valeur utiles à notre application
-                jsonParam.put("email", mEmail);
-                jsonParam.put("password", getSha1(mPassword));
-                out.write(jsonParam.toString());
-                out.flush();
-                out.close();
-
-                // récupération du serveur
-                int HttpResult = urlConnection.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                    String line = null;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    br.close();
-
-                    JSONArray jsonArray = new JSONArray(sb.toString());
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-                    boolean user_exist = jsonObject.getBoolean("connectSuccess");
-
-                    if (user_exist) {
-
-                        mFirstname = jsonObject.getString("Prenom_Personne"); //prenom
-                        mLastname = jsonObject.getString("Nom_Personne"); //nom
-                        mUrl_image = jsonObject.getString("Avatar_Personne");
-
-                        try {
-                            if (gcm == null) {
-                                gcm = GoogleCloudMessaging.getInstance(LoginActivity.this);
-                            }
-                            regid = gcm.register(getResources().getString(R.string.GOOGLE_PROJECT_ID));
-
-                            envoyerPhoneId(regid);
-
-                        } catch (IOException ex) {
-                            Log.i("GCM", ex.getMessage());
-                            // If there is an error, don't just keep trying to register.
-                            // Require the user to click a button again, or perform
-                            // exponential back-off.
-                        }
-
-                        return true;
-                    } else {
-                        //Utilisateur existe pas
-                        ErreurLoginTask = ErreurLoginTask + "de mot de passe ou d'email";
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } catch (MalformedURLException e) {
-                ErreurLoginTask = ErreurLoginTask + "URL";
-                return false; //Erreur URL
-            } catch (java.net.SocketTimeoutException e) {
-                ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                return false; //Temps trop long
-            } catch (IOException e) {
-                ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                return false; //Pas de connexion internet
-            } catch (JSONException e) {
-                ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                return false; //Erreur JSON
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                //Toast.makeText(getApplicationContext(), regid, Toast.LENGTH_SHORT).show();
-
-                mUser.loginUser(mEmail, mPassword, mFirstname, mLastname, mUrl_image);
-                vmodele.setCurrentUser(mUser);
-
-                Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
-                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(myIntent);
-                finish();
-
-            } else {
-                //mEmailView.setError(getString(R.string.error_invalid_email_or_password));
-                //mPasswordView.requestFocus();
-
-                Toast.makeText(getApplicationContext(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
-
-                //show keyboard :
-                //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+        } else {
+            Toast.makeText(getApplicationContext(), "Erreur d'authentification", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void envoyerPhoneId(String id) {
-        if (!id.equals("")) {
+    public void forgotPassword() {
+        String[] mesparams = {"password_oublie", mEmailView.getText().toString()};
+        new API_user(LoginActivity.this).execute(mesparams);
+    }
 
-            //Boolean testOK = false;
-            HttpURLConnection urlConnection = null;
-            StringBuilder sb = new StringBuilder();
-
-            try {
-                URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_SEND_PHONE_ID));
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty("Accept", "application/json");
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoOutput(true);
-                urlConnection.setConnectTimeout(5000);
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-                // Création objet jsonn clé valeur
-                JSONObject jsonParam = new JSONObject();
-                // Exemple Clé valeur utiles à notre application
-                jsonParam.put("email", mEmail);
-                jsonParam.put("password", getSha1(mPassword));
-                jsonParam.put("phoneId", id);
-                out.write(jsonParam.toString());
-                out.flush();
-                out.close();
-
-                int HttpResult = urlConnection.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                    String line = null;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    br.close();
-
-                    String result = sb.toString();
-                } else {
-                    //return false;
-                }
-            } catch (MalformedURLException e) {
-                //todo
-            } catch (java.net.SocketTimeoutException e) {
-                //todo
-            } catch (IOException e) {
-                //todo
-            } catch (JSONException e) {
-                //todo
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-
+    public void resultForgotPassword(Boolean result) {
+        if (result) {
+            Toast.makeText(getApplicationContext(), "Votre nouveau mot de passe viens de vous être envoyé par mail.\nPensez à vérifier dans vos spam !!!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Adresse email invalide", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -568,109 +366,6 @@ public class LoginActivity extends ActionBarActivity {
         return result;
     }
 
-    public void forgotPassword() {
-        new AsyncTask<Void, Void, Boolean>() {
-
-            String AfficherJSON = null;
-            String ErreurLoginTask = "Erreur ";
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-
-                HttpURLConnection urlConnection = null;
-                StringBuilder sb = new StringBuilder();
-
-                try {
-                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_FORGOT_PASSWORD_USER));
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
-                    urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setConnectTimeout(5000);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-                    // Création objet jsonn clé valeur
-                    JSONObject jsonParam = new JSONObject();
-                    // Exemple Clé valeur utiles à notre application
-                    jsonParam.put("email", mEmailView.getText().toString());
-                    out.write(jsonParam.toString());
-                    out.flush();
-                    out.close();
-
-                    // récupération du serveur
-                    int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK) {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                        String line = null;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        br.close();
-
-                        AfficherJSON = sb.toString();
-
-                        JSONArray jsonArray = new JSONArray(sb.toString());
-                        JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-                        boolean recupOK = jsonObject.getBoolean("recupSuccess");
-
-                        if (recupOK) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                } catch (MalformedURLException e) {
-                    ErreurLoginTask = ErreurLoginTask + "URL";
-                    return false; //Erreur URL
-                } catch (SocketTimeoutException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                    return false; //Temps trop long
-                } catch (IOException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                    return false; //Pas de connexion internet
-                } catch (JSONException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                    return false; //Erreur JSON
-                } finally {
-                    if (urlConnection != null) {
-                        urlConnection.disconnect();
-                    }
-                }
-            }
-
-            @Override
-            protected void onPostExecute(final Boolean result) {
-
-                if (result) {
-                    Toast.makeText(getApplicationContext(), "Votre nouveau mot de passe viens de vous être envoyé par mail.\nPensez à vérifier dans vos spam !!!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Adresse email invalide", Toast.LENGTH_SHORT).show();
-                }
-
-                /*AlertDialog.Builder adb = new AlertDialog.Builder(LoginActivity.this);
-                adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                adb.setMessage(AfficherJSON);
-                adb.show();*/
-            }
-        }.execute();
-    }
-
-    /**
-     * Hides the soft keyboard
-     */
     public void hideSoftKeyboard() {
         if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -678,9 +373,6 @@ public class LoginActivity extends ActionBarActivity {
         }
     }
 
-    /**
-     * Shows the soft keyboard
-     */
     public void showSoftKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         view.requestFocus();
