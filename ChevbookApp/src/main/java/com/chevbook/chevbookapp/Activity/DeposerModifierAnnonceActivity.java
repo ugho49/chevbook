@@ -31,24 +31,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chevbook.chevbookapp.API.API_annonce;
+import com.chevbook.chevbookapp.API.API_spinner;
 import com.chevbook.chevbookapp.Class.Annonce;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -251,23 +242,6 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 case R.id.buttonDeposerModifierAnnonceValider:
                     if(!clickDepotModif) {
                         clickDepotModif = true;
-                        /*if (CONSTANTE_EN_PARAM == CONST_MODIFIER) {
-                            if (verifDepotAnnonce()) {
-                                //Toast.makeText(getApplicationContext(), "Modifier annonce", Toast.LENGTH_SHORT).show();
-                                UpdateAnnonceTask();
-                            }
-                            else {
-                                clickDepotModif = false;
-                            }
-                        } else if (CONSTANTE_EN_PARAM == CONST_CREATE) {
-                            if (verifDepotAnnonce()) {
-                                CreateAnnonceTask();
-                            }
-                            else {
-                                clickDepotModif = false;
-                            }
-                        }*/
-
                         if(verifDepotAnnonce()){
                             CreerModifierAnnonceTask();
                         }else {
@@ -285,6 +259,22 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             }
         }
     };
+
+    public void setSpinnerListCategorie(String[] spinnerListCategorie) {
+        SpinnerListCategorie = spinnerListCategorie;
+    }
+
+    public void setSpinnerListQuartier(String[] spinnerListQuartier) {
+        SpinnerListQuartier = spinnerListQuartier;
+    }
+
+    public void setSpinnerListSousCategorie(String[] spinnerListSousCategorie) {
+        SpinnerListSousCategorie = spinnerListSousCategorie;
+    }
+
+    public void setSpinnerListType(String[] spinnerListType) {
+        SpinnerListType = spinnerListType;
+    }
 
     private boolean verifDepotAnnonce()
     {
@@ -576,174 +566,48 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         byte[] b = baos.toByteArray();
-        /*if(CONSTANTE_EN_PARAM == CONST_CREATE){
-            base64 = Base64.encodeToString(b, Base64.DEFAULT);
-        }
-        else if(CONSTANTE_EN_PARAM == CONST_MODIFIER){
-            base64 = "BASE64: " + Base64.encodeToString(b, Base64.DEFAULT);
-        }*/
         base64 = "BASE64: " + Base64.encodeToString(b, Base64.DEFAULT);
         return base64;
     }
 
     public void LoadingSpinnerTask()
     {
-        new AsyncTask<Void, Void, Boolean>() {
+        progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
+        progress.setMessage(getResources().getString(R.string.loading_in_progress));
+        progress.setCancelable(false);
+        progress.show();
 
-            String AfficherJSON = null;
-            String ErreurLoginTask = "Erreur ";
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-
-                progress = new ProgressDialog(DeposerModifierAnnonceActivity.this);
-                progress.setMessage(getResources().getString(R.string.loading_in_progress));
-                progress.setCancelable(false);
-                progress.show();
-            }
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-
-                HttpURLConnection urlConnection = null;
-                StringBuilder sb = new StringBuilder();
-
-                try {
-                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_LIST_SPINNER));
-                    urlConnection = (HttpURLConnection)url.openConnection();
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
-                    urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setConnectTimeout(5000);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-
-                    // récupération du serveur
-                    int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK)
-                    {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                        String line = null;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        br.close();
-
-                        AfficherJSON = sb.toString();
-
-                        JSONObject jsonObject = new JSONObject(sb.toString());
-
-                        JSONArray jsonArrayCategorie = jsonObject.getJSONArray("categorie");
-                        JSONArray jsonArrayQuartier = jsonObject.getJSONArray("quartier");
-                        JSONArray jsonArraySousCategorie = jsonObject.getJSONArray("sous_categorie");
-                        JSONArray jsonArrayType = jsonObject.getJSONArray("type_location");
-
-                        if(jsonArrayCategorie.length() > 0){
-                            SpinnerListCategorie = new String[jsonArrayCategorie.length()];
-                            for(int i = 0; i < jsonArrayCategorie.length(); i++){
-                                JSONObject Object = jsonArrayCategorie.getJSONObject(i);
-                                SpinnerListCategorie[i] = Object.getString("Libelle_Ctagorie");
-                            }
-                        }
-
-                        if(jsonArrayQuartier.length() > 0){
-                            SpinnerListQuartier = new String[jsonArrayQuartier.length()];
-                            for(int i = 0; i < jsonArrayQuartier.length(); i++){
-                                JSONObject Object = jsonArrayQuartier.getJSONObject(i);
-                                SpinnerListQuartier[i] = Object.getString("Libelle_Quartier");
-                            }
-                        }
-
-                        if(jsonArraySousCategorie.length() > 0){
-                            SpinnerListSousCategorie = new String[jsonArraySousCategorie.length()];
-                            for(int i = 0; i < jsonArraySousCategorie.length(); i++){
-                                JSONObject Object = jsonArraySousCategorie.getJSONObject(i);
-                                SpinnerListSousCategorie[i] = Object.getString("Libelle_Sous_Categorie");
-                            }
-                        }
-
-                        if(jsonArrayType.length() > 0){
-                            SpinnerListType = new String[jsonArrayType.length()];
-                            for(int i = 0; i < jsonArrayType.length(); i++){
-                                JSONObject Object = jsonArrayType.getJSONObject(i);
-                                SpinnerListType[i] = Object.getString("Libelle_Type_Location");
-                            }
-                        }
-
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (MalformedURLException e){
-                    ErreurLoginTask = ErreurLoginTask + "URL";
-                    return false; //Erreur URL
-                } catch (SocketTimeoutException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                    return false; //Temps trop long
-                } catch (IOException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                    return false; //Pas de connexion internet
-                } catch (JSONException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                    return false; //Erreur JSON
-                } finally {
-                    if (urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-
-                if (progress.isShowing()) {
-                    progress.dismiss();
-                }
-
-                if (success) {
-
-                    /*AlertDialog.Builder adb = new AlertDialog.Builder(DeposerModifierAnnonceActivity.this);
-                    adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    adb.setMessage(AfficherJSON);
-                    adb.show();*/
-
-                    remplirSpinner();
-
-                    //Toast.makeText(getApplication(), "Spinners Remplis", Toast.LENGTH_SHORT).show();
-
-                    if(CONSTANTE_EN_PARAM == CONST_MODIFIER)
-                    {
-                        initDataAnnonce();
-                    }
-                }
-                else {
-                    Toast.makeText(getApplication(), "Erreur de chargement des spinners", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-        }.execute();
+        String[] mesparams = {"lister_spinner_annonce"};
+        new API_spinner(DeposerModifierAnnonceActivity.this).execute(mesparams);
     }
 
-    private void remplirSpinner()
+    public void remplirSpinner(Boolean success)
     {
-        ArrayAdapter<String> spinnerQuartierArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListQuartier);
-        ArrayAdapter<String> spinnerCategorieArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListCategorie);
-        ArrayAdapter<String> spinnerSousCategorieArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListSousCategorie);
-        ArrayAdapter<String> spinnerTypeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListType);
+        if (progress.isShowing()) {
+            progress.dismiss();
+        }
 
-        mSpinnerDeposerModifierAnnonceQuartier.setAdapter(spinnerQuartierArrayAdapter);
-        mSpinnerDeposerModifierAnnonceCategorie.setAdapter(spinnerCategorieArrayAdapter);
-        mSpinnerDeposerModifierAnnonceSousCategorie.setAdapter(spinnerSousCategorieArrayAdapter);
-        mSpinnerDeposerModifierAnnonceType.setAdapter(spinnerTypeArrayAdapter);
+        if (success) {
+
+            ArrayAdapter<String> spinnerQuartierArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListQuartier);
+            ArrayAdapter<String> spinnerCategorieArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListCategorie);
+            ArrayAdapter<String> spinnerSousCategorieArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListSousCategorie);
+            ArrayAdapter<String> spinnerTypeArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, SpinnerListType);
+
+            mSpinnerDeposerModifierAnnonceQuartier.setAdapter(spinnerQuartierArrayAdapter);
+            mSpinnerDeposerModifierAnnonceCategorie.setAdapter(spinnerCategorieArrayAdapter);
+            mSpinnerDeposerModifierAnnonceSousCategorie.setAdapter(spinnerSousCategorieArrayAdapter);
+            mSpinnerDeposerModifierAnnonceType.setAdapter(spinnerTypeArrayAdapter);
+
+            if(CONSTANTE_EN_PARAM == CONST_MODIFIER)
+            {
+                initDataAnnonce();
+            }
+        }
+        else {
+            Toast.makeText(getApplication(), "Erreur de chargement des spinners", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void initDataAnnonce()

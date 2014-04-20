@@ -26,7 +26,6 @@ public class API_annonce extends API {
     private ArrayList<Annonce> mAnnonces = new ArrayList<Annonce>();
     private int AnnonceMax = 0;
     private int annonceChargeesInThisTask = 0;
-    private boolean Sucess_CreateUptadeDelete = false;
 
     public API_annonce(Activity activity) {
         super(activity);
