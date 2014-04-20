@@ -226,8 +226,19 @@ public class DetailsAccountActivity extends ActionBarActivity {
         //Toast.makeText(getApplicationContext(), getString(R.string.save_in_progress), Toast.LENGTH_SHORT).show();
         String nom = mEditTextLastName.getText().toString();
         String prenom = mEditTextFirstName.getText().toString();
+        boolean photoAchanger = false;
 
-        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.substring(5).equals(mUser.getUrlProfilPicture()) && PasswordModifieSHA1.equals(""))
+        if(Base64Image.equals("")){
+            if(!mUser.getUrlProfilPicture().equals("")){
+                photoAchanger = true;
+            }
+        } else {
+            if(!Base64Image.substring(0,5).equals("URL: ")){
+                photoAchanger = true;
+            }
+        }
+
+        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && !photoAchanger && PasswordModifieSHA1.equals(""))
         {
             Toast.makeText(getApplicationContext(), "Aucune modification.", Toast.LENGTH_SHORT).show();
             finish();
@@ -386,148 +397,6 @@ public class DetailsAccountActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    /*public void UpdateUserTask()
-    {
-        new AsyncTask<Void, Void, Boolean>() {
-
-            String ErreurLoginTask = "Erreur";
-            String AfficherJSON = null;
-            String url_img ="";
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
-                progress = new ProgressDialog(DetailsAccountActivity.this);
-                progress.setMessage("Modifications en cours ...");
-                progress.setCancelable(false);
-                progress.show();
-            }
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-
-                HttpURLConnection urlConnection = null;
-                StringBuilder sb = new StringBuilder();
-
-                try {
-                    URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_MODIFICATION_USER));
-                    urlConnection = (HttpURLConnection)url.openConnection();
-                    urlConnection.setRequestProperty("Content-Type", "application/json");
-                    urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestMethod("POST");
-                    urlConnection.setDoOutput(true);
-                    urlConnection.setConnectTimeout(5000);
-                    OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-
-                    // Création objet jsonn clé valeur
-                    JSONObject jsonParam = new JSONObject();
-
-                    // Exemple Clé valeur utiles à notre application
-                    jsonParam.put("email", mUser.getEmail());
-                    jsonParam.put("password", mUser.getPasswordSha1());
-                    if(PasswordModifieSHA1.equals("")){
-                        jsonParam.put("passwordMod", mUser.getPasswordSha1());
-                    }
-                    else {
-                        jsonParam.put("passwordMod", PasswordModifieSHA1);
-                    }
-                    jsonParam.put("prenomMod", mEditTextFirstName.getText().toString());
-                    jsonParam.put("nomMod", mEditTextLastName.getText().toString());
-                    jsonParam.put("photoMod", Base64Image);
-
-                    out.write(jsonParam.toString());
-                    out.flush();
-                    out.close();
-
-                    // récupération du serveur
-                    int HttpResult = urlConnection.getResponseCode();
-                    if (HttpResult == HttpURLConnection.HTTP_OK)
-                    {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                        String line = null;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line);
-                        }
-                        br.close();
-
-                        AfficherJSON = sb.toString();
-
-                        JSONObject jsonObject = new JSONObject(sb.toString());
-
-                        int modifOK = jsonObject.getInt("modifEffectue");
-
-                        if(modifOK == 1){
-                            url_img = jsonObject.getString("0");
-
-                            if(url_img.equals("null"))
-                            {
-                                url_img = "";
-                            }
-                            return true;
-                        } else {
-                            return false;
-                        }
-
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                catch (MalformedURLException e){
-                    ErreurLoginTask = ErreurLoginTask + "URL";
-                    return false; //Erreur URL
-                } catch (SocketTimeoutException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                    return false; //Temps trop long
-                } catch (IOException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                    return false; //Pas de connexion internet
-                } catch (JSONException e) {
-                    ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                    return false; //Erreur JSON
-                } finally {
-                    if (urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Boolean success) {
-                //actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
-                if (progress.isShowing()) {
-                    progress.dismiss();
-                }
-
-                if (success) {
-                    //todo save data in user
-                    Toast.makeText(getApplication(), "Modifications enregistrés", Toast.LENGTH_SHORT).show();
-
-                    mUser.setFirstname(mEditTextFirstName.getText().toString());
-                    mUser.setLastname(mEditTextLastName.getText().toString());
-
-                    if(!PasswordModifieSansSHA1.equals("")){
-                        mUser.setPassword(PasswordModifieSansSHA1);
-                    }
-
-                    Base64Image = "";
-                    PasswordModifieSHA1 = "";
-                    PasswordModifieSansSHA1 = "";
-
-                    mUser.setUrlProfilPicture(url_img);
-
-                    setResult(2);
-                    finish();
-                }
-                else {
-                    Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }.execute();
-    }*/
-
     public void UpdateUserTask()
     {
         //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
@@ -578,7 +447,8 @@ public class DetailsAccountActivity extends ActionBarActivity {
             mUser.setUrlProfilPicture(url_img);
 
             setResult(2);
-            finish();
+            //finish();
+            set_super_finish();
         }
         else {
             Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -636,8 +506,19 @@ public class DetailsAccountActivity extends ActionBarActivity {
     public void finish() {
         String nom = mEditTextLastName.getText().toString();
         String prenom = mEditTextFirstName.getText().toString();
+        boolean photoAchanger = false;
 
-        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.substring(5).equals(mUser.getUrlProfilPicture()) && PasswordModifieSHA1.equals(""))
+        if(Base64Image.equals("")){
+            if(!mUser.getUrlProfilPicture().equals("")){
+                photoAchanger = true;
+            }
+        } else {
+            if(!Base64Image.substring(0,5).equals("URL: ")){
+                photoAchanger = true;
+            }
+        }
+
+        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && !photoAchanger && PasswordModifieSHA1.equals(""))
         {
             set_super_finish();
         }

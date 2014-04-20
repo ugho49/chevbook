@@ -52,7 +52,7 @@ public class API_user extends API {
             }
 
             if(action.equals("modification_user")){
-                mUrl += resources.getString(R.string.URL_SERVEUR_UPDATE_ANNONCES);
+                mUrl += resources.getString(R.string.URL_SERVEUR_MODIFICATION_USER);
                 AddParamUser();
                 jsonParam.put("passwordMod", mParams[1]);
                 jsonParam.put("prenomMod", mParams[2]);
@@ -101,7 +101,7 @@ public class API_user extends API {
 
             if(action.equals("modification_user")) {
                 JSONObject jsonObject = new JSONObject(mResult);
-                int modifOK = jsonObject.getInt("modificationReussie");
+                int modifOK = jsonObject.getInt("modifEffectue");
                 if(modifOK == 1){
                     url_image = jsonObject.getString("0");
 

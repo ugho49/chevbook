@@ -110,11 +110,9 @@ public class MainActivity extends ActionBarActivity
                         .addToBackStack(null)
                         .commit();
             }
+
+            nbClick++;
         }
-
-
-
-        nbClick++;
 
     }
 
