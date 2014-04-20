@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
+import com.chevbook.chevbookapp.Activity.DetailsAccountActivity;
 import com.chevbook.chevbookapp.Activity.LoginActivity;
 import com.chevbook.chevbookapp.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -50,6 +51,15 @@ public class API_user extends API {
                 jsonParam.put("password", mParams[2]);
             }
 
+            if(action.equals("modification_user")){
+                mUrl += resources.getString(R.string.URL_SERVEUR_UPDATE_ANNONCES);
+                AddParamUser();
+                jsonParam.put("passwordMod", mParams[1]);
+                jsonParam.put("prenomMod", mParams[2]);
+                jsonParam.put("nomMod", mParams[3]);
+                jsonParam.put("photoMod", mParams[4]);
+            }
+
             return true;
         }
         catch (JSONException e) {
@@ -67,6 +77,10 @@ public class API_user extends API {
         if(action.equals("identification_user")){
             ((LoginActivity)mActivity).resultUserLoginTask(success, firstname, lastname, url_image);
         }
+
+        if(action.equals("modification_user")){
+            ((DetailsAccountActivity)mActivity).resultUpdateUserTask(success, url_image);
+        }
     }
 
     @Override
@@ -79,6 +93,23 @@ public class API_user extends API {
                 boolean recupOK = jsonObject.getBoolean("recupSuccess");
 
                 if (recupOK) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            if(action.equals("modification_user")) {
+                JSONObject jsonObject = new JSONObject(mResult);
+                int modifOK = jsonObject.getInt("modificationReussie");
+                if(modifOK == 1){
+                    url_image = jsonObject.getString("0");
+
+                    if(url_image.equals("null"))
+                    {
+                        url_image = "";
+                    }
+
                     return true;
                 } else {
                     return false;

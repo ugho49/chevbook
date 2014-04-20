@@ -24,25 +24,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.API.API_user;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.CustomsView.CircularImageView;
 import com.chevbook.chevbookapp.R;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
@@ -237,7 +227,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
         String nom = mEditTextLastName.getText().toString();
         String prenom = mEditTextFirstName.getText().toString();
 
-        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.equals("") && PasswordModifieSHA1.equals(""))
+        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.substring(5).equals(mUser.getUrlProfilPicture()) && PasswordModifieSHA1.equals(""))
         {
             Toast.makeText(getApplicationContext(), "Aucune modification.", Toast.LENGTH_SHORT).show();
             finish();
@@ -396,7 +386,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
         dialog.show();
     }
 
-    public void UpdateUserTask()
+    /*public void UpdateUserTask()
     {
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -534,17 +524,65 @@ public class DetailsAccountActivity extends ActionBarActivity {
                 else {
                     Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
                 }
-
-                /*AlertDialog.Builder adb = new AlertDialog.Builder(DetailsAccountActivity.this);
-                adb.setNegativeButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                adb.setMessage(AfficherJSON);
-                adb.show();*/
             }
         }.execute();
+    }*/
+
+    public void UpdateUserTask()
+    {
+        //actionBarActivity.setSupportProgressBarIndeterminateVisibility(true);
+        progress = new ProgressDialog(DetailsAccountActivity.this);
+        progress.setMessage("Modifications en cours ...");
+        progress.setCancelable(false);
+        progress.show();
+
+        String passwordModSha1 = "";
+        if(PasswordModifieSHA1.equals("")){
+            passwordModSha1 = mUser.getPasswordSha1();
+        }
+        else {
+            passwordModSha1 = PasswordModifieSHA1;
+        }
+
+        String[] mesparams = {
+                "modification_user",
+                passwordModSha1,
+                mEditTextFirstName.getText().toString(),
+                mEditTextLastName.getText().toString(),
+                Base64Image};
+
+        new API_user(DetailsAccountActivity.this).execute(mesparams);
+    }
+
+    public void resultUpdateUserTask(boolean success, String url_img)
+    {
+        if (progress.isShowing()) {
+            progress.dismiss();
+        }
+
+        if (success) {
+            //todo save data in user
+            Toast.makeText(getApplication(), "Modifications enregistrés", Toast.LENGTH_SHORT).show();
+
+            mUser.setFirstname(mEditTextFirstName.getText().toString());
+            mUser.setLastname(mEditTextLastName.getText().toString());
+
+            if(!PasswordModifieSansSHA1.equals("")){
+                mUser.setPassword(PasswordModifieSansSHA1);
+            }
+
+            Base64Image = "";
+            PasswordModifieSHA1 = "";
+            PasswordModifieSansSHA1 = "";
+
+            mUser.setUrlProfilPicture(url_img);
+
+            setResult(2);
+            finish();
+        }
+        else {
+            Toast.makeText(getApplication(), getString(R.string.error), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private static String getSha1(String password)
@@ -599,7 +637,7 @@ public class DetailsAccountActivity extends ActionBarActivity {
         String nom = mEditTextLastName.getText().toString();
         String prenom = mEditTextFirstName.getText().toString();
 
-        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.equals("") && PasswordModifieSHA1.equals(""))
+        if(nom.equals(mUser.getLastName()) && prenom.equals(mUser.getFirstName()) && Base64Image.substring(5).equals(mUser.getUrlProfilPicture()) && PasswordModifieSHA1.equals(""))
         {
             set_super_finish();
         }
