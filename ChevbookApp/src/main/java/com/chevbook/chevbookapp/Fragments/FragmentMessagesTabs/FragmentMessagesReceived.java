@@ -10,9 +10,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.chevbook.chevbookapp.API.API_message;
 import com.chevbook.chevbookapp.Adapter.ListViewMessageReceivedAdapter;
+import com.chevbook.chevbookapp.Class.ConnectionDetector;
 import com.chevbook.chevbookapp.Class.Message;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.CustomDialog.CustomDialogMessage;
@@ -47,6 +49,8 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
     private ActionBarActivity actionBarActivity;
     private PullToRefreshLayout mPullToRefreshLayout;
 
+    private ConnectionDetector connectionDetector;
+
     private ArrayList<Message> mMessages = new ArrayList<Message>();
     private User mUser;
     private Boolean onResume = false;
@@ -67,6 +71,7 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
         View rootView = inflater.inflate(R.layout.fragment_messages_received, container, false);
         ButterKnife.inject(this, rootView);
         actionBarActivity = (ActionBarActivity) getActivity();
+        connectionDetector = new ConnectionDetector(getActivity().getApplicationContext());
 
         Adapter = new ListViewMessageReceivedAdapter(getActivity().getBaseContext(), mMessages);
         mListViewMessageReceived.setAdapter(Adapter);
@@ -124,10 +129,15 @@ public class FragmentMessagesReceived extends Fragment implements OnRefreshListe
 
     @Override
     public void onRefreshStarted(View view) {
-        mMessages.clear();
-        mMessages = new ArrayList<Message>();
+        if (connectionDetector.isConnectingToInternet()) {
+            mMessages.clear();
+            mMessages = new ArrayList<Message>();
 
-        listerMessagesReceived();
+            listerMessagesReceived();
+        }else {
+            Toast.makeText(getActivity(), "Aucune connexion internet", Toast.LENGTH_SHORT).show();
+            mPullToRefreshLayout.setRefreshComplete();
+        }
     }
 
     public void listerMessagesReceived()

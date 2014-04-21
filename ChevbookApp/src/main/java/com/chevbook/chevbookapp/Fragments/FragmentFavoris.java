@@ -13,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.chevbook.chevbookapp.API.API_annonce;
 import com.chevbook.chevbookapp.Activity.DetailsAnnonceActivity;
 import com.chevbook.chevbookapp.Adapter.ListViewFavorisAdapter;
 import com.chevbook.chevbookapp.Class.Annonce;
+import com.chevbook.chevbookapp.Class.ConnectionDetector;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.R;
 
@@ -51,6 +53,8 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
     private Boolean onResume = false;
     private User mUser;
 
+    private ConnectionDetector connectionDetector;
+
     public static final int CODE_RETOUR = 0;
 
     private ArrayList<Annonce> mAnnonces = new ArrayList<Annonce>();
@@ -66,6 +70,7 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_favoris, container, false);
         ButterKnife.inject(this, rootView);
+        connectionDetector = new ConnectionDetector(getActivity().getApplicationContext());
 
         actionBarActivity = (ActionBarActivity) getActivity();
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
@@ -127,10 +132,15 @@ public class FragmentFavoris extends Fragment implements OnRefreshListener {
     @Override
     public void onRefreshStarted(View view) {
 
-        mAnnonces.clear();
-        mAnnonces = new ArrayList<Annonce>();
+        if (connectionDetector.isConnectingToInternet()){
+            mAnnonces.clear();
+            mAnnonces = new ArrayList<Annonce>();
 
-        listerMyFavoris();
+            listerMyFavoris();
+        } else {
+            Toast.makeText(getActivity(), "Aucune connexion internet", Toast.LENGTH_SHORT).show();
+            mPullToRefreshLayout.setRefreshComplete();
+        }
     }
 
     @Override

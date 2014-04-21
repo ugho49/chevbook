@@ -30,6 +30,7 @@ import com.chevbook.chevbookapp.Activity.DeposerModifierAnnonceActivity;
 import com.chevbook.chevbookapp.Activity.DetailsAnnonceActivity;
 import com.chevbook.chevbookapp.Adapter.ListViewAnnonceAdapter;
 import com.chevbook.chevbookapp.Class.Annonce;
+import com.chevbook.chevbookapp.Class.ConnectionDetector;
 import com.chevbook.chevbookapp.Class.Modele;
 import com.chevbook.chevbookapp.R;
 
@@ -65,6 +66,8 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
 
     private int AnnonceDebut = 0;
     private int AnnonceFin = 10;
+
+    private ConnectionDetector connectionDetector;
 
     private Boolean onResume = false;
 
@@ -121,6 +124,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         mInflater = inflater;
         actionBarActivity = (ActionBarActivity) getActivity();
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        connectionDetector = new ConnectionDetector(getActivity().getApplicationContext());
 
         // Now find the PullToRefreshLayout to setup
         mPullToRefreshLayout = (PullToRefreshLayout) root.findViewById(R.id.ptr_layout_list_appartements);
@@ -220,22 +224,26 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-        int currentPage = (int) Math.floor(AnnonceChargees / 10) + 1;
-        int maxPage = (int) Math.floor(AnnonceMax / 10) + 1;
+            int currentPage = (int) Math.floor(AnnonceChargees / 10) + 1;
+            int maxPage = (int) Math.floor(AnnonceMax / 10) + 1;
 
-        if(currentPage != maxPage){
-            if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0) {
-                if (flag_loading == false){
-                    flag_loading = true;
+            if(currentPage != maxPage){
+                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0) {
+                    if(connectionDetector.isConnectingToInternet()) {
+                        if (flag_loading == false) {
+                            flag_loading = true;
 
-                    //Toast.makeText(getActivity(), "Bas de la listView", Toast.LENGTH_SHORT).show();
-                    if(AnnonceMax > AnnonceChargees)
-                    {
-                        listerAnnonces(AnnonceDebut, AnnonceFin);
+                            //Toast.makeText(getActivity(), "Bas de la listView", Toast.LENGTH_SHORT).show();
+                            if (AnnonceMax > AnnonceChargees) {
+                                listerAnnonces(AnnonceDebut, AnnonceFin);
+                            }
+                        }
+                    } else {
+                        //Toast.makeText(getActivity(), "Aucune connexion internet", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
-        }
+
     }
 
     public void setAnnonceMax(int annonceMax) {
@@ -275,19 +283,24 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     @Override
     public void onRefreshStarted(View view) {
 
-        mAnnonces.clear();
-        mAnnonces = new ArrayList<Annonce>();
-        flag_loading = false;
+        if(connectionDetector.isConnectingToInternet()){
+            mAnnonces.clear();
+            mAnnonces = new ArrayList<Annonce>();
+            flag_loading = false;
 
-        if(AnnonceChargees == 0)
-        {
-            listerAnnonces(AnnonceDebut, AnnonceFin);
-        }
-        else {
+            if(AnnonceChargees == 0)
+            {
+                listerAnnonces(AnnonceDebut, AnnonceFin);
+            }
+            else {
 
-            int a = AnnonceChargees;
-            AnnonceChargees = 0;
-            listerAnnonces(0, a);
+                int a = AnnonceChargees;
+                AnnonceChargees = 0;
+                listerAnnonces(0, a);
+            }
+        }else {
+            Toast.makeText(getActivity(), "Aucune connexion internet", Toast.LENGTH_SHORT).show();
+            mPullToRefreshLayout.setRefreshComplete();
         }
     }
 

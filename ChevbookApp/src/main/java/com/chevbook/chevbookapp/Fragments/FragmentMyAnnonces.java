@@ -16,12 +16,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.chevbook.chevbookapp.API.API_annonce;
 import com.chevbook.chevbookapp.Activity.DeposerModifierAnnonceActivity;
 import com.chevbook.chevbookapp.Activity.DetailsAnnonceActivity;
 import com.chevbook.chevbookapp.Adapter.ListViewMyAnnoncesAdapter;
 import com.chevbook.chevbookapp.Class.Annonce;
+import com.chevbook.chevbookapp.Class.ConnectionDetector;
 import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.R;
 
@@ -49,6 +51,8 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
     private PullToRefreshLayout mPullToRefreshLayout;
 
     private ListViewMyAnnoncesAdapter Adapter;
+
+    private ConnectionDetector connectionDetector;
 
     public static final int CODE_RETOUR = 0;
 
@@ -78,6 +82,7 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
         View rootView = inflater.inflate(R.layout.fragment_my_annonces, container, false);
         ButterKnife.inject(this, rootView);
         actionBarActivity = (ActionBarActivity) getActivity();
+        connectionDetector = new ConnectionDetector(getActivity().getApplicationContext());
 
         ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
@@ -177,11 +182,16 @@ public class FragmentMyAnnonces extends Fragment implements OnRefreshListener {
 
     @Override
     public void onRefreshStarted(View view) {
+        if(connectionDetector.isConnectingToInternet()){
+            mAnnonces.clear();
+            mAnnonces = new ArrayList<Annonce>();
 
-        mAnnonces.clear();
-        mAnnonces = new ArrayList<Annonce>();
-
-        listerMyAnnonces();
+            listerMyAnnonces();
+        }
+        else {
+            Toast.makeText(getActivity(), "Aucune connexion internet", Toast.LENGTH_SHORT).show();
+            mPullToRefreshLayout.setRefreshComplete();
+        }
     }
 
     public void listerMyAnnonces()
