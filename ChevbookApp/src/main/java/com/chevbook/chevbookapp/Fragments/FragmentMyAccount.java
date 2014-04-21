@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -20,6 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chevbook.chevbookapp.API.API_user;
 import com.chevbook.chevbookapp.Activity.DetailsAccountActivity;
 import com.chevbook.chevbookapp.Activity.LoginActivity;
 import com.chevbook.chevbookapp.Activity.MainActivity;
@@ -28,18 +28,6 @@ import com.chevbook.chevbookapp.Class.User;
 import com.chevbook.chevbookapp.CustomsView.CircularImageView;
 import com.chevbook.chevbookapp.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -164,12 +152,11 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
 
     @Override
     public void onRefreshStarted(View view) {
-        LoadUserTask mLoadUserTask = new LoadUserTask();
-        mLoadUserTask.execute((Void) null);
+        LoadUserTask();
     }
 
     public void InitData() {
-        mProfilePrenomNom.setText(vuser.getFirstName() + " " + vuser.getLastName().toUpperCase());
+        mProfilePrenomNom.setText(capitalizeFirstLetter(vuser.getFirstName()) + " " + vuser.getLastName().toUpperCase());
         mProfileEmail.setText(vuser.getEmail());
         mProfileMesAnnonces.setText("0");
 
@@ -182,8 +169,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
             mProfilePicture.setImageResource(R.drawable.ic_profile);
         }
 
-        LoadUserTask mLoadUserTask = new LoadUserTask();
-        mLoadUserTask.execute((Void) null);
+        LoadUserTask();
     }
 
     public void EditProfil() {
@@ -207,8 +193,7 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
                 if (refreshing) {
                     Toast.makeText(getActivity(), getString(R.string.action_refresh_in_process), Toast.LENGTH_SHORT).show();
                 } else {
-                    LoadUserTask mLoadUserTask = new LoadUserTask();
-                    mLoadUserTask.execute((Void) null);
+                    LoadUserTask();
                 }
 
                 return true;
@@ -226,8 +211,8 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         // Vérifie que le résultat est OK
         if(resultCode == 2) {
             //Toast.makeText(getActivity(), "Modification = recharger page", Toast.LENGTH_SHORT).show();
-            LoadUserTask mLoadUserTask = new LoadUserTask();
-            mLoadUserTask.execute((Void) null);
+
+            LoadUserTask();
         }
     }
 
@@ -254,158 +239,66 @@ public class FragmentMyAccount extends Fragment implements OnRefreshListener {
         actionBarActivity.setSupportProgressBarIndeterminateVisibility(false);
     }
 
-    public class LoadUserTask extends AsyncTask<Void, Void, Boolean> {
-
-        private String ErreurLoginTask = "Erreur ";
-        private Boolean userExist = true;
-
-        String mFirstname; //prenom
-        String mLastname; //nom
-        String mUrl_image;
-        String mPassword;
-        String mEmail;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            ShowProgressBar(true);
-
+    public static String capitalizeFirstLetter(String value) {
+        if (value == null) {
+            return null;
         }
+        if (value.length() == 0) {
+            return value;
+        }
+        StringBuilder result = new StringBuilder(value);
+        result.replace(0, 1, result.substring(0, 1).toUpperCase());
+        return result.toString();
+    }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
+    public void LoadUserTask () {
+        ShowProgressBar(true);
 
-            HttpURLConnection urlConnection = null;
-            StringBuilder sb = new StringBuilder();
+        String[] mesparams = {"charge_donnees_user"};
+        new API_user(FragmentMyAccount.this).execute(mesparams);
+    }
 
-            try {
-                URL url = new URL(getResources().getString(R.string.URL_SERVEUR) + getResources().getString(R.string.URL_SERVEUR_IDENTIFICATION));
-                urlConnection = (HttpURLConnection)url.openConnection();
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-                urlConnection.setRequestProperty("Accept", "application/json");
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setDoOutput(true);
-                urlConnection.setConnectTimeout(5000);
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+    public void resultLoadUserTask (Boolean success, Boolean userExist) {
+        ShowProgressBar(false);
+        mPullToRefreshLayout.setRefreshComplete();
 
-                // Création objet jsonn clé valeur
-                JSONObject jsonParam = new JSONObject();
-                // Exemple Clé valeur utiles à notre application
-                jsonParam.put("email", vuser.getEmail());
-                jsonParam.put("password", vuser.getPasswordSha1());
-                out.write(jsonParam.toString());
-                out.flush();
-                out.close();
+        if (success) {
+            mProfilePrenomNom.setText(capitalizeFirstLetter(vuser.getFirstName()) + " " + vuser.getLastName().toUpperCase());
+            mProfileEmail.setText(vuser.getEmail());
+            mProfileMesAnnonces.setText("0");
 
-                // récupération du serveur
-                int HttpResult = urlConnection.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK)
-                {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-                    String line = null;
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line);
-                    }
-                    br.close();
-
-                    JSONArray jsonArray = new JSONArray(sb.toString());
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-
-                    boolean user_exist = jsonObject.getBoolean("connectSuccess");
-
-                    if(user_exist) {
-
-                        mFirstname = jsonObject.getString("Prenom_Personne"); //prenom
-                        mLastname = jsonObject.getString("Nom_Personne"); //nom
-                        mUrl_image = jsonObject.getString("Avatar_Personne");
-                        mPassword = jsonObject.getString("Mdp_Personne");
-                        mEmail = jsonObject.getString("Email");
-                        //int mNbAnnonces = jsonObject.getInt("Nb_annonces_Personne");;
-
-                        return true;
-                    }
-                    else {
-                        //Utilisateur existe pas
-                        ErreurLoginTask = ErreurLoginTask + "de mot de passe ou d'email";
-                        userExist = false;
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+            if(vuser.getUrlProfilPicture().length() > 0)
+            {
+                imageLoader.displayImage(vuser.getUrlProfilPicture(), mProfilePicture);
             }
-            catch (MalformedURLException e){
-                ErreurLoginTask = ErreurLoginTask + "URL";
-                return false; //Erreur URL
-            } catch (java.net.SocketTimeoutException e) {
-                ErreurLoginTask = ErreurLoginTask + "Temps trop long";
-                return false; //Temps trop long
-            } catch (IOException e) {
-                ErreurLoginTask = ErreurLoginTask + "Connexion internet lente ou inexistante";
-                return false; //Pas de connexion internet
-            } catch (JSONException e) {
-                ErreurLoginTask = ErreurLoginTask + "Problème de JSON";
-                return false; //Erreur JSON
-            } finally {
-                if (urlConnection != null){
-                    urlConnection.disconnect();
-                }
+            else
+            {
+                mProfilePicture.setImageResource(R.drawable.ic_profile);
             }
 
-        }
+            vmodele.setCurrentUser(vuser);
+            vmodele.getDrawerAdapter().setCurrentUser(vuser);
+            vmodele.getDrawerAdapter().notifyDataSetChanged();
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-
-            ShowProgressBar(false);
-            mPullToRefreshLayout.setRefreshComplete();
-
-            if (success) {
-                mProfilePrenomNom.setText(mFirstname + " " + mLastname.toUpperCase());
-                mProfileEmail.setText(mEmail);
-                mProfileMesAnnonces.setText("0");
-
-                if(mUrl_image.length() > 0)
-                {
-                    imageLoader.displayImage(mUrl_image, mProfilePicture);
-                }
-                else
-                {
-                    mProfilePicture.setImageResource(R.drawable.ic_profile);
-                }
-
-                vuser.setFirstname(mFirstname);
-                vuser.setLastname(mLastname);
-                vuser.setUrlProfilPicture(mUrl_image);
-                vuser.setEmail(mEmail);
-
-                vmodele.setCurrentUser(vuser);
-                vmodele.getDrawerAdapter().setCurrentUser(vuser);
-                vmodele.getDrawerAdapter().notifyDataSetChanged();
-
-            } else {
-                if(!userExist)
-                {
-                    AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-                    adb.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent myIntent = new Intent(getActivity(), LoginActivity.class);
-                            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(myIntent);
-                            vuser.logoutUser();
-                            getActivity().finish();
-                        }
-                    });
-                    adb.setMessage("Votre compte à changer, veuillez-vous re-connecter !");
-                    adb.setCancelable(false);
-                    adb.show();
-                }
-                else {
-                    Toast.makeText(getActivity(), ErreurLoginTask, Toast.LENGTH_SHORT).show();
-                }
+        } else {
+            if(!userExist)
+            {
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+                adb.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent myIntent = new Intent(getActivity(), LoginActivity.class);
+                        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(myIntent);
+                        vuser.logoutUser();
+                        ((MainActivity)getActivity()).set_super_finish();
+                    }
+                });
+                adb.setMessage("Votre compte à changer, veuillez-vous re-connecter !");
+                adb.setCancelable(false);
+                adb.show();
+            }
+            else {
+                Toast.makeText(getActivity(), "Erreur de chargement...", Toast.LENGTH_SHORT).show();
             }
         }
     }

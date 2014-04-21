@@ -76,7 +76,7 @@ public class MenuDrawerAdapter extends BaseAdapter {
             item.setVisibility(View.GONE);
 
             String url = currentUser.getUrlProfilPicture();
-            String name = currentUser.getFirstName() + " " + currentUser.getLastName();
+            String name = capitalizeFirstLetter(currentUser.getFirstName()) + " " + currentUser.getLastName().toUpperCase();
 
             txtTitle.setText(name);
 
@@ -103,5 +103,17 @@ public class MenuDrawerAdapter extends BaseAdapter {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public static String capitalizeFirstLetter(String value) {
+        if (value == null) {
+            return null;
+        }
+        if (value.length() == 0) {
+            return value;
+        }
+        StringBuilder result = new StringBuilder(value);
+        result.replace(0, 1, result.substring(0, 1).toUpperCase());
+        return result.toString();
     }
 }

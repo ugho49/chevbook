@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.chevbook.chevbookapp.Activity.DetailsAccountActivity;
 import com.chevbook.chevbookapp.Activity.LoginActivity;
+import com.chevbook.chevbookapp.Fragments.FragmentMyAccount;
 import com.chevbook.chevbookapp.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -28,6 +29,7 @@ import java.net.URL;
 public class API_user extends API {
 
     private String firstname = "", lastname = "", url_image = "";
+    private boolean userExist = true;
 
     public API_user(Activity activity) {
         super(activity);
@@ -60,6 +62,11 @@ public class API_user extends API {
                 jsonParam.put("photoMod", mParams[4]);
             }
 
+            if(action.equals("charge_donnees_user")){
+                mUrl += resources.getString(R.string.URL_SERVEUR_IDENTIFICATION);
+                AddParamUser();
+            }
+
             return true;
         }
         catch (JSONException e) {
@@ -80,6 +87,10 @@ public class API_user extends API {
 
         if(action.equals("modification_user")){
             ((DetailsAccountActivity)mActivity).resultUpdateUserTask(success, url_image);
+        }
+
+        if(action.equals("charge_donnees_user")){
+            ((FragmentMyAccount)mFragment).resultLoadUserTask(success, userExist);
         }
     }
 
@@ -112,6 +123,29 @@ public class API_user extends API {
 
                     return true;
                 } else {
+                    return false;
+                }
+            }
+
+            if(action.equals("charge_donnees_user")) {
+                JSONArray jsonArray = new JSONArray(mResult);
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                boolean user_exist = jsonObject.getBoolean("connectSuccess");
+
+                if(user_exist) {
+
+                    mUser.setFirstname(jsonObject.getString("Prenom_Personne"));
+                    mUser.setLastname(jsonObject.getString("Nom_Personne"));
+                    mUser.setUrlProfilPicture(jsonObject.getString("Avatar_Personne"));
+                    mUser.setEmail(jsonObject.getString("Email"));
+                    //int mNbAnnonces = jsonObject.getInt("Nb_annonces_Personne");;
+                    userExist = true;
+                    return true;
+                }
+                else {
+                    //Utilisateur existe pas
+                    userExist = false;
                     return false;
                 }
             }
