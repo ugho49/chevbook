@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -436,7 +437,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                setBitmapAndEncodeInBase64(imageBitmap, ImageSelected);
+                setBitmapAndEncodeInBase64(imageBitmap, ImageSelected, true);
             }
             else if (requestCode == REQUEST_SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
@@ -444,7 +445,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
                 BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
                 btmapOptions.inSampleSize = 3;
                 Bitmap imageBitmap = BitmapFactory.decodeFile(selectedPath, btmapOptions);
-                setBitmapAndEncodeInBase64(imageBitmap, ImageSelected);
+                setBitmapAndEncodeInBase64(imageBitmap, ImageSelected, false);
             }
         }
     }
@@ -466,7 +467,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         adb.show();
     }
 
-    private void setBitmapAndEncodeInBase64(final Bitmap bm, final int number)
+    private void setBitmapAndEncodeInBase64(final Bitmap bm, final int number, final Boolean topQualite)
     {
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -483,7 +484,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
             @Override
             protected Boolean doInBackground(Void... params) {
 
-                Base64Image[number - 1] = encodeTobase64(bm);
+                Base64Image[number - 1] = encodeTobase64(bm, topQualite);
 
                 return true;
             }
@@ -536,6 +537,7 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
     private void TakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            takePictureIntent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
@@ -560,13 +562,20 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         return cursor.getString(column_index);
     }
 
-    public String encodeTobase64(Bitmap image)
+    public String encodeTobase64(Bitmap image, Boolean topQualite)
     {
         String base64 = "";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 50, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+
+        if(topQualite) {
+            image.compress(Bitmap.CompressFormat.PNG, 100, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        }else {
+            image.compress(Bitmap.CompressFormat.JPEG, 60, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+        }
+
         byte[] b = baos.toByteArray();
         base64 = "BASE64: " + Base64.encodeToString(b, Base64.DEFAULT);
+
         return base64;
     }
 
