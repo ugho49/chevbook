@@ -568,9 +568,9 @@ public class DeposerModifierAnnonceActivity extends ActionBarActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         if(topQualite) {
-            image.compress(Bitmap.CompressFormat.PNG, 100, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+            image.compress(Bitmap.CompressFormat.JPEG, 100, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         }else {
-            image.compress(Bitmap.CompressFormat.JPEG, 60, baos); //0 meaning compress for small size, 100 meaning compress for max quality
+            image.compress(Bitmap.CompressFormat.JPEG, 70, baos); //0 meaning compress for small size, 100 meaning compress for max quality
         }
 
         byte[] b = baos.toByteArray();
