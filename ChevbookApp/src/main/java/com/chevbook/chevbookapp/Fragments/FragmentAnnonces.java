@@ -1,7 +1,5 @@
 package com.chevbook.chevbookapp.Fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,14 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.chevbook.chevbookapp.API.API_annonce;
@@ -72,7 +67,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     private Boolean onResume = false;
 
     //Custom Dialog
-    private static EditText EditTextKeyWord;
+    /*private static EditText EditTextKeyWord;
     private static EditText EditTextPrixMin;
     private static EditText EditTextPrixMax;
     private static EditText mEditTextPieceMin;
@@ -83,7 +78,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
     private static CheckBox mCheckBoxAppartements;
     private static CheckBox mCheckBoxTerrain;
     private static CheckBox mCheckBoxParking;
-    private static Button mButtonSearch;
+    private static Button mButtonSearch;*/
 
     private static String [] AppartementListQuartier;
     private static String [] AppartementListType;
@@ -178,14 +173,14 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case R.id.imageViewSearchMoreDetail:
+                /*case R.id.imageViewSearchMoreDetail:
                     //Toast.makeText(getActivity(), "Plus de détails - Custom dialog...", Toast.LENGTH_SHORT).show();
-                    custom_dialog_more_detail();
+                    //custom_dialog_more_detail();
                     break;
 
                 case R.id.imageViewSearch:
                     Toast.makeText(getActivity(), "Recherche lancée...", Toast.LENGTH_SHORT).show();
-                    break;
+                    break;*/
 
                 case R.id.buttonNoResultRafraichirAnnonce:
                     listerAnnonces(AnnonceDebut, AnnonceFin);
@@ -250,7 +245,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
         AnnonceMax = annonceMax;
     }
 
-    private void custom_dialog_more_detail() {
+    /*private void custom_dialog_more_detail() {
         View custom_view_change_password = mInflater.inflate(R.layout.custom_dialog_search_annonce_more_detail, null);
 
         AppartementListQuartier = getResources().getStringArray(R.array.appartements_quartier_array);
@@ -278,7 +273,7 @@ public class FragmentAnnonces extends Fragment implements OnRefreshListener, Abs
                 .create();
 
         dialog.show();
-    }
+    }*/
 
     @Override
     public void onRefreshStarted(View view) {
